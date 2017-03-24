@@ -2,44 +2,52 @@
 
 ## Entities
 
-### User
+### Parent
+```javascript
+  {
+    name: "string",
+    email: "string",
+    family: Family
+  }
+```
+
+### Child
 ```javascript
   {
     name: "string",
     username: "string"
-    email: "string",
-    role: role // ("Parent" or "Child") - Coming from role entity
-    groupsOwned: [], // If role is parent
-    assignedTasks: [] // Ifr role is child 
+    birdthday: "string",
+    family: Family, 
+    assignedTasks: [ Task ] 
   }
 ```
+
 ### Task
 ```javascript
   {
     description: "string",
-    assignee: user // (Child),
-    owner: user // (Parent),
-    group: group
+    assignee: Child,
+    needsReviewed: boolean
+    group: Group
   }
 ```  
 ### Group
 ```javascript
   {
-    tasks: [
-      {task one...},
-      {task Two...}
-    ],
-    dueDate: "string",
-    reward: "string",
-    owner: user, // User with parent role that owns the group
-    assignees: user // User with child role that are apart of the group
+    tasks: [ Task ],
+    dueDate: Timestamp,
+    reward: Reward,
+    family: Family,
+    assignees: [ Child ]
   }
 ```
 ### Reward
 ```javascript
 {
   title: "String",
-  description: "String"
+  description: "String",
+  family: Family,
+  group: [ Group ]
 }
 ```
 
@@ -48,26 +56,10 @@
 {
   name: "String",
   description: "String",
-  parent: user, // Has role of parent
-  members: [], // Array of users that have a role of child
-  groups: [] // Array of any active/inactive groups in the family
-}
-```
-### Role
-```javascript
-{
-  name: "String" ,
-  users: [],  // Array of users in this role
-}
-```
-
-### Achievements
-```javascript
-{
-  name: "String",
-  description: "String",
-  level: Number,
-  users: [] // Array of users that have this achievement
+  parents: [ Parent ], 
+  children: [ Child ],
+  groups: [ Group ],
+  rewards: [ Reward ]
 }
 ```
 
@@ -99,5 +91,5 @@
 - By default three inputs are shown to the user to add in tasks
 - The parent adds the task name, assigns a user to the task, and marks whether or not the task needs to be reviewed before completion.
 - If the parent wants to add more tasks they click add another task and another input is appended to the end of the task inputs
-- One the parent is done adding tasks they click done
+- Once the parent is done adding tasks they click done
 
