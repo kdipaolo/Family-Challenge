@@ -1,10 +1,12 @@
 import React from 'react'
-
+import Card from './Card'
 class Groups extends React.Component {
   render() {
     return (
       <div>
-        <h1>Groups</h1>
+        <Card />
+        <Card />
+        <Card />
       </div>
     )
   }
