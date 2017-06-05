@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-
-// How do you go about choosing headers?
+import LoginWrapper from '../styles/LoginWrapper'
 // Do you have a better proccess for how you use wrappers in styled components? Feels repetitive?
 
 const Input = styled.input`
@@ -17,21 +16,6 @@ const Input = styled.input`
   ::-webkit-input-placeholder {
     color: lightgray;
     padding-left: 10px;
-  }
-`
-
-const LoginWrapper = styled.div`
-display: flex;
-align-items: center;
-min-height: 100vh;
-justify-content: center;
-text-align: center;
-flex-direction: column;
-
-  h3 {
-    color: #fff;
-    font-size: 15px;
-    letter-spacing: 1px;
   }
 `
 

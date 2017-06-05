@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import styles from '../styles/config'
 import Button from './Button'
 const NotificationWrapper = styled.div`
-  background: ${styles.colors.primary};
+  background: ${props => props.theme.colors.primary};
   padding: 5%;
   text-align: center;
   margin: 3% auto 0 auto;
@@ -22,7 +21,7 @@ class Notification extends React.Component {
             You have no groups. Create a group to begin assigning tasks to your members
           </p>
         </NotificationWrapper>
-        <Button color="#364796" title="Add Group" />
+        <Button notification>Test</Button>
       </div>
     )
   }

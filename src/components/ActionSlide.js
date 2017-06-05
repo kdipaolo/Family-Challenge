@@ -1,12 +1,11 @@
 import React from 'react'
 import Button from './Button'
-import styles from '../styles/config'
 import styled from 'styled-components'
 
 const ActionSlideWrapper = styled.div`
   transform:  ${props => (props.open ? 'translateY(0px)' : 'translateY(351px)')};
   transition: 0.2s all ease-out;
-  background-color: ${styles.colors.primaryLight};
+  background-color: ${props => props.theme.colors.primaryLight};
   position: absolute;
   box-sizing: border-box;
   width: 100%;

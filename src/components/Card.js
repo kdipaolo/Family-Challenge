@@ -1,9 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import placeholder from '../../public/images/placeholder.png'
-
-// How do you handle nested elements in styled components?
-
+// Try not to have nested elements
 const CardWrapper = styled.div`
   border: 0.5px solid lightgray;
   margin: 2% 0;

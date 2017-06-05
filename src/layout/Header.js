@@ -1,23 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
 import ArrowRight from 'react-icons/lib/ti/th-menu'
-import { boxShadow } from '../styles/index'
+// import { boxShadow } from '../styles/index'
 import Bell from 'react-icons/lib/fa/bell-o'
 import UserGroup from 'react-icons/lib/fa/group'
 import ObjectGroup from 'react-icons/lib/fa/object-group'
 import Cog from 'react-icons/lib/fa/cog'
 import CaretDown from 'react-icons/lib/fa/caret-down'
 import Times from 'react-icons/lib/ti/times'
-import styles from '../styles/config'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import placeholder from '../../public/images/placeholder.png'
 
-///// ${boxShadow()}
 const NavigationBar = styled.div`
-  background-color: ${styles.colors.primary};
+   background-color: ${props => props.theme.colors.primary};
   width: 100%;
   color: #fff;
-  padding: 3%; 
+  padding: 3%;
   box-shadow: 0px 2px 2px #888888;
 
   & span {
@@ -46,7 +44,7 @@ const NavItem = styled.div`
 `
 
 const UserInfo = styled.div`
-  background-color: ${styles.colors.primary};
+  ${/* background-color: ${props.theme.colors.primary}; */ ''}
   padding: 5%;
   height: 75px;
   position: relative;
@@ -84,6 +82,9 @@ class Header extends React.Component {
     })
   }
   render() {
+    if (this.props.location.pathname === '/') {
+      return null
+    }
     return (
       <div>
         <NavigationBar>
@@ -117,4 +118,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header
+export default withRouter(Header)

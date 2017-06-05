@@ -1,15 +1,12 @@
+// 'polished/lib/mixins/normalize';
 import normalizeStyled from 'normalize-styled'
-import { injectGlobal } from 'styled-components'
-import styles from '../styles/config'
+import { injectGlobal, css } from 'styled-components'
 
-export default () => injectGlobal`
+injectGlobal`
   ${normalizeStyled}
-
   body {
-    
     padding: 0;
-    ${/* background: linear-gradient(#5A6ED0 0%, ${styles.colors.primary} 100%); */ ''}
-    background: #fff;
+    ${window.location.pathname == '/' ? css`background: linear-gradient(#5A6ED0 0%, #4053AE 100%);` : css`background: #fff;`}
     background-repeat: no-repeat;
     height: 100vh;
     color: #333;
@@ -22,7 +19,7 @@ export default () => injectGlobal`
 
   * {
     font-family: 'Open Sans', sans-serif;
-    font-weight: 300
+    font-weight: 300;
   }
 
   a:visited, a:active {
@@ -31,6 +28,7 @@ export default () => injectGlobal`
   }
   `
 
-export function boxShadow() {
-  return 'box-shadow: 0px 2px 2px #888888'
-}
+//
+// export function boxShadow() {
+//   return 'box-shadow: 0px 2px 2px #888888'
+// }

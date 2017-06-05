@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import placeholder from '../../public/images/placeholder.png'
 import Refresh from 'react-icons/lib/ti/refresh'
 import Download from 'react-icons/lib/ti/download'
@@ -39,17 +39,23 @@ const CardWrapper = styled.div`
 
 const Actions = styled.div`
   display: flex;
-  p {
-      flex: 1;
-      text-align: center;
-      justify-content: center;
-      margin: 10px auto 0 auto;
-  }
+`
+const ActionTextItem = styled.p`
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+    margin: 10px auto 0 auto;
+`
+const icon = css`
+  font-size: 22px;
+  margin-right: 5px;
+`
 
-  svg {
-    font-size: 22px;
-    margin-right: 5px;
-  }
+const RefreshIcon = styled(Refresh)`
+  ${icon}
+`
+const DownloadIcon = styled(Download)`
+  ${icon}
 `
 
 class ActionCard extends React.Component {
@@ -62,8 +68,8 @@ class ActionCard extends React.Component {
         <h4>2/12 Tasks Completed</h4>
         <hr />
         <Actions>
-          <p><Refresh />Approve</p>
-          <p><Download />Reply</p>
+          <ActionTextItem><RefreshIcon />Approve</ActionTextItem>
+          <ActionTextItem><DownloadIcon />Reply</ActionTextItem>
         </Actions>
       </CardWrapper>
     )

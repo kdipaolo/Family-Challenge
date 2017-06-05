@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import baseStyles from './styles/index'
+
+// Hedron - Grid System uses flexbox / styled components
+// "CSS Variables" in a config.js file?
 
 const render = () => {
-  baseStyles()
   ReactDOM.render(<App />, document.getElementById('root'))
 }
 render()

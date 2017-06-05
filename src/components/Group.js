@@ -2,7 +2,6 @@ import React from 'react'
 import Button from './Button'
 import ActionSlide from './ActionSlide'
 
-// Do you usually start off with a stateless functional component or a class?
 class Group extends React.Component {
   constructor(props) {
     super(props)
