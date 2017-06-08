@@ -22,6 +22,7 @@ const Button = styled.button`
   cursor: pointer;
   transition: 0.3s all ease;
   ${props => props.notification && createColorVariation(props.theme.colors.primaryDark)}
+  ${props => props.secondary && createColorVariation(props.theme.colors.secondary)}
 `
 
 export default Button

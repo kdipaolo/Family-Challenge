@@ -32,7 +32,7 @@ class App extends Component {
                 <Route path="/dashboard" component={Dashboard} />
                 <Route path="/groups" component={Groups} />
                 <Route path="/group/:groupid" component={Group} />
-                <Route path="/memebers" component={Members} />
+                <Route path="/members" component={Members} />
                 <Route path="/memeber/:memeberid" component={Member} />
                 <Route path="/settings" component={Settings} />
               </ContentWrapper>
