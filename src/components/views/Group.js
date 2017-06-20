@@ -6,24 +6,8 @@ import Member from '../cards/Member'
 import styled from 'styled-components'
 import ContentWrapper from '../../styles/ContentWrapper'
 import InfoCard from '../cards/InfoCard'
+import Switcher from '../shared/Switcher'
 
-const Switcher = styled.div`
-  display: flex;
-  background: #efefef;
-`
-const SwitcherItem = styled.p`
-  cursor: pointer;
-  flex: 1;
-  text-align: center;
-  font-weight: 500;
-  text-transform: uppercase;
-  font-size: 14px;
-  margin: 0;
-  padding: 3% 0;
-  color: ${props => (props.active ? props.theme.colors.primaryDark : '#333')};
-  border-bottom: ${props => (props.active ? '2px solid' + props.theme.colors.primaryDark : 'none')}
-
-`
 class Group extends React.Component {
   constructor(props) {
     super(props)
@@ -50,21 +34,11 @@ class Group extends React.Component {
       <div>
         <InfoCard />
 
-        <Switcher>
-
-          <SwitcherItem
-            data-item="Tasks"
-            onClick={this.handleSwitcherClick}
-            active={this.state.active === 'Tasks'}>
-            Tasks
-          </SwitcherItem>
-          <SwitcherItem
-            data-item="Members"
-            onClick={this.handleSwitcherClick}
-            active={this.state.active === 'Members'}>
-            Members
-          </SwitcherItem>
-        </Switcher>
+        <Switcher
+          active={this.state.active}
+          handleSwitcherClick={this.handleSwitcherClick}
+          links={['Tasks', 'Members']}
+        />
         <ContentWrapper>
           {this.state.active === 'Tasks'
             ? <div>
@@ -73,7 +47,11 @@ class Group extends React.Component {
                 <Task />
                 <Task />
                 <Task />
-                <Button onClick={this.handleButtonClick}>
+                <Task />
+                <Task />
+                <Task />
+
+                <Button sticky onClick={this.handleButtonClick}>
                   + Add A Todo
                 </Button>
               </div>
@@ -82,7 +60,11 @@ class Group extends React.Component {
                 <Member />
                 <Member />
                 <Member />
-                <Button onClick={this.handleButtonClick}>
+                <Member />
+                <Member />
+                <Member />
+                <Member />
+                <Button sticky onClick={this.handleButtonClick}>
                   + Add A Memeber
                 </Button>
               </div>}

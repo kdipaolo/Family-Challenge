@@ -11,6 +11,17 @@ const createColorVariation = color => {
     `
 }
 
+function stickyButton() {
+  return css`
+      position: fixed;
+      left: 3%;
+      width: 95%;
+      bottom: 2%;
+      z-index: 999999999;
+      border: 3px solid #fff;
+    `
+}
+
 const Button = styled.button`
   ${props => createColorVariation(props.theme.colors.primary)}
   width: 100%;
@@ -24,6 +35,7 @@ const Button = styled.button`
   transition: 0.3s all ease;
   ${props => props.notification && createColorVariation(props.theme.colors.primaryDark)}
   ${props => props.secondary && createColorVariation(props.theme.colors.secondary)}
+  ${props => props.sticky && stickyButton()}
 `
 
 export default Button

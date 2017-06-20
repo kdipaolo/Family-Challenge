@@ -11,13 +11,26 @@ const Info = styled.div`
 `
 const Header = styled.h3`
   margin: 0;
+  padding: 2%;
 `
 const Detail = styled.p`
+  font-size: 13px;
+  width: 50%;
+  color: lightgray;
 
 `
 const DetailWrapper = styled.div`
   display: flex;
+  flex-wrap:  wrap;
+  justify-content: space-around;
 `
+
+const Highlight = styled.div`
+  color: #fff;
+  font-weight: bold;
+  display: inline;
+`
+
 const Image = styled.img`
   width: 100px;
   clip-path: circle(50% at 50% 50%);
@@ -25,13 +38,25 @@ const Image = styled.img`
 
 class InfoCard extends React.Component {
   render() {
+    const { member, task } = this.props
     return (
       <Info>
-        {this.props.member ? <Image src={placeholder} alt="" /> : ''}
-        <Header>Children</Header>
+        {member && <Image src={placeholder} alt="" />}
+        <Header>Header Title</Header>
         <DetailWrapper>
-          <Detail>5/25 Tasks Completed</Detail>
-          <Detail>Created on: 5/5/2017</Detail>
+          {task
+            ? <Detail>Tasks Assigned By: <Highlight>Mom</Highlight></Detail>
+            : <Detail><Highlight>5</Highlight> Tasks Assigned</Detail>}
+          {!task && <Detail><Highlight>35</Highlight> Tasks Completed</Detail>}
+          <Detail>
+            {member ? 'Signed up' : 'Created'}
+            {' '}
+            on:
+            {' '}
+            <Highlight>5/5/2017</Highlight>
+          </Detail>
+          {member && <Detail>Groups: <Highlight>Children</Highlight></Detail>}
+
         </DetailWrapper>
       </Info>
     )

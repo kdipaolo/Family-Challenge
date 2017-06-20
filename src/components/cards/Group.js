@@ -8,7 +8,8 @@ class Member extends React.Component {
         <CardWrapper>
           <h3>Children</h3>
           <h4>Tasks: 5</h4>
-          <h4>Age: 28</h4>
+          <h4>Created: 2/2/2018</h4>
+          <h4>Due: 2/2/2018</h4>
         </CardWrapper>
       </Link>
     )

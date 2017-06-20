@@ -9,9 +9,8 @@ class Task extends React.Component {
       <Link to="/task/1">
         <CardWrapper>
           <h5>1/26/2017</h5>
-          <img src={placeholder} alt="" />
-          <h3>Entire Family</h3>
-          <h4>2/12 Tasks Completed</h4>
+          <h3>Clean Room</h3>
+          <h4>Assigned By: Mom</h4>
         </CardWrapper>
       </Link>
     )
