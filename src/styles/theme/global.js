@@ -24,7 +24,10 @@ injectGlobal`
 
   a:visited, a:active {
     text-decoration: none;
-    color: #fff;
+    color: #333;
+  }
+  a{
+    text-decoration: none;
   }
   `
 

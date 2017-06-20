@@ -2,20 +2,20 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Header from './layout/Header'
 import theme from './styles/theme/index'
-import Dashboard from './components/Dashboard'
-import Login from './components/Login'
-import CreateFamily from './components/CreateFamily'
-import Groups from './components/Groups'
-import Group from './components/Group'
-import Members from './components/Members'
-import Member from './components/Member'
-import Settings from './components/Settings'
+import Dashboard from './components/views/Dashboard'
+import Login from './components/views/Login'
+import CreateFamily from './components/views/CreateFamily'
+import Groups from './components/views/Groups'
+import Group from './components/views/Group'
+import Members from './components/views/Members'
+import Member from './components/views/Member'
+import Task from './components/views/Task'
+import Settings from './components/views/Settings'
 import styled, { ThemeProvider } from 'styled-components'
 import './styles/theme/global'
 
 const ContentWrapper = styled.div`
   max-width: 600px;
-  margin: 3%;
 `
 
 class App extends Component {
@@ -33,7 +33,8 @@ class App extends Component {
                 <Route path="/groups" component={Groups} />
                 <Route path="/group/:groupid" component={Group} />
                 <Route path="/members" component={Members} />
-                <Route path="/memeber/:memeberid" component={Member} />
+                <Route path="/member/:memberid" component={Member} />
+                <Route path="/task/:taskid" component={Task} />
                 <Route path="/settings" component={Settings} />
               </ContentWrapper>
             </Switch>

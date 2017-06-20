@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import LoginWrapper from '../styles/LoginWrapper'
+import LoginWrapper from '../../styles/LoginWrapper'
 // Do you have a better proccess for how you use wrappers in styled components? Feels repetitive?
 
 const Input = styled.input`

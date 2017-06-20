@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import placeholder from '../../public/images/placeholder.png'
+import placeholder from '../../../public/images/placeholder.png'
 import Refresh from 'react-icons/lib/ti/refresh'
 import Download from 'react-icons/lib/ti/download'
 

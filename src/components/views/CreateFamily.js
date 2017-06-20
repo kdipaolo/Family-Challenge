@@ -2,7 +2,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import LoginWrapper from '../styles/LoginWrapper'
+import LoginWrapper from '../../styles/LoginWrapper'
 import { Redirect } from 'react-router-dom'
 const Input = styled.input`
   background: transparent;

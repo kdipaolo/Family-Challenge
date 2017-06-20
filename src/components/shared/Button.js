@@ -14,6 +14,7 @@ const createColorVariation = color => {
 const Button = styled.button`
   ${props => createColorVariation(props.theme.colors.primary)}
   width: 100%;
+  cursor: pointer;
   padding: 5%;
   border: none;
   color: #fff;

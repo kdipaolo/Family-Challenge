@@ -1,16 +1,16 @@
 import React from 'react'
-import ActionCard from './ActionCard'
+import Action from '../cards/Action'
 import Notification from './Notification'
-
+import ContentWrapper from '../../styles/ContentWrapper'
 class Dashboard extends React.Component {
   render() {
     return (
-      <div>
+      <ContentWrapper>
 
         <Notification />
-        <ActionCard />
+        <Action />
 
-      </div>
+      </ContentWrapper>
     )
   }
 }
