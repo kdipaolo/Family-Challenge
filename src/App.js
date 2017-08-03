@@ -8,7 +8,7 @@ import {
 import Header from './layout/Header'
 import theme from './styles/theme/index'
 import Dashboard from './components/views/Dashboard'
-import Login from './components/views/Login'
+// import Login from './components/views/Login'
 import CreateFamily from './components/views/CreateFamily'
 import Groups from './components/views/Groups'
 import Group from './components/views/Group'
@@ -55,7 +55,7 @@ const ContentWrapper = styled.div`max-width: 600px;`
 const AppBackground = withRouter(
   styled.div`
     ${props =>
-      props.location.pathname == '/'
+      props.location.pathname === '/'
         ? css`background: linear-gradient(#5A6ED0 0%, #4053AE 100%);`
         : css`background: #fff;`} background-repeat: no-repeat;
     height: 100vh;

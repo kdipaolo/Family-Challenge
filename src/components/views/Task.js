@@ -27,12 +27,16 @@ class Task extends React.Component {
       })
   }
   handleTaskUpdate(description) {
+    // this.props.mutate({
+    //   variables: {}
+    // })
     this.props.client
       .mutate({
         mutation: UPDATE_TASK_MUTATION,
         variables: {
           task: {
-            id: this.props.location.pathname.split('task/')[1],
+            // id: this.props.location.pathname.split('task/')[1],
+            id: this.props.params.taskid,
             description
           }
         }
@@ -91,5 +95,5 @@ const UPDATE_TASK_MUTATION = gql`
     }
   }
 `
-
+// http://dev.apollodata.com/react/mutations.html#basics
 export default withApollo(Task)
