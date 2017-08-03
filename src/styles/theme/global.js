@@ -6,9 +6,6 @@ injectGlobal`
   ${normalizeStyled}
   body {
     padding: 0;
-    ${window.location.pathname == '/' ? css`background: linear-gradient(#5A6ED0 0%, #4053AE 100%);` : css`background: #fff;`}
-    background-repeat: no-repeat;
-    height: 100vh;
     color: #333;
   }
 

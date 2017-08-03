@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 class Member extends React.Component {
   render() {
     return (
-      <Link to="/group/1">
+      <Link to="/group/R3JvdXA6Mg==">
         <CardWrapper>
           <h3>Children</h3>
           <h4>Tasks: 5</h4>

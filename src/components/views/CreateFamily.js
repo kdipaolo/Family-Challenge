@@ -17,6 +17,10 @@ const Input = styled.input`
     padding-left: 10px;
   }
 `
+const Header = styled.h2`
+  color: #fff;
+`
+
 class CreateFamily extends React.Component {
   constructor(props) {
     super(props)
@@ -39,7 +43,7 @@ class CreateFamily extends React.Component {
     return this.state.routeChange
       ? <Redirect to="/dashboard" />
       : <LoginWrapper>
-          <h2>Thank you for signing up for Family Challenge!</h2>
+          <Header>Thank you for signing up for Family Challenge!</Header>
           <h3>What is the name of your family?</h3>
           <form onSubmit={this.handleSubmit}>
             <Input type="text" placeholder="i.e - The Smith's" />

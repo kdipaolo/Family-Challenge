@@ -7,17 +7,40 @@ import styled from 'styled-components'
 import ContentWrapper from '../../styles/ContentWrapper'
 import InfoCard from '../cards/InfoCard'
 import Switcher from '../shared/Switcher'
+import { graphql, gql, withApollo } from 'react-apollo'
 
 class Group extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       openMenu: false,
-      active: 'Members'
+      active: 'Members',
+      name: null,
+      tasks: []
     }
     this.handleButtonClick = this.handleButtonClick.bind(this)
     this.handleSwitcherClick = this.handleSwitcherClick.bind(this)
   }
+  componentDidMount() {
+    this.props.client
+      .query({
+        query: GET_GROUP,
+        variables: { id: this.props.location.pathname.split('group/')[1] }
+      })
+      .then(results => {
+        console.log(results)
+        this.setState({
+          name: results.data.getGroup.name,
+          tasks: results.data.getGroup.tasks.edges.map(item => {
+            return {
+              description: item.node.description,
+              id: item.node.id
+            }
+          })
+        })
+      })
+  }
+
   handleButtonClick(e) {
     e.preventDefault()
     this.setState({
@@ -32,7 +55,7 @@ class Group extends React.Component {
   render() {
     return (
       <div>
-        <InfoCard />
+        <InfoCard title={this.state.name} />
 
         <Switcher
           active={this.state.active}
@@ -42,14 +65,9 @@ class Group extends React.Component {
         <ContentWrapper>
           {this.state.active === 'Tasks'
             ? <div>
-                <Task />
-                <Task />
-                <Task />
-                <Task />
-                <Task />
-                <Task />
-                <Task />
-                <Task />
+                {this.state.tasks.map(task => {
+                  return <Task description={task.description} id={task.id} />
+                })}
 
                 <Button sticky onClick={this.handleButtonClick}>
                   + Add A Todo
@@ -79,4 +97,20 @@ class Group extends React.Component {
   }
 }
 
-export default Group
+const GET_GROUP = gql`
+  query getGroup($id: ID!) {
+    getGroup(id: $id) {
+      name
+      tasks {
+        edges {
+          node {
+            id
+            description
+          }
+        }
+      }
+    }
+  }
+`
+
+export default withApollo(Group)
