@@ -1,15 +1,26 @@
 import React from 'react'
 import CardWrapper from '../../styles/CardWrapper'
 import { Link } from 'react-router-dom'
+import dateFormat from 'dateformat'
+
 class Member extends React.Component {
   render() {
+    const { id, name, tasks, created, dueDate } = this.props
     return (
-      <Link to="/group/R3JvdXA6Mg==">
+      <Link to={'/group/' + id}>
         <CardWrapper>
-          <h3>Children</h3>
-          <h4>Tasks: 5</h4>
-          <h4>Created: 2/2/2018</h4>
-          <h4>Due: 2/2/2018</h4>
+          <h3>
+            {name}
+          </h3>
+          <h4>
+            Tasks: {tasks}
+          </h4>
+          <h4>
+            Created: {dateFormat(created, 'fullDate')}
+          </h4>
+          <h4>
+            Due: {dateFormat(dueDate, 'fullDate')}
+          </h4>
         </CardWrapper>
       </Link>
     )

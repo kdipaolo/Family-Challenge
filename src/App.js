@@ -50,7 +50,10 @@ const client = new ApolloClient({
   networkInterface
 })
 
-const ContentWrapper = styled.div`max-width: 600px;`
+const ContentWrapper = styled.div`
+  max-width: 600px;
+  margin: auto;
+`
 
 const AppBackground = withRouter(
   styled.div`

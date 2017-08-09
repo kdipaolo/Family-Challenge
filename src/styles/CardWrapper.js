@@ -1,12 +1,15 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const CardWrapper = styled.div`
   border: 0.5px solid lightgray;
   margin: 2% 0;
   padding: 3%;
   box-shadow: 0px 1.5px 1px #888888;
-
-  img {
+  ${props =>
+    props.faded &&
+    css`
+     opacity: 0.3;
+  `} img {
     width: 50px;
     clip-path: circle(50% at 50% 50%);
     float: left;

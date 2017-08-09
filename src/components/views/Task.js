@@ -1,14 +1,15 @@
 import React from 'react'
 import InfoCard from '../cards/InfoCard.js'
 import Message from '../shared/Message.js'
-import { graphql, gql, withApollo } from 'react-apollo'
+import { gql, withApollo } from 'react-apollo'
 
 class Task extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       description: null,
-      id: null
+      id: null,
+      title: null
     }
     this.handleTaskUpdate = this.handleTaskUpdate.bind(this)
   }
@@ -16,33 +17,30 @@ class Task extends React.Component {
     this.props.client
       .query({
         query: GET_TASK,
-        variables: { id: this.props.location.pathname.split('task/')[1] }
+        variables: { id: this.props.match.params.taskid }
       })
       .then(results => {
         console.log(results)
         this.setState({
           description: results.data.getTask.description,
-          id: results.data.getTask.id
+          title: results.data.getTask.title,
+          id: results.data.getTask.id,
+          createdAt: results.data.getTask.createdAt
         })
       })
   }
   handleTaskUpdate(description) {
-    // this.props.mutate({
-    //   variables: {}
-    // })
     this.props.client
       .mutate({
         mutation: UPDATE_TASK_MUTATION,
         variables: {
           task: {
-            // id: this.props.location.pathname.split('task/')[1],
-            id: this.props.params.taskid,
+            id: this.props.match.params.taskid,
             description
           }
         }
       })
       .then(results => {
-        console.log(results)
         this.setState({
           description: results.data.updateTask.changedTask.description
         })
@@ -53,10 +51,11 @@ class Task extends React.Component {
       <div>
         <InfoCard
           task
-          title={this.state.description}
-          handleTaskUpdate={this.handleTaskUpdate}
+          title={this.state.title}
+          handleUpdate={this.handleTaskUpdate}
+          created={this.state.createdAt}
         />
-        <Message />
+        <Message content={this.state.description} />
         <Message response />
         <Message />
         <Message response />
@@ -76,6 +75,7 @@ const GET_TASK = gql`
         name
       }
       description
+      title
       createdAt
       assignee {
         name
@@ -95,5 +95,4 @@ const UPDATE_TASK_MUTATION = gql`
     }
   }
 `
-// http://dev.apollodata.com/react/mutations.html#basics
 export default withApollo(Task)

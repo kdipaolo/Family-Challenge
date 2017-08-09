@@ -1,12 +1,16 @@
 const styles = {
   colors: {
-    primary: '#4053AE',
-    primaryLight: '#4D61C0',
-    primaryDark: '#364796',
+    primary: '#313B4B',
+    primaryLight: '#53BDE5',
+    primaryDark: '#2C3443',
     secondary: '#419388',
     completed: '#2b8e2b',
     rejected: '#c62828'
   }
 }
+
+// '#4053AE'
+// '#4D61C0',
+// '#364796',
 
 export default styles

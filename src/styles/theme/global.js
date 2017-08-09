@@ -1,6 +1,6 @@
 // 'polished/lib/mixins/normalize';
 import normalizeStyled from 'normalize-styled'
-import { injectGlobal, css } from 'styled-components'
+import { injectGlobal } from 'styled-components'
 
 injectGlobal`
   ${normalizeStyled}

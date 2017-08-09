@@ -12,18 +12,18 @@ import { Link, withRouter } from 'react-router-dom'
 import placeholder from '../../public/images/placeholder.png'
 
 const NavigationBar = styled.div`
-   background-color: ${props => props.theme.colors.primary};
+  background-color: ${props => props.theme.colors.primary};
   width: 100%;
   color: #fff;
   padding: 3%;
   box-shadow: 0px 2px 2px #888888;
-      box-sizing: border-box;
+  box-sizing: border-box;
   & span {
     font-size: 28px;
   }
 `
 const NavigationMenu = styled.div`
-  background-color: #4D61C0;
+  background-color: ${props => props.theme.colors.primaryLight};
   color: #fff;
   width: 300px;
   height: 100vh;
@@ -31,7 +31,8 @@ const NavigationMenu = styled.div`
   position: absolute;
   z-index: 50000;
   transition: 0.2s all ease-out;
-  transform:  ${props => (props.open ? 'translateX(0px)' : 'translateX(-300px)')};
+  transform: ${props =>
+    props.open ? 'translateX(0px)' : 'translateX(-300px)'};
 `
 
 const NavItem = styled.div`
@@ -44,8 +45,7 @@ const NavItem = styled.div`
 `
 
 const UserInfo = styled.div`
-  ${/* background-color: ${props.theme.colors.primary}; */ ''}
-  padding: 5%;
+  ${/* background-color: ${props.theme.colors.primary}; */ ''} padding: 5%;
   height: 75px;
   position: relative;
   > svg {
@@ -96,20 +96,30 @@ class Header extends React.Component {
           <UserInfo>
             <Times onClick={this.handleMenuClick} />
             <img src={placeholder} alt="" />
-            <p>DiPaolo Family <CaretDown /></p>
+            <p>
+              DiPaolo Family <CaretDown />
+            </p>
           </UserInfo>
           <ul>
             <Link to="/dashboard" onClick={this.handleMenuClick}>
-              <NavItem><Bell /> Notifications</NavItem>
+              <NavItem>
+                <Bell /> Notifications
+              </NavItem>
             </Link>
             <Link to="/groups" onClick={this.handleMenuClick}>
-              <NavItem><UserGroup /> Groups</NavItem>
+              <NavItem>
+                <UserGroup /> Groups
+              </NavItem>
             </Link>
             <Link to="/members" onClick={this.handleMenuClick}>
-              <NavItem><ObjectGroup /> Memebers</NavItem>
+              <NavItem>
+                <ObjectGroup /> Memebers
+              </NavItem>
             </Link>
             <Link to="/settings" onClick={this.handleMenuClick}>
-              <NavItem><Cog /> Settings</NavItem>
+              <NavItem>
+                <Cog /> Settings
+              </NavItem>
             </Link>
           </ul>
         </NavigationMenu>
