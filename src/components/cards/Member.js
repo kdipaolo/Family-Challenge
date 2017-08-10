@@ -7,10 +7,14 @@ class Member extends React.Component {
     return (
       <Link to="/member/1">
         <CardWrapper>
-          <img src={placeholder} alt="" />
-          <h3>Kurt DiPaolo</h3>
-          <h4>Tasks: 5</h4>
-          <h4>Age: 28</h4>
+          <div>
+            <img src={placeholder} alt="" />
+          </div>
+          <div>
+            <h3>Kurt DiPaolo</h3>
+            <h4>Tasks: 5</h4>
+            <h4>Age: 28</h4>
+          </div>
         </CardWrapper>
       </Link>
     )

@@ -24,15 +24,14 @@ class Groups extends React.Component {
     })
   }
 
-  handleNewGroup(e, refs) {
-    e.preventDefault()
+  handleNewGroup(values) {
     this.props.client
       .mutate({
         mutation: NEW_GROUP_MUTATION,
         variables: {
-          name: refs.name.value,
-          dueDate: refs.dueDate.value,
-          description: refs.description.value
+          name: values.name,
+          dueDate: values.dueDate,
+          description: values.description
         }
       })
       .then(results => {
@@ -60,7 +59,9 @@ class Groups extends React.Component {
                 dueDate={group.node.dueDate}
               />
             )}
-        <Button onClick={this.handleButtonClick}>+ Add a new group</Button>
+        <Button sticky onClick={this.handleButtonClick}>
+          + Add a new group
+        </Button>
         <ActionSlide
           handleAdd={this.handleNewGroup}
           open={this.state.openMenu}

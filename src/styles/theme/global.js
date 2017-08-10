@@ -1,9 +1,8 @@
-// 'polished/lib/mixins/normalize';
-import normalizeStyled from 'normalize-styled'
+import normalize from 'polished/lib/mixins/normalize'
 import { injectGlobal } from 'styled-components'
 
 injectGlobal`
-  ${normalizeStyled}
+  ${normalize()}
   body {
     padding: 0;
     color: #333;

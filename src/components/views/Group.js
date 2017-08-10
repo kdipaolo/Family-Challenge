@@ -65,7 +65,6 @@ class Group extends React.Component {
   }
 
   handleStateUpdate(e, textValue) {
-    console.log(textValue)
     if (textValue) {
       this.setState({
         [textValue]: !this.state[textValue]
@@ -87,7 +86,6 @@ class Group extends React.Component {
     }
   }
   handleAddTodo(e, refs) {
-    e.preventDefault()
     this.props.client
       .mutate({
         mutation: ADD_TASK_MUTATION,

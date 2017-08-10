@@ -9,7 +9,7 @@ import dateFormat from 'dateformat'
 import Settings from '../shared/Settings'
 
 const Info = styled.div`
-  background-color: ${props => props.theme.colors.primaryDark};
+  background-color: ${props => props.theme.colors.secondary};
   color: #fff;
   text-align: center;
   padding: 5%;
@@ -49,16 +49,8 @@ const Gear = styled(gear)`
 `
 
 class InfoCard extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      edit: false,
-      value: null
-    }
-  }
   render() {
     const { member, task, name, created, tasks } = this.props
-    const { edit, value } = this.state
     return (
       <div>
         {this.props.settings &&
