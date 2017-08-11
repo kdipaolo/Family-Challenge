@@ -55,12 +55,15 @@ const ContentWrapper = styled.div`
   margin: auto;
 `
 
+const setBackgroundColor = props =>
+  props.location.pathname === '/'
+    ? css`background: linear-gradient(#5A6ED0 0%, #4053AE 100%);`
+    : css`background: #fff;`
+
 const AppBackground = withRouter(
   styled.div`
-    ${props =>
-      props.location.pathname === '/'
-        ? css`background: linear-gradient(#5A6ED0 0%, #4053AE 100%);`
-        : css`background: #fff;`} background-repeat: no-repeat;
+    ${setBackgroundColor};
+    background-repeat: no-repeat;
     height: 100vh;
   `
 )

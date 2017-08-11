@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 class Task extends React.Component {
   render() {
     return (
-      <Link to={'/task/' + this.props.id}>
+      <Link to={`/task/${this.props.id}`}>
         <CardWrapper faded={this.props.completed}>
           <h5>1/26/2017</h5>
           <h3>

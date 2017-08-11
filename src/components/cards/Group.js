@@ -7,7 +7,7 @@ class Member extends React.Component {
   render() {
     const { id, name, tasks, created, dueDate } = this.props
     return (
-      <Link to={'/group/' + id}>
+      <Link to={`/group/${id}`}>
         <CardWrapper>
           <h3>
             {name}
