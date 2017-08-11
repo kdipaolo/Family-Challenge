@@ -49,16 +49,9 @@ const Gear = styled(gear)`
 `
 
 class InfoCard extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      edit: false,
-      value: null
-    }
-  }
   render() {
     const { member, task, name, created, tasks } = this.props
-    const { edit, value } = this.state
+
     return (
       <div>
         {this.props.settings &&

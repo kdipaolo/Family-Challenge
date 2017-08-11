@@ -69,14 +69,11 @@ const UserInfo = styled.div`
 `
 
 class Header extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      openMenu: false
-    }
-    this.handleMenuClick = this.handleMenuClick.bind(this)
+  state = {
+    openMenu: false
   }
-  handleMenuClick() {
+
+  handleMenuClick = () => {
     this.setState({
       openMenu: !this.state.openMenu
     })

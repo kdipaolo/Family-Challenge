@@ -45,11 +45,8 @@ const Check = styled(check)`
 `
 
 class Alert extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      show: false
-    }
+  state = {
+    show: false
   }
 
   render() {

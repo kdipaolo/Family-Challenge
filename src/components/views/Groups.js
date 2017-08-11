@@ -7,24 +7,20 @@ import Alert from '../shared/Alert'
 import ActionSlide from '../shared/ActionSlide'
 
 class Groups extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      inTransition: false,
-      openMenu: false,
-      active: false
-    }
-    this.handleButtonClick = this.handleButtonClick.bind(this)
-    this.handleNewGroup = this.handleNewGroup.bind(this)
+  state = {
+    inTransition: false,
+    openMenu: false,
+    active: false
   }
-  handleButtonClick() {
+
+  handleButtonClick = () => {
     this.setState({
       openMenu: !this.state.openMenu,
       groups: []
     })
   }
 
-  handleNewGroup(values) {
+  handleNewGroup = values => {
     this.props.client
       .mutate({
         mutation: NEW_GROUP_MUTATION,
