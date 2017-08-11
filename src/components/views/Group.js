@@ -38,14 +38,13 @@ class Group extends React.Component {
         })
       })
   }
-  handleGroupUpdate = e => {
-    e.preventDefault()
+  handleGroupUpdate = values => {
     this.props.client.mutate({
       mutation: UPDATE_GROUP_MUTATION,
       variables: {
         group: {
           id: this.props.match.params.groupid,
-          name: this.state.name
+          name: values.name
         }
       }
     })
@@ -103,6 +102,7 @@ class Group extends React.Component {
   render() {
     return (
       <div>
+        {/* TODO: update state.name when user types in settings input box */}
         <InfoCard
           name={this.state.name}
           handleGroupUpdate={this.handleGroupUpdate}

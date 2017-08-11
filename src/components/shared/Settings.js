@@ -26,17 +26,28 @@ const Label = styled.label`
 `
 
 class Settings extends React.Component {
+  state = {
+    name: ''
+  }
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+  handleSubmit = e => {
+    e.preventDefault()
+    this.props.handleGroupUpdate(this.state)
+  }
   render() {
     return (
       <Container>
-        <form onSubmit={e => this.props.handleGroupUpdate(e)}>
+        <form onSubmit={this.handleSubmit}>
           <Label htmlFor="group">Edit Group Name</Label>
           <Input
-            ref="title"
             type="text"
             name="name"
-            value={this.props.name}
-            onChange={this.props.handleStateUpdate}
+            value={this.state.name}
+            onChange={this.handleChange}
           />
           <Label htmlFor="group">Delete A Group:</Label>
           <Button>Save</Button>
