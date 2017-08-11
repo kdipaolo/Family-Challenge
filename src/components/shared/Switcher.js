@@ -23,17 +23,15 @@ class Switcher extends React.Component {
   render() {
     return (
       <SwitcherWrapper>
-        {this.props.links.map((link, i) => {
-          return (
-            <SwitcherItem
-              data-item={link}
-              key={i}
-              onClick={this.props.handleSwitcherClick}
-              active={this.props.active === link}>
-              {link}
-            </SwitcherItem>
-          )
-        })}
+        {this.props.links.map((link, i) =>
+          <SwitcherItem
+            data-item={link}
+            key={i}
+            onClick={this.props.handleSwitcherClick}
+            active={this.props.active === link}>
+            {link}
+          </SwitcherItem>
+        )}
       </SwitcherWrapper>
     )
   }
