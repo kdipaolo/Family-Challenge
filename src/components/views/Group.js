@@ -9,22 +9,15 @@ import Switcher from '../shared/Switcher'
 import { gql, withApollo } from 'react-apollo'
 
 class Group extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      openMenu: false,
-      active: 'Tasks',
-      name: null,
-      settings: false,
-      tasks: [],
-      completed: false
-    }
-
-    this.handleSwitcherClick = this.handleSwitcherClick.bind(this)
-    this.handleGroupUpdate = this.handleGroupUpdate.bind(this)
-    this.handleAddTodo = this.handleAddTodo.bind(this)
-    this.handleStateUpdate = this.handleStateUpdate.bind(this)
+  state = {
+    openMenu: false,
+    active: 'Tasks',
+    name: null,
+    settings: false,
+    tasks: [],
+    completed: false
   }
+
   componentDidMount() {
     this.props.client
       .query({
@@ -45,26 +38,26 @@ class Group extends React.Component {
         })
       })
   }
-  handleGroupUpdate(e) {
-    e.preventDefault()
+  handleGroupUpdate = values => {
     this.props.client.mutate({
       mutation: UPDATE_GROUP_MUTATION,
       variables: {
         group: {
           id: this.props.match.params.groupid,
-          name: this.state.name
+          name: values.name
         }
       }
     })
   }
-  handleSwitcherClick(e) {
+  handleSwitcherClick = e => {
     this.setState({
       active: e.target.dataset.item,
       completed: false
     })
   }
 
-  handleStateUpdate(e, textValue) {
+  handleStateUpdate = (e, textValue) => {
+    console.log(textValue)
     if (textValue) {
       this.setState({
         [textValue]: !this.state[textValue]
@@ -85,7 +78,8 @@ class Group extends React.Component {
       }
     }
   }
-  handleAddTodo(e, refs) {
+  handleAddTodo = (e, refs) => {
+    e.preventDefault()
     this.props.client
       .mutate({
         mutation: ADD_TASK_MUTATION,
@@ -108,6 +102,7 @@ class Group extends React.Component {
   render() {
     return (
       <div>
+        {/* TODO: update state.name when user types in settings input box */}
         <InfoCard
           name={this.state.name}
           handleGroupUpdate={this.handleGroupUpdate}

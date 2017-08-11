@@ -8,7 +8,6 @@
   "dependencies": {
     "dateformat": "^2.0.0",
     "feather-icons": "^3.2.2",
-    "normalize-styled": "^1.0.0",
     "polished": "^1.1.3",
     "react": "^15.5.4",
     "react-apollo": "^1.4.10",

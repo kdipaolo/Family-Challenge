@@ -122,7 +122,6 @@ class ActionSlide extends React.Component {
           </Button>
         </Form>
         <ButtonWrapper>
-          {/* Not working now because of styled components */}
           <Button onClick={handleClose} name="openMenu">
             x Close
           </Button>

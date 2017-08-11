@@ -14,7 +14,7 @@ const ZapIcon = styled(Zap)`
 class Task extends React.Component {
   render() {
     return (
-      <Link to={'/task/' + this.props.id}>
+      <Link to={`/task/${this.props.id}`}>
         <CardWrapper faded={this.props.completed}>
           <div>
             <h3>

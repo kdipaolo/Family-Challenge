@@ -1,18 +1,14 @@
 import styled, { css } from 'styled-components'
-
 import { darken } from 'polished'
 
-const createColorVariation = color => {
-  return css`
+const createColorVariation = color => css`
       background-color: ${color};
       &:hover {
         background-color: ${darken(0.2, color)};
       }
     `
-}
 
-function stickyButton() {
-  return css`
+const stickyButton = () => css`
       position: fixed;
       left: 3%;
       width: 95%;
@@ -20,7 +16,6 @@ function stickyButton() {
       z-index: 999999999;
       border: 3px solid #fff;
     `
-}
 
 const border = () => css`
     border: 2px solid ${props => props.theme.colors.secondary};

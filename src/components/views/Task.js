@@ -4,15 +4,12 @@ import Message from '../shared/Message.js'
 import { gql, withApollo } from 'react-apollo'
 
 class Task extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      description: null,
-      id: null,
-      title: null
-    }
-    this.handleTaskUpdate = this.handleTaskUpdate.bind(this)
+  state = {
+    description: null,
+    id: null,
+    title: null
   }
+
   componentDidMount() {
     this.props.client
       .query({
@@ -29,7 +26,7 @@ class Task extends React.Component {
         })
       })
   }
-  handleTaskUpdate(description) {
+  handleTaskUpdate = description => {
     this.props.client
       .mutate({
         mutation: UPDATE_TASK_MUTATION,
