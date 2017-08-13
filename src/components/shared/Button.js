@@ -10,8 +10,8 @@ const createColorVariation = color => css`
 
 const stickyButton = () => css`
       position: fixed;
-      left: 3%;
-      width: 95%;
+      ${'' /* left: 3%; */}
+      width: 100%;
       bottom: 2%;
       z-index: 999999999;
       border: 3px solid #fff;
@@ -30,6 +30,7 @@ const Button = styled.button`
   ${props => createColorVariation(props.theme.colors.secondary)} width: 100%;
   cursor: pointer;
   padding: 5%;
+  max-width: 565px;
   border: none;
   font-weight: bold;
   color: #fff;
@@ -40,6 +41,10 @@ const Button = styled.button`
   ${props => props.sticky && stickyButton()};
   ${props => props.danger && createColorVariation(props.theme.colors.rejected)};
   ${props => props.border && border()};
+
+  @media (min-width: 700px) {
+    padding: 1.5%;
+  }
 `
 
 export default Button

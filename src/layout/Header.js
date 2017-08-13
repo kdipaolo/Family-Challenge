@@ -16,7 +16,7 @@ const NavigationBar = styled.div`
   background-color: ${props => props.theme.colors.primary};
   width: 100%;
   color: #333;
-  padding: 3%;
+  padding: 1%;
   box-shadow: 0px 2px 2px #888888;
   box-sizing: border-box;
   & span {

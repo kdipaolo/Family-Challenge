@@ -15,25 +15,11 @@ const CardWrapper = styled.div`
     clip-path: circle(50% at 50% 50%);
   }
 
-  h3 {
-    margin: 0 0 5px;
-    font-size: 18px;
-  }
-  h4 {
-    margin: 0 0 5px;
-    font-size: 12px;
-    color: gray;
-  }
-  h5 {
-    float: right;
-    color: gray;
-  }
-
-  display: flex;
+  ${'' /* display: flex;
   justify-content: center;
   align-items: center;
   & > div {
     flex: 1;
-  }
+  } */};
 `
 export default CardWrapper

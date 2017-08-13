@@ -62,14 +62,16 @@ const setBackgroundColor = props =>
 
 const AppBackground = withRouter(
   styled.div`
-    ${setBackgroundColor} height: 100vh;
+    ${setBackgroundColor};
+    min-height: 100vh;
+    height: auto;
   `
 )
 
 class App extends Component {
   render() {
     return (
-      <Router>
+      <Router testing>
         <ApolloProvider client={client}>
           <ThemeProvider theme={theme}>
             <AppBackground>

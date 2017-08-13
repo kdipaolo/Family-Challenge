@@ -7,10 +7,13 @@ class Members extends React.Component {
   render() {
     return (
       <ContentWrapper>
-        <Member /><Member /><Member />
-        <Button secondary onClick={this.handleClick}>+ Add a new member</Button>
+        <Member />
+        <Member />
+        <Member />
+        <Button secondary sticky onClick={this.handleClick}>
+          + Add a new member
+        </Button>
         <ActionSlide />
-
       </ContentWrapper>
     )
   }

@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom'
 import dateFormat from 'dateformat'
 import { Users } from 'react-feather'
 import styled from 'styled-components'
-
-const UsersIcon = styled(Users)`
-  float: right;
-  padding: 3px;
-`
+import {
+  CardText,
+  CardHeader,
+  Flex,
+  CardIcon,
+  Image
+} from '../../styles/Cards.js'
 
 class Member extends React.Component {
   render() {
@@ -16,27 +18,26 @@ class Member extends React.Component {
     return (
       <Link to={`/group/${id}`}>
         <CardWrapper>
-          <div>
-            <h3>
-              {name}
-            </h3>
-          </div>
-          <div>
-            <h4>
-              Tasks: {tasks}
-            </h4>
-          </div>
-          <div>
-            <h4>
-              Created: {dateFormat(created, 'fullDate')}
-            </h4>
-            <h4>
-              Due: {dateFormat(dueDate, 'fullDate')}
-            </h4>
-          </div>
-          <div>
-            <UsersIcon />
-          </div>
+          <CardHeader>
+            {name}
+          </CardHeader>
+          <Flex>
+            <div>
+              <CardText secondary>
+                Tasks: {tasks}
+              </CardText>
+
+              <CardText secondary>
+                Created: {dateFormat(created, 'fullDate')}
+              </CardText>
+              <CardText secondary>
+                Due: {dateFormat(dueDate, 'fullDate')}
+              </CardText>
+            </div>
+            <div>
+              <CardIcon />
+            </div>
+          </Flex>
         </CardWrapper>
       </Link>
     )
