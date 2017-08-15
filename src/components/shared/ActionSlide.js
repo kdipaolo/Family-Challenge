@@ -1,6 +1,8 @@
 import React from 'react'
 import Button from './Button'
 import styled from 'styled-components'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const Container = styled.div`
   transform: ${props => (props.open ? 'translateY(0px)' : 'translateY(540px)')};
@@ -68,7 +70,7 @@ const ButtonWrapper = styled.div`display: flex;`
 
 class ActionSlide extends React.Component {
   state = {
-    name: '',
+    title: '',
     dueDate: '',
     description: ''
   }
@@ -83,7 +85,14 @@ class ActionSlide extends React.Component {
     e.preventDefault()
     this.props.handleAdd(this.state)
   }
-
+  handleDatePickerChange = date => {
+    this.setState({
+      dueDate: date
+    })
+  }
+  closeMenu = e => {
+    this.props.handleClose(e, 'openMenu')
+  }
   render() {
     const { open, type, handleClose, handleAdd } = this.props
     return (
@@ -94,18 +103,23 @@ class ActionSlide extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           {/* use: innerRef */}
           <Input
-            name="name"
-            value={this.state.name}
+            name="title"
+            value={this.state.title}
             onChange={this.handleChange}
             type="text"
             placeholder={type + ' Name'}
           />
-          <Input
+          {/* <Input
             name="dueDate"
             value={this.state.dueDate}
             type="text"
             onChange={this.handleChange}
             placeholder={type + ' Due Date'}
+          /> */}
+          <DatePicker
+            placeholderText="Click to select a date"
+            onChange={this.handleDatePickerChange}
+            selected={this.state.dueDate}
           />
           <Label htmlFor="">
             {type} Description
@@ -122,7 +136,7 @@ class ActionSlide extends React.Component {
           </Button>
         </Form>
         <ButtonWrapper>
-          <Button onClick={handleClose} name="openMenu">
+          <Button onClick={this.closeMenu} name="openMenu">
             x Close
           </Button>
         </ButtonWrapper>

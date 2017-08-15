@@ -5,12 +5,12 @@ import dateFormat from 'dateformat'
 
 class Member extends React.Component {
   render() {
-    const { id, name, tasks, created, dueDate } = this.props
+    const { id, title, tasks, created, dueDate } = this.props
     return (
       <Link to={`/group/${id}`}>
         <CardWrapper>
           <h3>
-            {name}
+            {title}
           </h3>
           <h4>
             Tasks: {tasks}

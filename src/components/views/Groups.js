@@ -3,7 +3,6 @@ import Group from '../cards/Group'
 import ContentWrapper from '../../styles/ContentWrapper'
 import { graphql, gql, withApollo } from 'react-apollo'
 import Button from '../shared/Button'
-import Alert from '../shared/Alert'
 import ActionSlide from '../shared/ActionSlide'
 
 class Groups extends React.Component {
@@ -25,7 +24,7 @@ class Groups extends React.Component {
       .mutate({
         mutation: NEW_GROUP_MUTATION,
         variables: {
-          name: values.name,
+          title: values.title,
           dueDate: values.dueDate,
           description: values.description
         }
@@ -40,6 +39,15 @@ class Groups extends React.Component {
           })
       })
   }
+  componentDidMount() {
+    this.props.client
+      .query({
+        query: GET_GROUPS
+      })
+      .then(results => {
+        this.props.getGroups.refetch()
+      })
+  }
   render() {
     return (
       <ContentWrapper>
@@ -49,7 +57,7 @@ class Groups extends React.Component {
               <Group
                 key={i}
                 id={group.node.id}
-                name={group.node.name}
+                title={group.node.title}
                 created={group.node.createdAt}
                 tasks={group.node.tasks.edges.length}
                 dueDate={group.node.dueDate}
@@ -64,7 +72,6 @@ class Groups extends React.Component {
           handleClose={this.handleButtonClick}
           type="Group"
         />
-        <Alert text="New Group Created!" transition={this.state.inTransition} />
       </ContentWrapper>
     )
   }
@@ -76,7 +83,7 @@ const GET_GROUPS = gql`
       allGroups(orderBy: { field: createdAt, direction: DESC }) {
         edges {
           node {
-            name
+            title
             id
             dueDate
             createdAt
@@ -97,11 +104,11 @@ const GET_GROUPS = gql`
 `
 
 const NEW_GROUP_MUTATION = gql`
-  mutation CreateNewGroup($name: String!, $dueDate: DateTime!) {
-    createGroup(input: { name: $name, dueDate: $dueDate }) {
+  mutation CreateNewGroup($title: String!, $dueDate: DateTime!) {
+    createGroup(input: { title: $title, dueDate: $dueDate }) {
       changedGroup {
         id
-        name
+        title
       }
     }
   }
