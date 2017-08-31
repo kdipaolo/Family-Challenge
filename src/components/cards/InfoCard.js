@@ -51,21 +51,22 @@ const Gear = styled(gear)`
 class InfoCard extends React.Component {
   updateSettings = e => this.props.handleStateUpdate(e, 'settings')
   render() {
-    const { member, task, name, created, tasks } = this.props
+    const { member, task, title, created, tasks } = this.props
     return (
       <div>
         {this.props.settings &&
           <Settings
-            name={name}
+            name={title}
             handleStateUpdate={this.props.handleStateUpdate}
-            handleGroupUpdate={this.props.handleGroupUpdate}
+            handleUpdate={this.props.handleUpdate}
+            handleDelete={this.props.handleDelete}
           />}
         <Info>
           <Gear onClick={this.updateSettings} />
           {member && <Image src={placeholder} alt="" />}
 
           <Header>
-            {name}
+            {title}
           </Header>
 
           <DetailWrapper>

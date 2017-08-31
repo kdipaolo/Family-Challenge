@@ -26,33 +26,29 @@ const Label = styled.label`
 `
 
 class Settings extends React.Component {
-  state = {
-    name: ''
-  }
-  handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
-  }
   handleSubmit = e => {
     e.preventDefault()
-    this.props.handleGroupUpdate(this.state)
+    this.props.handleUpdate({ title: this.props.name })
+    this.props.handleStateUpdate(e, 'settings')
   }
+
   render() {
     return (
       <Container>
         <form onSubmit={this.handleSubmit}>
-          <Label htmlFor="group">Edit Group Name</Label>
+          <Label htmlFor="group">Edit Name</Label>
           <Input
             type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.handleChange}
+            name="title"
+            value={this.props.name}
+            onChange={this.props.handleStateUpdate}
           />
-          <Label htmlFor="group">Delete A Group:</Label>
+          <Label htmlFor="group">Delete A :</Label>
           <Button>Save</Button>
         </form>
-        <Button danger>- Delete This Group</Button>
+        <Button danger onClick={this.props.handleDelete}>
+          - Delete This
+        </Button>
       </Container>
     )
   }

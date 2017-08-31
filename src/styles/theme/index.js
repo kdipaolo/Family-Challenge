@@ -9,8 +9,8 @@ const styles = {
     text: '#333',
     background: '#f7f7f7',
     cardBorer: '#d8d8d8',
-    cardBackground: '#fff',
     gray: '#9e9e9e'
+    cardBackground: '#e0e0e0'
   }
 }
 

@@ -12,6 +12,7 @@
     "react": "^15.5.4",
     "react-apollo": "^1.4.10",
     "react-confirm": "^0.1.14",
+    "react-datepicker": "^0.53.0",
     "react-dom": "^15.5.4",
     "react-feather": "^1.0.6",
     "react-icons": "^2.2.5",

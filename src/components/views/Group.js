@@ -1,18 +1,18 @@
 import React from 'react'
 import Button from '../shared/Button'
 import ActionSlide from '../shared/ActionSlide'
-import Task from '../cards/Task'
-import Member from '../cards/Member'
 import ContentWrapper from '../../styles/ContentWrapper'
 import InfoCard from '../cards/InfoCard'
 import Switcher from '../shared/Switcher'
-import { gql, withApollo } from 'react-apollo'
+import TaskList from '../shared/TaskList'
+import MemberList from '../shared/MemberList'
+import { gql, graphql, withApollo } from 'react-apollo'
 
 class Group extends React.Component {
   state = {
     openMenu: false,
     active: 'Tasks',
-    name: null,
+    title: null,
     settings: false,
     tasks: [],
     completed: false
@@ -26,7 +26,7 @@ class Group extends React.Component {
       })
       .then(results => {
         this.setState({
-          name: results.data.getGroup.name,
+          title: results.data.getGroup.title,
           tasks: results.data.getGroup.tasks.edges.map(item => {
             return {
               description: item.node.description,
@@ -44,10 +44,29 @@ class Group extends React.Component {
       variables: {
         group: {
           id: this.props.match.params.groupid,
-          name: values.name
+          title: values.title
         }
       }
     })
+  }
+  handleGroupDelete = () => {
+    var confirmation = confirm('are you sure?')
+    if (confirmation) {
+      this.props.client
+        .mutate({
+          mutation: DELETE_GROUP_MUTATION,
+          variables: {
+            group: {
+              id: this.props.match.params.groupid
+            }
+          }
+        })
+        .then(result => {
+          this.props.history.push('/groups')
+        })
+    } else {
+      console.log('DENIED')
+    }
   }
   handleSwitcherClick = e => {
     this.setState({
@@ -57,7 +76,6 @@ class Group extends React.Component {
   }
 
   handleStateUpdate = (e, textValue) => {
-    console.log(textValue)
     if (textValue) {
       this.setState({
         [textValue]: !this.state[textValue]
@@ -78,34 +96,37 @@ class Group extends React.Component {
       }
     }
   }
-  handleAddTodo = (e, refs) => {
-    e.preventDefault()
+  handleCreateTask = state => {
     this.props.client
       .mutate({
-        mutation: ADD_TASK_MUTATION,
+        mutation: CREATE_TASK_MUTATION,
         variables: {
-          description: refs.description.value,
+          description: state.description,
           groupId: this.props.match.params.groupid,
           needsReviewed: true,
-          title: refs.name.value
+          title: state.title
         }
       })
       .then(results => {
         this.props.client
           .query({
-            query: GET_GROUP,
-            variables: { id: this.props.match.params.groupid }
+            query: GET_TASKS_IN_GROUP,
+            variables: {
+              id: this.props.match.params.groupid
+            }
           })
-          .then(results => {})
+          .then(results => {
+            this.handleStateUpdate('e', 'openMenu')
+          })
       })
   }
   render() {
     return (
       <div>
-        {/* TODO: update state.name when user types in settings input box */}
         <InfoCard
-          name={this.state.name}
-          handleGroupUpdate={this.handleGroupUpdate}
+          title={this.state.title}
+          handleUpdate={this.handleGroupUpdate}
+          handleDelete={this.handleGroupDelete}
           tasks={this.state.tasks}
           settings={this.state.settings}
           handleStateUpdate={this.handleStateUpdate}
@@ -119,49 +140,18 @@ class Group extends React.Component {
 
         <ContentWrapper>
           {this.state.active === 'Tasks'
-            ? <div>
-                <a
-                  href="#"
-                  name="completed"
-                  onClick={e => this.handleStateUpdate(e, 'completed')}>
-                  {this.state.completed ? 'Hide' : 'Show'} Completed
-                </a>
-                {this.state.tasks
-                  .filter(
-                    task => (this.state.completed ? task : !task.completed)
-                  )
-                  .map(task => {
-                    return (
-                      <Task
-                        description={task.description}
-                        title={task.title}
-                        key={task.id}
-                        id={task.id}
-                        completed={task.completed}
-                      />
-                    )
-                  })}
-
-                {!this.state.openMenu &&
-                  <Button
-                    sticky
-                    name="openMenu"
-                    onClick={e => this.handleStateUpdate(e)}>
-                    + Add A Task
-                  </Button>}
-              </div>
-            : <div>
-                <Member />
-
-                <Button sticky onClick={this.handleStateUpdate}>
-                  + Add A Memeber
-                </Button>
-              </div>}
+            ? <TaskList
+                handleStateUpdate={this.handleStateUpdate}
+                tasks={this.state.tasks}
+                completed={this.state.completed}
+                openMenu={this.state.openMenu}
+              />
+            : <MemberList />}
         </ContentWrapper>
         <ActionSlide
           open={this.state.openMenu}
           handleClose={this.handleStateUpdate}
-          handleAdd={this.handleAddTodo}
+          handleAdd={this.handleCreateTask}
           type={this.state.active}
         />
       </div>
@@ -172,7 +162,7 @@ class Group extends React.Component {
 const GET_GROUP = gql`
   query getGroup($id: ID!) {
     getGroup(id: $id) {
-      name
+      title
       tasks {
         edges {
           node {
@@ -187,18 +177,42 @@ const GET_GROUP = gql`
   }
 `
 
-const UPDATE_GROUP_MUTATION = gql`
-  mutation updateGroup($group: UpdateGroupInput!) {
-    updateGroup(input: $group) {
-      changedGroup {
-        id
-        name
+const GET_TASKS_IN_GROUP = gql`
+  query getTasksInGroup($id: ID!) {
+    getGroup(id: $id) {
+      tasks {
+        edges {
+          node {
+            title
+          }
+        }
       }
     }
   }
 `
 
-const ADD_TASK_MUTATION = gql`
+const UPDATE_GROUP_MUTATION = gql`
+  mutation updateGroup($group: UpdateGroupInput!) {
+    updateGroup(input: $group) {
+      changedGroup {
+        id
+        title
+      }
+    }
+  }
+`
+
+const DELETE_GROUP_MUTATION = gql`
+  mutation deleteGroup($group: DeleteGroupInput!) {
+    deleteGroup(input: $group) {
+      changedGroup {
+        title
+      }
+    }
+  }
+`
+
+const CREATE_TASK_MUTATION = gql`
   mutation CreateNewTask(
     $groupId: ID!
     $description: String!
