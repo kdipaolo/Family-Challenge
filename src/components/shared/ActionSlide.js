@@ -1,11 +1,12 @@
 import React from 'react'
 import Button from './Button'
 import styled from 'styled-components'
+import { Input, Textarea, Form, Label } from '../../styles/Forms'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 const Container = styled.div`
-  transform: ${props => (props.open ? 'translateY(0px)' : 'translateY(540px)')};
+  transform: ${props => (props.open ? 'translateY(0vh)' : 'translateY(100vh)')};
   transition: 0.2s all ease-out;
   background-color: ${props => props.theme.colors.cardBackground};
   border-top: 5px solid ${props => props.theme.colors.secondary};
@@ -16,47 +17,14 @@ const Container = styled.div`
   margin: auto;
   display: block;
   height: auto;
-  left: 0;
   bottom: 0;
   text-align: center;
   padding: 10% 5%;
-`
-const Form = styled.form`margin: 6% 0;`
-
-const Input = styled.input`
-  box-sizing: border-box;
-  width: 100%;
-  padding: 3% 0;
-  border-radius: 3px;
-  background: transparent;
-  margin: 2% 0;
-  border: none;
-  color: ${props => props.theme.colors.secondary};
-  border: 1px solid ${props => props.theme.colors.secondary};
-  &::-webkit-input-placeholder {
-    color: ${props => props.theme.colors.secondary};
-    padding-left: 10px;
+  @media (min-width: 700px) {
+    padding: 3% 2%;
   }
 `
-const Textarea = styled.textarea`
-  width: 100%;
-  background: ${props => props.theme.colors.background};
-  height: 100px;
-  border: none;
-  margin: 2% 0;
-  border-radius: 3px;
-  padding: 5px;
-  color: ${props => props.theme.colors.secondary};
-`
-const Label = styled.label`
-  color: ${props => props.theme.colors.secondary};
-  margin: 2% 0;
-  font-size: 16px;
-  margin: 5% 0 1% 0;
-  margin-left: 10px;
-  text-align: left;
-  display: block;
-`
+
 const Text = styled.p`
   color: ${props => props.theme.colors.secondary};
   text-align: center;

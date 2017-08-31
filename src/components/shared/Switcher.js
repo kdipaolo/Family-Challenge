@@ -14,9 +14,9 @@ const SwitcherItem = styled.p`
   font-size: 14px;
   margin: 0;
   padding: 3% 0;
-  color: ${props => (props.active ? props.theme.colors.primaryDark : '#333')};
+  color: ${props => (props.active ? props.theme.colors.secondary : '#333')};
   border-bottom: ${props =>
-    props.active ? '2px solid' + props.theme.colors.primaryDark : 'none'};
+    props.active ? '2px solid' + props.theme.colors.secondary : 'none'};
 `
 
 class Switcher extends React.Component {

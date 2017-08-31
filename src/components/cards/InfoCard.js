@@ -9,7 +9,7 @@ import dateFormat from 'dateformat'
 import Settings from '../shared/Settings'
 
 const Info = styled.div`
-  background-color: ${props => props.theme.colors.primaryDark};
+  background-color: ${props => props.theme.colors.secondary};
   color: #fff;
   text-align: center;
   padding: 5%;

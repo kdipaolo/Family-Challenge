@@ -1,15 +1,15 @@
 import styled from 'styled-components'
 
 const LoginWrapper = styled.div`
-display: flex;
-align-items: center;
-min-height: 100vh;
-justify-content: center;
-text-align: center;
-flex-direction: column;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
 
   h3 {
-    color: #fff;
+    color: #333;
     font-size: 15px;
     letter-spacing: 1px;
   }

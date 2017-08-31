@@ -1,10 +1,11 @@
 import styled, { css } from 'styled-components'
 
 const CardWrapper = styled.div`
-  border: 0.5px solid lightgray;
+  background-color: ${props => props.theme.colors.cardBackground};
   margin: 2% 0;
   padding: 3%;
-  box-shadow: 0px 1.5px 1px #888888;
+  border: 1px solid ${props => props.theme.colors.cardBorer};
+
   ${props =>
     props.faded &&
     css`
@@ -12,22 +13,13 @@ const CardWrapper = styled.div`
   `} img {
     width: 50px;
     clip-path: circle(50% at 50% 50%);
-    float: left;
-    margin-right: 10px;
   }
 
-  h3 {
-    margin: 0 0 5px;
-    font-size: 18px;
-  }
-  h4 {
-    margin: 0 0 5px;
-    font-size: 12px;
-    color: gray;
-  }
-  h5 {
-    float: right;
-    color: gray;
-  }
+  ${'' /* display: flex;
+  justify-content: center;
+  align-items: center;
+  & > div {
+    flex: 1;
+  } */};
 `
 export default CardWrapper

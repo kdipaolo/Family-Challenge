@@ -2,21 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import LoginWrapper from '../../styles/LoginWrapper'
 import { Redirect } from 'react-router-dom'
+import apple from '../../../public/images/apple.svg'
+import { Input } from '../../styles/Forms'
+import { HeaderTwo } from '../../styles/Typography'
+import { Form } from '../../styles/Forms'
 
-const Input = styled.input`
-  background: transparent;
-  border: none;
-  padding: 3%;
-  color: #fff;
-  width: 80%;
-  border-bottom: 1px solid #fff;
-  ::-webkit-input-placeholder {
-    color: #fff;
-
-    padding-left: 10px;
-  }
-`
-const Header = styled.h2`color: #fff;`
+const Apple = styled.img`width: 100px;`
 
 class CreateFamily extends React.Component {
   state = {
@@ -34,11 +25,12 @@ class CreateFamily extends React.Component {
     return this.state.routeChange
       ? <Redirect to="/dashboard" />
       : <LoginWrapper>
-          <Header>Thank you for signing up for Family Challenge!</Header>
+          <Apple src={apple} alt="" />
+          <HeaderTwo>Thank you for signing up for Family Challenge!</HeaderTwo>
           <h3>What is the name of your family?</h3>
-          <form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit}>
             <Input type="text" placeholder="i.e - The Smith's" />
-          </form>
+          </Form>
         </LoginWrapper>
   }
 }

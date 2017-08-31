@@ -10,17 +10,27 @@ const createColorVariation = color => css`
 
 const stickyButton = () => css`
       position: fixed;
-      left: 3%;
-      width: 95%;
+      ${'' /* left: 3%; */}
+      width: 100%;
       bottom: 2%;
       z-index: 999999999;
       border: 3px solid #fff;
     `
 
+const border = () => css`
+    border: 2px solid ${props => props.theme.colors.secondary};
+    background: transparent;
+    color: ${props => props.theme.colors.secondary};
+    width: auto;
+    border-radius: 5px;
+    padding: 2% 5%;
+  `
+
 const Button = styled.button`
-  ${props => createColorVariation(props.theme.colors.primary)} width: 100%;
+  ${props => createColorVariation(props.theme.colors.secondary)} width: 100%;
   cursor: pointer;
   padding: 5%;
+  max-width: 565px;
   border: none;
   font-weight: bold;
   color: #fff;
@@ -28,12 +38,13 @@ const Button = styled.button`
   font-size: 14px;
   cursor: pointer;
   transition: 0.3s all ease;
-  ${props =>
-    props.notification && createColorVariation(props.theme.colors.primaryDark)};
-  ${props =>
-    props.secondary && createColorVariation(props.theme.colors.secondary)};
   ${props => props.sticky && stickyButton()};
   ${props => props.danger && createColorVariation(props.theme.colors.rejected)};
+  ${props => props.border && border()};
+
+  @media (min-width: 700px) {
+    padding: 1.5%;
+  }
 `
 
 export default Button

@@ -57,21 +57,21 @@ const ContentWrapper = styled.div`
 
 const setBackgroundColor = props =>
   props.location.pathname === '/'
-    ? css`background: linear-gradient(#5A6ED0 0%, #4053AE 100%);`
-    : css`background: #fff;`
+    ? css`background: linear-gradient(#fff 0%, #fbfbfb 100%);`
+    : css`background: #f7f7f7;`
 
 const AppBackground = withRouter(
   styled.div`
     ${setBackgroundColor};
-    background-repeat: no-repeat;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
   `
 )
 
 class App extends Component {
   render() {
     return (
-      <Router>
+      <Router testing>
         <ApolloProvider client={client}>
           <ThemeProvider theme={theme}>
             <AppBackground>

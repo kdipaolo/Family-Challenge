@@ -1,21 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
-import ArrowRight from 'react-icons/lib/ti/th-menu'
-// import { boxShadow } from '../styles/index'
-import Bell from 'react-icons/lib/fa/bell-o'
-import UserGroup from 'react-icons/lib/fa/group'
-import ObjectGroup from 'react-icons/lib/fa/object-group'
-import Cog from 'react-icons/lib/fa/cog'
-import CaretDown from 'react-icons/lib/fa/caret-down'
-import Times from 'react-icons/lib/ti/times'
 import { Link, withRouter } from 'react-router-dom'
 import placeholder from '../../public/images/placeholder.png'
+import {
+  Menu,
+  Bell,
+  Users,
+  Settings,
+  UserCheck,
+  ChevronDown,
+  X
+} from 'react-feather'
 
 const NavigationBar = styled.div`
   background-color: ${props => props.theme.colors.primary};
   width: 100%;
-  color: #fff;
-  padding: 3%;
+  color: #333;
+  padding: 1%;
   box-shadow: 0px 2px 2px #888888;
   box-sizing: border-box;
   & span {
@@ -23,8 +24,10 @@ const NavigationBar = styled.div`
   }
 `
 const NavigationMenu = styled.div`
-  background-color: ${props => props.theme.colors.primaryLight};
-  color: #fff;
+  background-color: ${props => props.theme.colors.background};
+  border-right: 4px solid ${props => props.theme.colors.gray};
+  box-sizing: border-box;
+  color: #333;
   width: 300px;
   height: 100vh;
   top: 0;
@@ -86,15 +89,15 @@ class Header extends React.Component {
       <div>
         <NavigationBar>
           <span onClick={this.handleMenuClick}>
-            <ArrowRight />
+            <Menu />
           </span>
         </NavigationBar>
         <NavigationMenu open={this.state.openMenu}>
           <UserInfo>
-            <Times onClick={this.handleMenuClick} />
+            <X onClick={this.handleMenuClick} />
             <img src={placeholder} alt="" />
             <p>
-              DiPaolo Family <CaretDown />
+              DiPaolo Family <ChevronDown />
             </p>
           </UserInfo>
           <ul>
@@ -105,17 +108,17 @@ class Header extends React.Component {
             </Link>
             <Link to="/groups" onClick={this.handleMenuClick}>
               <NavItem>
-                <UserGroup /> Groups
+                <Users /> Groups
               </NavItem>
             </Link>
             <Link to="/members" onClick={this.handleMenuClick}>
               <NavItem>
-                <ObjectGroup /> Memebers
+                <UserCheck /> Memebers
               </NavItem>
             </Link>
             <Link to="/settings" onClick={this.handleMenuClick}>
               <NavItem>
-                <Cog /> Settings
+                <Settings /> Settings
               </NavItem>
             </Link>
           </ul>
