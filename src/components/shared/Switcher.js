@@ -15,24 +15,23 @@ const SwitcherItem = styled.p`
   margin: 0;
   padding: 3% 0;
   color: ${props => (props.active ? props.theme.colors.primaryDark : '#333')};
-  border-bottom: ${props => (props.active ? '2px solid' + props.theme.colors.primaryDark : 'none')}
-
+  border-bottom: ${props =>
+    props.active ? '2px solid' + props.theme.colors.primaryDark : 'none'};
 `
 
 class Switcher extends React.Component {
   render() {
     return (
       <SwitcherWrapper>
-        {this.props.links.map(link => {
-          return (
-            <SwitcherItem
-              data-item={link}
-              onClick={this.props.handleSwitcherClick}
-              active={this.props.active === link}>
-              {link}
-            </SwitcherItem>
-          )
-        })}
+        {this.props.links.map((link, i) =>
+          <SwitcherItem
+            data-item={link}
+            key={i}
+            onClick={this.props.handleSwitcherClick}
+            active={this.props.active === link}>
+            {link}
+          </SwitcherItem>
+        )}
       </SwitcherWrapper>
     )
   }

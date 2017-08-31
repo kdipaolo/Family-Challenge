@@ -30,12 +30,11 @@ const MessageWrapper = styled.div`
   padding: 4%;
   font-size: 13px;
   border-radius: 4px;
-  color:  ${props => props.theme.colors.primary};
+  color: ${props => props.theme.colors.primary};
   display: flex;
   align-items: center;
-  ${props => props.response && response()}
-  ${props => props.completed && completed()}
-  ${props => props.rejected && rejected()}
+  ${props => props.response && response()} ${props =>
+      props.completed && completed()} ${props => props.rejected && rejected()};
 `
 
 const Content = styled.p`
@@ -65,7 +64,7 @@ const ThumbDownIcon = styled(ThumbDown)`
 
 class Message extends React.Component {
   render() {
-    const { response, completed, message, alert, rejected } = this.props
+    const { response, completed, alert, rejected } = this.props
     return (
       <ContentWrapper>
         <MessageWrapper
@@ -74,16 +73,18 @@ class Message extends React.Component {
           rejected={rejected}>
           {!alert &&
             <Content>
-              Please do a better job with the vacumning the carpet
+              {this.props.content}
             </Content>}
           {completed &&
-            <Content><ThumbUpIcon />Task has been approved!</Content>}
+            <Content>
+              <ThumbUpIcon />Task has been approved!
+            </Content>}
           {rejected &&
-            <Content><ThumbDownIcon />Task has been rejected!</Content>}
+            <Content>
+              <ThumbDownIcon />Task has been rejected!
+            </Content>}
 
-          <Timestamp>
-            1/1/2017
-          </Timestamp>
+          <Timestamp>1/1/2017</Timestamp>
         </MessageWrapper>
       </ContentWrapper>
     )

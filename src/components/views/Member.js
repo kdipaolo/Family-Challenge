@@ -5,19 +5,16 @@ import Task from '../cards/Task'
 import ContentWrapper from '../../styles/ContentWrapper'
 
 class Member extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      active: 'Tasks'
-    }
-
-    this.handleSwitcherClick = this.handleSwitcherClick.bind(this)
+  state = {
+    active: 'Tasks'
   }
-  handleSwitcherClick(e) {
+
+  handleSwitcherClick = e => {
     this.setState({
       active: e.target.dataset.item
     })
   }
+
   render() {
     return (
       <div>

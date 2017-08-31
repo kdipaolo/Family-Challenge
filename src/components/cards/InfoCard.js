@@ -2,14 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import placeholder from '../../../public/images/placeholder.png'
 import EditIcon from 'react-icons/lib/md/edit'
+import gear from 'react-icons/lib/fa/cog'
 import CheckCircle from 'react-icons/lib/md/check-circle'
 import { graphql, gql } from 'react-apollo'
+import dateFormat from 'dateformat'
+import Settings from '../shared/Settings'
 
 const Info = styled.div`
   background-color: ${props => props.theme.colors.primaryDark};
   color: #fff;
   text-align: center;
   padding: 5%;
+  position: relative;
 `
 const Header = styled.h3`
   margin: 0;
@@ -26,7 +30,7 @@ const DetailWrapper = styled.div`
   justify-content: space-around;
 `
 
-const Highlight = styled.div`
+const Highlight = styled.span`
   color: #fff;
   font-weight: bold;
   display: inline;
@@ -37,77 +41,62 @@ const Image = styled.img`
   clip-path: circle(50% at 50% 50%);
 `
 
+const Gear = styled(gear)`
+  font-size: 30px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+`
+
 class InfoCard extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      edit: false,
-      description: null
-    }
-  }
+  updateSettings = e => this.props.handleStateUpdate(e, 'settings')
   render() {
-    const { member, task } = this.props
+    const { member, task, title, created, tasks } = this.props
     return (
-      <Info>
-        {member && <Image src={placeholder} alt="" />}
-        {!this.state.edit
-          ? <EditIcon onClick={() => this.setState({ edit: true })} />
-          : <CheckCircle
-              onClick={desc => {
-                this.props.handleTaskUpdate(this.state.description)
-                this.setState({ edit: false })
-              }}
-            />}
+      <div>
+        {this.props.settings &&
+          <Settings
+            name={title}
+            handleStateUpdate={this.props.handleStateUpdate}
+            handleUpdate={this.props.handleUpdate}
+            handleDelete={this.props.handleDelete}
+          />}
+        <Info>
+          <Gear onClick={this.updateSettings} />
+          {member && <Image src={placeholder} alt="" />}
 
-        <Header>
-          {!this.state.edit
-            ? this.props.title
-            : <input
-                defaultValue={this.props.title}
-                onChange={e => this.setState({ description: e.target.value })}
-                type="text"
-              />}
-        </Header>
+          <Header>
+            {title}
+          </Header>
 
-        <DetailWrapper>
-          {task
-            ? <Detail>
-                Tasks Assigned By: <Highlight>Mom</Highlight>
-              </Detail>
-            : <Detail>
-                <Highlight>5</Highlight> Tasks Assigned
+          <DetailWrapper>
+            {task
+              ? <Detail>
+                  Tasks Assigned By: <Highlight>Mom</Highlight>
+                </Detail>
+              : <Detail>
+                  <Highlight>{tasks.length}</Highlight> Tasks Assigned
+                </Detail>}
+            {!task &&
+              <Detail>
+                <Highlight>
+                  {tasks.filter(task => task.completed).length}
+                </Highlight>{' '}
+                Tasks Completed
               </Detail>}
-          {!task &&
             <Detail>
-              <Highlight>35</Highlight> Tasks Completed
-            </Detail>}
-          <Detail>
-            {member ? 'Signed up' : 'Created'} on:{' '}
-            <Highlight>5/5/2017</Highlight>
-          </Detail>
-          {member &&
-            <Detail>
-              Groups: <Highlight>Children</Highlight>
-            </Detail>}
-        </DetailWrapper>
-      </Info>
+              {member ? 'Signed up' : 'Created'} on:{' '}
+              <Highlight>{dateFormat(created, 'fullDate')}</Highlight>
+            </Detail>
+            {member &&
+              <Detail>
+                Groups: <Highlight>Children</Highlight>
+              </Detail>}
+          </DetailWrapper>
+        </Info>
+      </div>
     )
   }
 }
 
-const UPDATE_TASK_MUTATION = gql`
-  mutation UpdateTaskMutation($title: String!, $content: String!, $id: ID!) {
-    updateTask(title: $title, content: $content, id: $id) {
-      id
-      createdAt
-      title
-      content
-      author {
-        id
-        name
-      }
-    }
-  }
-`
-
-export default graphql(UPDATE_TASK_MUTATION, { name: 'updateTask' })(InfoCard)
+export default InfoCard
