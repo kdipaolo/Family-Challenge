@@ -3,6 +3,7 @@ import Group from '../cards/Group'
 import ContentWrapper from '../../styles/ContentWrapper'
 import { graphql, gql, withApollo } from 'react-apollo'
 import Button from '../shared/Button'
+import Loading from '../shared/Loading'
 import ActionSlide from '../shared/ActionSlide'
 
 class Groups extends React.Component {
@@ -54,7 +55,7 @@ class Groups extends React.Component {
     return (
       <ContentWrapper>
         {this.props.getGroups.loading
-          ? <h1>Loading..</h1>
+          ? <Loading />
           : this.props.getGroups.viewer.allGroups.edges.map((group, i) =>
               <Group
                 key={i}
