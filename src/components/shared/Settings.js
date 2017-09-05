@@ -1,29 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from './Button'
-
+import { Input, Textarea, Form, Label } from '../../styles/Forms'
+import { HeaderTwo } from '../../styles/Typography'
 const Container = styled.div`
   padding: 2%;
-  background-color: ${props => props.theme.colors.primaryLight};
+  background-color: ${props => props.theme.colors.primary};
   max-width: 100%;
   padding: 3%;
   transition: 3s all ease;
 `
 
-const Input = styled.input`
-  padding: 3%;
-  width: 100%;
-  margin: 1% auto;
-  color: ${props => props.theme.colors.primaryDark};
-  box-sizing: border-box;
-`
-
-const Label = styled.label`
-  margin: 2% auto;
-  display: block;
-  color: ${props => props.theme.colors.primaryDark};
-  font-weight: bold;
-`
+const Flex = styled.div`display: flex;`
 
 class Settings extends React.Component {
   handleSubmit = e => {
@@ -35,6 +23,7 @@ class Settings extends React.Component {
   render() {
     return (
       <Container>
+        <HeaderTwo>Settings</HeaderTwo>
         <form onSubmit={this.handleSubmit}>
           <Label htmlFor="group">Edit Name</Label>
           <Input
@@ -43,12 +32,13 @@ class Settings extends React.Component {
             value={this.props.name}
             onChange={this.props.handleStateUpdate}
           />
-          <Label htmlFor="group">Delete A :</Label>
-          <Button>Save</Button>
+          <Flex>
+            <Button outline>Save</Button>
+            <Button outline danger onClick={this.props.handleDelete}>
+              Delete
+            </Button>
+          </Flex>
         </form>
-        <Button danger onClick={this.props.handleDelete}>
-          - Delete This
-        </Button>
       </Container>
     )
   }

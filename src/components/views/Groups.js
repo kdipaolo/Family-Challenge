@@ -9,9 +9,10 @@ class Groups extends React.Component {
   state = {
     inTransition: false,
     openMenu: false,
-    active: false
+    active: false,
+    open: false
   }
-
+  x
   handleButtonClick = () => {
     this.setState({
       openMenu: !this.state.openMenu,
@@ -45,6 +46,7 @@ class Groups extends React.Component {
         query: GET_GROUPS
       })
       .then(results => {
+        console.log(results)
         this.props.getGroups.refetch()
       })
   }
@@ -63,9 +65,10 @@ class Groups extends React.Component {
                 dueDate={group.node.dueDate}
               />
             )}
-        <Button sticky onClick={this.handleButtonClick}>
-          + Add a new group
-        </Button>
+        {!this.state.openMenu &&
+          <Button sticky onClick={this.handleButtonClick}>
+            + Add a new group
+          </Button>}
         <ActionSlide
           handleAdd={this.handleNewGroup}
           open={this.state.openMenu}

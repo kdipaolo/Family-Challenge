@@ -2,13 +2,50 @@ import React from 'react'
 import InfoCard from '../cards/InfoCard.js'
 import Message from '../shared/Message.js'
 import { gql, withApollo } from 'react-apollo'
+import styled from 'styled-components'
+import { CheckCircle, XCircle } from 'react-feather'
+import { Input, Textarea, Form, Label } from '../../styles/Forms'
+import ContentWrapper from '../../styles/ContentWrapper'
+import Button from '../shared/Button'
+
+const Status = styled.div`
+  background: ${props => props.theme.colors.Highlight};
+  padding: 2%;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid ${props => props.theme.colors.cardBorer};
+  border-left: 1px solid ${props => props.theme.colors.cardBorer};
+  border-right: 1px solid ${props => props.theme.colors.cardBorer};
+`
+
+const Flex = styled.div`
+  display: flex;
+  & > div {
+    flex: 1;
+    background: ${props => props.theme.colors.cardBackground};
+    padding: 2%;
+    text-align: center;
+    margin: 5px;
+    justify-content: center;
+    & > span {
+      margin-right: 10px;
+    }
+  }
+`
+
+const Messages = styled.div`
+  background: ${props => props.theme.colors.cardBackground};
+  padding: 2%;
+  border: 1px solid ${props => props.theme.colors.cardBorer};
+`
 
 class Task extends React.Component {
   state = {
     description: null,
     id: null,
     title: null,
-    settings: false
+    settings: false,
+    completed: false
   }
 
   componentDidMount() {
@@ -23,6 +60,7 @@ class Task extends React.Component {
           description: results.data.getTask.description,
           title: results.data.getTask.title,
           id: results.data.getTask.id,
+          completed: results.data.getTask.completed,
           createdAt: results.data.getTask.createdAt
         })
       })
@@ -51,7 +89,7 @@ class Task extends React.Component {
           }
         })
         .then(result => {
-          // this.props.history.push('/groups')
+          this.props.history.goBack()
         })
     } else {
       console.log('DENIED')
@@ -78,6 +116,17 @@ class Task extends React.Component {
       }
     }
   }
+  handleApprove = () => {
+    this.props.client.mutate({
+      mutation: UPDATE_TASK_MUTATION,
+      variables: {
+        task: {
+          id: this.props.match.params.taskid,
+          completed: true
+        }
+      }
+    })
+  }
   render() {
     return (
       <div>
@@ -91,13 +140,38 @@ class Task extends React.Component {
           handleDelete={this.handleTaskDelete}
           handleStateUpdate={this.handleStateUpdate}
         />
-        <Message content={this.state.description} />
-        {/* <Message response />
-        <Message />
-        <Message response />
-        <Message alert rejected />
-        <Message response />
-        <Message alert completed /> */}
+        <Status>
+          Status: {this.state.completed ? 'Task Completed' : 'In Progress'}
+        </Status>
+        <Flex>
+          <div onClick={this.handleApprove}>
+            <span>Approve Task</span>
+            <CheckCircle />
+          </div>
+          <div>
+            <span>Decline Task</span>
+            <XCircle />
+          </div>
+        </Flex>
+        <h1 />
+        <Messages>
+          <ContentWrapper>
+            <h3>Conversation:</h3>
+            <Textarea
+              type="text"
+              name="title"
+              placeholder="Send message to task assignee"
+            />
+            <Button>Send</Button>
+            <Message content={this.state.description} />
+            <Message response content="Content for message" />
+            <Message content="Content for message" />
+            <Message response content="Content for message" />
+            <Message alert rejected />
+            <Message response content="Content for message" />
+            <Message alert completed />
+          </ContentWrapper>
+        </Messages>
       </div>
     )
   }
@@ -108,9 +182,10 @@ const GET_TASK = gql`
     getTask(id: $id) {
       group {
         id
-        name
+        title
       }
       description
+      completed
       title
       createdAt
       assignee {
@@ -141,4 +216,5 @@ const UPDATE_TASK_MUTATION = gql`
     }
   }
 `
+
 export default withApollo(Task)

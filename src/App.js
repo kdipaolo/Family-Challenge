@@ -51,7 +51,7 @@ const client = new ApolloClient({
 })
 
 const ContentWrapper = styled.div`
-  max-width: 600px;
+  max-width: 700px;
   margin: auto;
 `
 

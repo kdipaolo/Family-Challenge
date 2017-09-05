@@ -7,13 +7,16 @@ import Switcher from '../shared/Switcher'
 import TaskList from '../shared/TaskList'
 import MemberList from '../shared/MemberList'
 import { gql, graphql, withApollo } from 'react-apollo'
+import { Motion, spring } from 'react-motion'
+import styled, { css } from 'styled-components'
+import Users from 'react-feather'
 
 class Group extends React.Component {
   state = {
     openMenu: false,
     active: 'Tasks',
     title: null,
-    settings: false,
+    edit: false,
     tasks: [],
     completed: false
   }
@@ -25,6 +28,7 @@ class Group extends React.Component {
         variables: { id: this.props.match.params.groupid }
       })
       .then(results => {
+        console.log('results', results)
         this.setState({
           title: results.data.getGroup.title,
           tasks: results.data.getGroup.tasks.edges.map(item => {
@@ -39,6 +43,7 @@ class Group extends React.Component {
       })
   }
   handleGroupUpdate = values => {
+    console.log(values)
     this.props.client.mutate({
       mutation: UPDATE_GROUP_MUTATION,
       variables: {
@@ -116,6 +121,7 @@ class Group extends React.Component {
             }
           })
           .then(results => {
+            console.log(results)
             this.handleStateUpdate('e', 'openMenu')
           })
       })
@@ -128,7 +134,7 @@ class Group extends React.Component {
           handleUpdate={this.handleGroupUpdate}
           handleDelete={this.handleGroupDelete}
           tasks={this.state.tasks}
-          settings={this.state.settings}
+          edit={this.state.edit}
           handleStateUpdate={this.handleStateUpdate}
         />
 
@@ -147,13 +153,14 @@ class Group extends React.Component {
                 openMenu={this.state.openMenu}
               />
             : <MemberList />}
+
+          <ActionSlide
+            open={this.state.openMenu}
+            handleClose={this.handleStateUpdate}
+            handleAdd={this.handleCreateTask}
+            type={this.state.active}
+          />
         </ContentWrapper>
-        <ActionSlide
-          open={this.state.openMenu}
-          handleClose={this.handleStateUpdate}
-          handleAdd={this.handleCreateTask}
-          type={this.state.active}
-        />
       </div>
     )
   }

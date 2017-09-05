@@ -11,7 +11,7 @@ import {
   ChevronDown,
   X
 } from 'react-feather'
-
+import SettingsView from '../components/shared/Settings'
 const NavigationBar = styled.div`
   background-color: ${props => props.theme.colors.primary};
   width: 100%;
@@ -21,6 +21,10 @@ const NavigationBar = styled.div`
   box-sizing: border-box;
   & span {
     font-size: 28px;
+      &:last-of-type {
+        float: right;
+      }
+    }
   }
 `
 const NavigationMenu = styled.div`
@@ -36,6 +40,11 @@ const NavigationMenu = styled.div`
   transition: 0.2s all ease-out;
   transform: ${props =>
     props.open ? 'translateX(0px)' : 'translateX(-300px)'};
+`
+
+const SettingsMenu = NavigationMenu.extend`
+  right: 0;
+  transform: ${props => (props.open ? 'translateX(0px)' : 'translateX(300px)')};
 `
 
 const NavItem = styled.div`
@@ -73,12 +82,18 @@ const UserInfo = styled.div`
 
 class Header extends React.Component {
   state = {
-    openMenu: false
+    openNav: false,
+    openSettings: false
   }
 
   handleMenuClick = () => {
     this.setState({
-      openMenu: !this.state.openMenu
+      openNav: !this.state.openNav
+    })
+  }
+  handleSettingsClick = () => {
+    this.setState({
+      openSettings: !this.state.openSettings
     })
   }
   render() {
@@ -91,8 +106,11 @@ class Header extends React.Component {
           <span onClick={this.handleMenuClick}>
             <Menu />
           </span>
+          <span onClick={this.handleSettingsClick}>
+            <Settings />
+          </span>
         </NavigationBar>
-        <NavigationMenu open={this.state.openMenu}>
+        <NavigationMenu open={this.state.openNav}>
           <UserInfo>
             <X onClick={this.handleMenuClick} />
             <img src={placeholder} alt="" />
@@ -123,6 +141,9 @@ class Header extends React.Component {
             </Link>
           </ul>
         </NavigationMenu>
+        <SettingsMenu open={this.state.openSettings}>
+          <X onClick={this.handleSettingsClick} />
+        </SettingsMenu>
       </div>
     )
   }
