@@ -1,7 +1,7 @@
 import React from 'react'
 import InfoCard from '../cards/InfoCard.js'
 import Message from '../shared/Message.js'
-import { gql, withApollo } from 'react-apollo'
+import { gql, graphql, compose } from 'react-apollo'
 import styled from 'styled-components'
 import { CheckCircle, XCircle } from 'react-feather'
 import { Input, Textarea, Form, Label } from '../../styles/Forms'
@@ -45,52 +45,30 @@ class Task extends React.Component {
     id: null,
     title: null,
     settings: false,
-    completed: false
+    completed: false,
+    edit: false
+  }
+  componentWillUpdate(nextProps) {
+    if (
+      nextProps.getTask.loading === false &&
+      this.props.getTask.loading === true
+    ) {
+      const task = nextProps.getTask.getTask
+      this.setState({
+        description: task.description,
+        title: task.title,
+        id: task.id,
+        completed: task.completed,
+        createdAt: task.createdAt
+      })
+    }
   }
 
-  componentDidMount() {
-    this.props.client
-      .query({
-        query: GET_TASK,
-        variables: { id: this.props.match.params.taskid }
-      })
-      .then(results => {
-        console.log(results)
-        this.setState({
-          description: results.data.getTask.description,
-          title: results.data.getTask.title,
-          id: results.data.getTask.id,
-          completed: results.data.getTask.completed,
-          createdAt: results.data.getTask.createdAt
-        })
-      })
-  }
-  handleTaskUpdate = values => {
-    this.props.client.mutate({
-      mutation: UPDATE_TASK_MUTATION,
-      variables: {
-        task: {
-          id: this.props.match.params.taskid,
-          title: values.title
-        }
-      }
-    })
-  }
   handleTaskDelete = () => {
     var confirmation = confirm('are you sure?')
     if (confirmation) {
-      this.props.client
-        .mutate({
-          mutation: DELETE_TASK_MUTATION,
-          variables: {
-            task: {
-              id: this.props.match.params.taskid
-            }
-          }
-        })
-        .then(result => {
-          this.props.history.goBack()
-        })
+      this.props.deleteTask()
+      this.props.history.goBack()
     } else {
       console.log('DENIED')
     }
@@ -133,12 +111,12 @@ class Task extends React.Component {
         <InfoCard
           task
           title={this.state.title}
-          handleUpdate={this.handleTaskUpdate}
           created={this.state.createdAt}
           settings={this.state.settings}
-          handleUpdate={this.handleTaskUpdate}
+          handleUpdate={this.props.updateTask}
           handleDelete={this.handleTaskDelete}
           handleStateUpdate={this.handleStateUpdate}
+          edit={this.state.edit}
         />
         <Status>
           Status: {this.state.completed ? 'Task Completed' : 'In Progress'}
@@ -217,4 +195,38 @@ const UPDATE_TASK_MUTATION = gql`
   }
 `
 
-export default withApollo(Task)
+export default compose(
+  graphql(GET_TASK, {
+    name: 'getTask',
+    options: props => ({ variables: { id: props.match.params.taskid } })
+  }),
+  graphql(UPDATE_TASK_MUTATION, {
+    name: 'updateTaskMutation',
+    props: ({ ownProps, updateTaskMutation }) => ({
+      updateTask: values => {
+        updateTaskMutation({
+          variables: {
+            task: {
+              id: ownProps.match.params.taskid,
+              title: values.title
+            }
+          }
+        })
+      }
+    })
+  }),
+  graphql(DELETE_TASK_MUTATION, {
+    name: 'deleteTaskMutation',
+    props: ({ ownProps, deleteTaskMutation }) => ({
+      deleteTask: values => {
+        deleteTaskMutation({
+          variables: {
+            task: {
+              id: ownProps.match.params.taskid
+            }
+          }
+        })
+      }
+    })
+  })
+)(Task)

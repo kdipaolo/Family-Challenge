@@ -2,8 +2,9 @@ import React from 'react'
 import Button from './Button'
 import styled from 'styled-components'
 import { Input, Textarea, Form, Label } from '../../styles/Forms'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+
+import { SingleDatePicker } from 'react-dates'
+import 'react-dates/lib/css/_datepicker.css'
 
 const Container = styled.div`
   transform: ${props => (props.open ? 'translateY(0vh)' : 'translateY(100vh)')};
@@ -41,6 +42,18 @@ const Text = styled.p`
   display: inline-block;
   margin: auto;
 `
+
+const sDatePicker = styled.div`
+  .SingleDatePicker {
+    width: 100% !important;
+  }
+`
+
+// const sDatePicker = styled(SingleDatePicker)`
+//   .SingleDatePicker {
+//     width: 100% !important;
+//   }
+// `
 
 class ActionSlide extends React.Component {
   state = {
@@ -82,12 +95,14 @@ class ActionSlide extends React.Component {
             type="text"
             placeholder={type + ' Name'}
           />
-          <DatePicker
-            style={{ border: '2px solid green' }}
-            placeholderText="Click to select a date"
-            onChange={this.handleDatePickerChange}
-            selected={this.state.dueDate}
-          />
+          <sDatePicker>
+            <SingleDatePicker
+              date={this.state.dueDate}
+              onDateChange={this.handleDatePickerChange}
+              focused={this.state.focused}
+              onFocusChange={({ focused }) => this.setState({ focused })}
+            />
+          </sDatePicker>
           <Label htmlFor="">
             {type} Description
           </Label>

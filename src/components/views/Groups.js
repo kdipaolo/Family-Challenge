@@ -1,7 +1,7 @@
 import React from 'react'
 import Group from '../cards/Group'
 import ContentWrapper from '../../styles/ContentWrapper'
-import { graphql, gql, withApollo } from 'react-apollo'
+import { graphql, gql, compose } from 'react-apollo'
 import Button from '../shared/Button'
 import Loading from '../shared/Loading'
 import ActionSlide from '../shared/ActionSlide'
@@ -13,7 +13,9 @@ class Groups extends React.Component {
     active: false,
     open: false
   }
-  x
+  componentDidMount() {
+    this.props.getGroups.refetch()
+  }
   handleButtonClick = () => {
     this.setState({
       openMenu: !this.state.openMenu,
@@ -41,16 +43,7 @@ class Groups extends React.Component {
           })
       })
   }
-  componentDidMount() {
-    this.props.client
-      .query({
-        query: GET_GROUPS
-      })
-      .then(results => {
-        console.log(results)
-        this.props.getGroups.refetch()
-      })
-  }
+
   render() {
     return (
       <ContentWrapper>
@@ -71,7 +64,7 @@ class Groups extends React.Component {
             + Add a new group
           </Button>}
         <ActionSlide
-          handleAdd={this.handleNewGroup}
+          handleAdd={this.props.createGroup}
           open={this.state.openMenu}
           handleClose={this.handleButtonClick}
           type="Group"
@@ -118,4 +111,22 @@ const NEW_GROUP_MUTATION = gql`
   }
 `
 
-export default withApollo(graphql(GET_GROUPS, { name: 'getGroups' })(Groups))
+export default compose(
+  graphql(GET_GROUPS, {
+    name: 'getGroups'
+  }),
+  graphql(NEW_GROUP_MUTATION, {
+    name: 'newGroupMutation',
+    props: ({ ownProps, newGroupMutation }) => ({
+      createGroup: values => {
+        newGroupMutation({
+          variables: {
+            title: values.title,
+            dueDate: values.dueDate,
+            description: values.description
+          }
+        }).then(res => ownProps.getGroups.refetch())
+      }
+    })
+  })
+)(Groups)

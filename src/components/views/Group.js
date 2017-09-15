@@ -6,7 +6,7 @@ import InfoCard from '../cards/InfoCard'
 import Switcher from '../shared/Switcher'
 import TaskList from '../shared/TaskList'
 import MemberList from '../shared/MemberList'
-import { gql, graphql, withApollo } from 'react-apollo'
+import { gql, graphql, withApollo, compose } from 'react-apollo'
 import { Motion, spring } from 'react-motion'
 import styled, { css } from 'styled-components'
 import Users from 'react-feather'
@@ -20,55 +20,29 @@ class Group extends React.Component {
     tasks: [],
     completed: false
   }
-
-  componentDidMount() {
-    this.props.client
-      .query({
-        query: GET_GROUP,
-        variables: { id: this.props.match.params.groupid }
-      })
-      .then(results => {
-        console.log('results', results)
-        this.setState({
-          title: results.data.getGroup.title,
-          tasks: results.data.getGroup.tasks.edges.map(item => {
-            return {
-              description: item.node.description,
-              completed: item.node.completed,
-              title: item.node.title,
-              id: item.node.id
-            }
-          })
+  componentWillUpdate(nextProps) {
+    if (
+      nextProps.getGroup.loading === false &&
+      this.props.getGroup.loading === true
+    ) {
+      this.setState({
+        title: nextProps.getGroup.getGroup.title,
+        tasks: nextProps.getGroup.getGroup.tasks.edges.map(item => {
+          return {
+            description: item.node.description,
+            completed: item.node.completed,
+            title: item.node.title,
+            id: item.node.id
+          }
         })
       })
-  }
-  handleGroupUpdate = values => {
-    console.log(values)
-    this.props.client.mutate({
-      mutation: UPDATE_GROUP_MUTATION,
-      variables: {
-        group: {
-          id: this.props.match.params.groupid,
-          title: values.title
-        }
-      }
-    })
+    }
   }
   handleGroupDelete = () => {
     var confirmation = confirm('are you sure?')
     if (confirmation) {
-      this.props.client
-        .mutate({
-          mutation: DELETE_GROUP_MUTATION,
-          variables: {
-            group: {
-              id: this.props.match.params.groupid
-            }
-          }
-        })
-        .then(result => {
-          this.props.history.push('/groups')
-        })
+      this.props.deleteGroup()
+      this.props.history.goBack()
     } else {
       console.log('DENIED')
     }
@@ -101,37 +75,13 @@ class Group extends React.Component {
       }
     }
   }
-  handleCreateTask = state => {
-    this.props.client
-      .mutate({
-        mutation: CREATE_TASK_MUTATION,
-        variables: {
-          description: state.description,
-          groupId: this.props.match.params.groupid,
-          needsReviewed: true,
-          title: state.title
-        }
-      })
-      .then(results => {
-        this.props.client
-          .query({
-            query: GET_TASKS_IN_GROUP,
-            variables: {
-              id: this.props.match.params.groupid
-            }
-          })
-          .then(results => {
-            console.log(results)
-            this.handleStateUpdate('e', 'openMenu')
-          })
-      })
-  }
+  handleCreateTask = state => {}
   render() {
     return (
       <div>
         <InfoCard
           title={this.state.title}
-          handleUpdate={this.handleGroupUpdate}
+          handleUpdate={this.props.updateGroup}
           handleDelete={this.handleGroupDelete}
           tasks={this.state.tasks}
           edit={this.state.edit}
@@ -157,7 +107,7 @@ class Group extends React.Component {
           <ActionSlide
             open={this.state.openMenu}
             handleClose={this.handleStateUpdate}
-            handleAdd={this.handleCreateTask}
+            handleAdd={this.props.createTask}
             type={this.state.active}
           />
         </ContentWrapper>
@@ -243,4 +193,56 @@ const CREATE_TASK_MUTATION = gql`
   }
 `
 
-export default withApollo(Group)
+export default compose(
+  graphql(GET_GROUP, {
+    name: 'getGroup',
+    options: props => ({ variables: { id: props.match.params.groupid } })
+  }),
+  graphql(UPDATE_GROUP_MUTATION, {
+    name: 'updateGroupMutation',
+    props: ({ ownProps, updateGroupMutation }) => ({
+      updateGroup: values => {
+        updateGroupMutation({
+          variables: {
+            group: {
+              id: ownProps.match.params.groupid,
+              title: values.title
+            }
+          }
+        })
+      }
+    })
+  }),
+  graphql(DELETE_GROUP_MUTATION, {
+    name: 'deleteGroupMutation',
+    props: ({ ownProps, deleteGroupMutation }) => ({
+      deleteGroup: values => {
+        deleteGroupMutation({
+          variables: {
+            group: {
+              id: ownProps.match.params.groupid
+            }
+          }
+        })
+      }
+    })
+  }),
+  graphql(CREATE_TASK_MUTATION, {
+    name: 'createTaskMutation',
+    props: ({ ownProps, createTaskMutation }) => ({
+      createTask: values => {
+        // Where is values coming from?
+        createTaskMutation({
+          variables: {
+            description: values.description,
+            groupId: ownProps.match.params.groupid,
+            needsReviewed: true,
+            title: values.title
+          }
+        }).then(res => {
+          ownProps.getGroup.refetch()
+        })
+      }
+    })
+  })
+)(Group)
