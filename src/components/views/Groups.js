@@ -17,31 +17,20 @@ class Groups extends React.Component {
     this.props.getGroups.refetch()
   }
   handleButtonClick = () => {
-    this.setState({
-      openMenu: !this.state.openMenu,
+    this.setState(state => ({
+      openMenu: !state.openMenu,
       groups: []
-    })
+    }))
   }
 
-  handleNewGroup = values => {
-    this.props.client
-      .mutate({
-        mutation: NEW_GROUP_MUTATION,
-        variables: {
-          title: values.title,
-          dueDate: values.dueDate,
-          description: values.description
-        }
-      })
-      .then(results => {
-        this.props.client
-          .query({
-            query: GET_GROUPS
-          })
-          .then(results => {
-            this.props.getGroups.refetch()
-          })
-      })
+  handleNewGroup = async values => {
+    const response = await this.props.createGroup(values)
+    this.setState({
+      openMenu: false
+    })
+    console.log(response)
+    const id = response.data.createGroup.changedGroup.id
+    this.props.history.push(`/group/${id}`)
   }
 
   render() {
@@ -64,7 +53,7 @@ class Groups extends React.Component {
             + Add a new group
           </Button>}
         <ActionSlide
-          handleAdd={this.props.createGroup}
+          handleAdd={this.handleNewGroup}
           open={this.state.openMenu}
           handleClose={this.handleButtonClick}
           type="Group"
@@ -118,15 +107,14 @@ export default compose(
   graphql(NEW_GROUP_MUTATION, {
     name: 'newGroupMutation',
     props: ({ ownProps, newGroupMutation }) => ({
-      createGroup: values => {
+      createGroup: values =>
         newGroupMutation({
           variables: {
             title: values.title,
             dueDate: values.dueDate,
             description: values.description
           }
-        }).then(res => ownProps.getGroups.refetch())
-      }
+        })
     })
   })
 )(Groups)

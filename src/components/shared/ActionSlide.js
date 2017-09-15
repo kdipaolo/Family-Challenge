@@ -43,16 +43,14 @@ const Text = styled.p`
   margin: auto;
 `
 
-const sDatePicker = styled.div`
+const StyledDatePicker = styled.div`
   .SingleDatePicker {
     width: 100% !important;
   }
 `
 
-// const sDatePicker = styled(SingleDatePicker)`
-//   .SingleDatePicker {
-//     width: 100% !important;
-//   }
+// const StyledDatePicker = styled(SingleDatePicker)`
+//     width: 100%!important;
 // `
 
 class ActionSlide extends React.Component {
@@ -95,14 +93,15 @@ class ActionSlide extends React.Component {
             type="text"
             placeholder={type + ' Name'}
           />
-          <sDatePicker>
+
+          <StyledDatePicker>
             <SingleDatePicker
               date={this.state.dueDate}
               onDateChange={this.handleDatePickerChange}
               focused={this.state.focused}
               onFocusChange={({ focused }) => this.setState({ focused })}
             />
-          </sDatePicker>
+          </StyledDatePicker>
           <Label htmlFor="">
             {type} Description
           </Label>
