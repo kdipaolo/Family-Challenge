@@ -1,19 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
 import placeholder from '../../../public/images/placeholder.png'
-import EditIcon from 'react-icons/lib/md/edit'
-import gear from 'react-icons/lib/fa/cog'
-import CheckCircle from 'react-icons/lib/md/check-circle'
 import { graphql, gql } from 'react-apollo'
 import dateFormat from 'dateformat'
 import Settings from '../shared/Settings'
+import { Motion, spring } from 'react-motion'
+import house from '../../../public/images/house.svg'
+import paperAirplane from '../../../public/images/paper-airplane.svg'
+import { MinusCircle, Edit, CheckCircle } from 'react-feather'
 
 const Info = styled.div`
-  background-color: ${props => props.theme.colors.secondary};
-  color: #fff;
-  text-align: center;
+  background: ${props => props.theme.colors.primary};
   padding: 5%;
+  text-align: center;
   position: relative;
+  margin: 3% auto 0 auto;
+  color: ${props => props.theme.colors.text};
+  border-top: 1px solid ${props => props.theme.colors.cardBorer};
+  border-left: 1px solid ${props => props.theme.colors.cardBorer};
+  border-right: 1px solid ${props => props.theme.colors.cardBorer};
+  line-height: 25px;
+  letter-spacing: 1px;
+  font-weight: 400;
 `
 const Header = styled.h3`
   margin: 0;
@@ -21,8 +29,8 @@ const Header = styled.h3`
 `
 const Detail = styled.p`
   font-size: 13px;
-  width: 50%;
-  color: lightgray;
+  width: 33%;
+  color: ${props => props.theme.colors.gray};
 `
 const DetailWrapper = styled.div`
   display: flex;
@@ -31,42 +39,57 @@ const DetailWrapper = styled.div`
 `
 
 const Highlight = styled.span`
-  color: #fff;
+  color: ${props => props.theme.colors.primaryDark};
   font-weight: bold;
-  display: inline;
+  display: block;
 `
 
-const Image = styled.img`
-  width: 100px;
-  clip-path: circle(50% at 50% 50%);
-`
+const Image = styled.img`width: 75px;`
 
-const Gear = styled(gear)`
-  font-size: 30px;
+const MinusCircleIcon = styled(MinusCircle)`
   position: absolute;
-  right: 15px;
-  top: 15px;
+  right: 10px;
+  top: 10px;
+  color: ${props => props.theme.colors.rejected};
+`
+
+const EditIcon = styled(Edit)`
+  display: block;
+  margin: auto;
+  color: ${props => props.theme.colors.gray};
 `
 
 class InfoCard extends React.Component {
-  updateSettings = e => this.props.handleStateUpdate(e, 'settings')
+  handleSubmit = e => {
+    e.preventDefault()
+    this.props.handleUpdate({ title: this.props.title })
+    this.props.handleStateUpdate(e, 'edit')
+  }
   render() {
     const { member, task, title, created, tasks } = this.props
     return (
       <div>
-        {this.props.settings &&
-          <Settings
-            name={title}
-            handleStateUpdate={this.props.handleStateUpdate}
-            handleUpdate={this.props.handleUpdate}
-            handleDelete={this.props.handleDelete}
-          />}
         <Info>
-          <Gear onClick={this.updateSettings} />
-          {member && <Image src={placeholder} alt="" />}
+          <MinusCircleIcon onClick={this.props.handleDelete} />
 
+          {member && <Image src={placeholder} alt="" />}
+          <Image src={task ? paperAirplane : house} />
+          <EditIcon onClick={e => this.props.handleStateUpdate(e, 'edit')} />
           <Header>
-            {title}
+            {task ? 'Task: ' : 'Group: '}
+            <strong>
+              {!this.props.edit && title}
+              {this.props.edit &&
+                <div>
+                  <input
+                    type="text"
+                    name="title"
+                    value={this.props.title}
+                    onChange={this.props.handleStateUpdate}
+                  />
+                  <CheckCircle onClick={this.handleSubmit} />
+                </div>}
+            </strong>
           </Header>
 
           <DetailWrapper>
@@ -85,8 +108,8 @@ class InfoCard extends React.Component {
                 Tasks Completed
               </Detail>}
             <Detail>
-              {member ? 'Signed up' : 'Created'} on:{' '}
               <Highlight>{dateFormat(created, 'fullDate')}</Highlight>
+              {member ? 'Signed up' : 'Created'} on{' '}
             </Detail>
             {member &&
               <Detail>

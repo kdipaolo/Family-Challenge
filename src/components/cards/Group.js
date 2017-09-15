@@ -19,7 +19,7 @@ class Member extends React.Component {
       <Link to={`/group/${id}`}>
         <CardWrapper>
           <CardHeader>
-            {name}
+            {title}
           </CardHeader>
           <Flex>
             <div>

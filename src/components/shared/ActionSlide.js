@@ -2,8 +2,9 @@ import React from 'react'
 import Button from './Button'
 import styled from 'styled-components'
 import { Input, Textarea, Form, Label } from '../../styles/Forms'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+
+import { SingleDatePicker } from 'react-dates'
+import 'react-dates/lib/css/_datepicker.css'
 
 const Container = styled.div`
   transform: ${props => (props.open ? 'translateY(0vh)' : 'translateY(100vh)')};
@@ -13,7 +14,7 @@ const Container = styled.div`
   position: fixed;
   box-sizing: border-box;
   width: 100%;
-  max-width: 565px;
+  max-width: 700px;
   margin: auto;
   display: block;
   height: auto;
@@ -21,7 +22,15 @@ const Container = styled.div`
   text-align: center;
   padding: 10% 5%;
   @media (min-width: 700px) {
-    padding: 3% 2%;
+    padding: 5% 3%;
+    ${'' /* position: relative; */};
+  }
+`
+
+const Flex = styled.div`
+  display: flex;
+  & > div {
+    flex: 1;
   }
 `
 
@@ -34,7 +43,15 @@ const Text = styled.p`
   margin: auto;
 `
 
-const ButtonWrapper = styled.div`display: flex;`
+const StyledDatePicker = styled.div`
+  .SingleDatePicker {
+    width: 100% !important;
+  }
+`
+
+// const StyledDatePicker = styled(SingleDatePicker)`
+//     width: 100%!important;
+// `
 
 class ActionSlide extends React.Component {
   state = {
@@ -69,7 +86,6 @@ class ActionSlide extends React.Component {
           + Add a New {type}
         </Text>
         <Form onSubmit={this.handleSubmit}>
-          {/* use: innerRef */}
           <Input
             name="title"
             value={this.state.title}
@@ -77,18 +93,15 @@ class ActionSlide extends React.Component {
             type="text"
             placeholder={type + ' Name'}
           />
-          {/* <Input
-            name="dueDate"
-            value={this.state.dueDate}
-            type="text"
-            onChange={this.handleChange}
-            placeholder={type + ' Due Date'}
-          /> */}
-          <DatePicker
-            placeholderText="Click to select a date"
-            onChange={this.handleDatePickerChange}
-            selected={this.state.dueDate}
-          />
+
+          <StyledDatePicker>
+            <SingleDatePicker
+              date={this.state.dueDate}
+              onDateChange={this.handleDatePickerChange}
+              focused={this.state.focused}
+              onFocusChange={({ focused }) => this.setState({ focused })}
+            />
+          </StyledDatePicker>
           <Label htmlFor="">
             {type} Description
           </Label>
@@ -99,15 +112,15 @@ class ActionSlide extends React.Component {
             onChange={this.handleChange}
             placeholder=""
           />
-          <Button type="submit">
-            + Add {type}
-          </Button>
+          <Flex>
+            <Button type="submit">
+              + Add {type}
+            </Button>
+            {/* <Button onClick={this.closeMenu} name="openMenu">
+              x Close
+            </Button> */}
+          </Flex>
         </Form>
-        <ButtonWrapper>
-          <Button onClick={this.closeMenu} name="openMenu">
-            x Close
-          </Button>
-        </ButtonWrapper>
       </Container>
     )
   }

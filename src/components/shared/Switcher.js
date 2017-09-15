@@ -3,7 +3,8 @@ import styled from 'styled-components'
 
 const SwitcherWrapper = styled.div`
   display: flex;
-  background: #efefef;
+  background: ${props => props.theme.colors.cardBackground};
+  z-index: 99999;
 `
 const SwitcherItem = styled.p`
   cursor: pointer;
@@ -15,6 +16,7 @@ const SwitcherItem = styled.p`
   margin: 0;
   padding: 3% 0;
   color: ${props => (props.active ? props.theme.colors.secondary : '#333')};
+  border: 1px solid ${props => props.theme.colors.cardBorer};
   border-bottom: ${props =>
     props.active ? '2px solid' + props.theme.colors.secondary : 'none'};
 `

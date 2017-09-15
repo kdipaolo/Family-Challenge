@@ -8,6 +8,7 @@ export const Input = styled.input`
   background: transparent;
   margin: 2% 0;
   border: none;
+  padding-left: 10px;
   color: ${props => props.theme.colors.secondary};
   border: 1px solid ${props => props.theme.colors.secondary};
   &::-webkit-input-placeholder {

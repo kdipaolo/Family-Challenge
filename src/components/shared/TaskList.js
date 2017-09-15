@@ -4,6 +4,7 @@ import Button from './Button'
 import NoResults from './NoResults'
 class TaskList extends React.Component {
   render() {
+    console.log(this.props.tasks)
     return (
       <div>
         {this.props.tasks.length

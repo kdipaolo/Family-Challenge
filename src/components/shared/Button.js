@@ -27,10 +27,11 @@ const border = () => css`
   `
 
 const Button = styled.button`
-  ${props => createColorVariation(props.theme.colors.secondary)} width: 100%;
+  ${props => createColorVariation(props.theme.colors.secondary)};
+  width: 100%;
   cursor: pointer;
   padding: 5%;
-  max-width: 565px;
+  max-width: 700px;
   border: none;
   font-weight: bold;
   color: #fff;
