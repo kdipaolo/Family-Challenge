@@ -1,19 +1,21 @@
-import React from 'react'
-import Task from '../cards/Task'
-import Button from './Button'
-import NoResults from './NoResults'
+import React from "react";
+import Task from "../cards/Task";
+import Button from "./Button";
+import Loading from "./Loading";
+import NoResults from "./NoResults";
 class TaskList extends React.Component {
   render() {
-    console.log(this.props.tasks)
     return (
       <div>
-        {this.props.tasks.length
-          ? <div>
+        {!this.props.loading ? (
+          this.props.tasks.length ? (
+            <div>
               <a
                 href="#"
                 name="completed"
-                onClick={e => this.props.handleStateUpdate(e, 'completed')}>
-                {this.props.completed ? 'Hide' : 'Show'} Completed
+                onClick={e => this.props.handleStateUpdate(e, "completed")}
+              >
+                {this.props.completed ? "Hide" : "Show"} Completed
               </a>
               {this.props.tasks
                 .filter(task => (this.props.completed ? task : !task.completed))
@@ -26,21 +28,28 @@ class TaskList extends React.Component {
                       id={task.id}
                       completed={task.completed}
                     />
-                  )
+                  );
                 })}
             </div>
-          : <NoResults>No Tasks Found</NoResults>}
+          ) : (
+            <NoResults>No Tasks Found</NoResults>
+          )
+        ) : (
+          <Loading />
+        )}
 
-        {!this.props.openMenu &&
+        {!this.props.openMenu && (
           <Button
             sticky
             name="openMenu"
-            onClick={e => this.props.handleStateUpdate(e)}>
+            onClick={e => this.props.handleStateUpdate(e)}
+          >
             + Add A Task
-          </Button>}
+          </Button>
+        )}
       </div>
-    )
+    );
   }
 }
 
-export default TaskList
+export default TaskList;

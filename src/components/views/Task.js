@@ -1,12 +1,12 @@
-import React from 'react'
-import InfoCard from '../cards/InfoCard.js'
-import Message from '../shared/Message.js'
-import { gql, graphql, compose } from 'react-apollo'
-import styled from 'styled-components'
-import { CheckCircle, XCircle } from 'react-feather'
-import { Input, Textarea, Form, Label } from '../../styles/Forms'
-import ContentWrapper from '../../styles/ContentWrapper'
-import Button from '../shared/Button'
+import React from "react";
+import InfoCard from "../cards/InfoCard.js";
+import Message from "../shared/Message.js";
+import { gql, graphql, compose } from "react-apollo";
+import styled from "styled-components";
+import { CheckCircle, XCircle } from "react-feather";
+import { Input, Textarea, Form, Label } from "../../styles/Forms";
+import ContentWrapper from "../../styles/ContentWrapper";
+import Button from "../shared/Button";
 
 const Status = styled.div`
   background: ${props => props.theme.colors.Highlight};
@@ -16,7 +16,7 @@ const Status = styled.div`
   border: 1px solid ${props => props.theme.colors.cardBorer};
   border-left: 1px solid ${props => props.theme.colors.cardBorer};
   border-right: 1px solid ${props => props.theme.colors.cardBorer};
-`
+`;
 
 const Flex = styled.div`
   display: flex;
@@ -31,13 +31,13 @@ const Flex = styled.div`
       margin-right: 10px;
     }
   }
-`
+`;
 
 const Messages = styled.div`
   background: ${props => props.theme.colors.cardBackground};
   padding: 2%;
   border: 1px solid ${props => props.theme.colors.cardBorer};
-`
+`;
 
 class Task extends React.Component {
   state = {
@@ -46,54 +46,58 @@ class Task extends React.Component {
     title: null,
     settings: false,
     completed: false,
-    edit: false
-  }
+    edit: false,
+    messages: [],
+    newMessage: null
+  };
   componentWillUpdate(nextProps) {
     if (
       nextProps.getTask.loading === false &&
       this.props.getTask.loading === true
     ) {
-      const task = nextProps.getTask.Task
+      const task = nextProps.getTask.Task;
+
       this.setState({
         description: task.description,
         title: task.title,
         id: task.id,
         completed: task.completed,
-        createdAt: task.createdAt
-      })
+        createdAt: task.createdAt,
+        messages: task.messages
+      });
     }
   }
 
   handleTaskDelete = () => {
-    var confirmation = confirm('are you sure?')
+    var confirmation = confirm("are you sure?");
     if (confirmation) {
-      this.props.deleteTask()
-      this.props.history.goBack()
+      this.props.deleteTask();
+      this.props.history.goBack();
     } else {
-      console.log('DENIED')
+      console.log("DENIED");
     }
-  }
+  };
   handleStateUpdate = (e, textValue) => {
     if (textValue) {
       this.setState({
         [textValue]: !this.state[textValue]
-      })
-      return
+      });
+      return;
     } else {
-      const value = e.target.value
-      const name = e.target.name
+      const value = e.target.value;
+      const name = e.target.name;
 
       if (value) {
         this.setState({
           [name]: value
-        })
+        });
       } else {
         this.setState({
           [name]: !this.state[name]
-        })
+        });
       }
     }
-  }
+  };
   handleApprove = () => {
     this.props.client.mutate({
       mutation: UPDATE_TASK_MUTATION,
@@ -103,8 +107,23 @@ class Task extends React.Component {
           completed: true
         }
       }
-    })
-  }
+    });
+  };
+  handleNewMessageSubmit = e => {
+    e.preventDefault();
+
+    this.props.createMessage({
+      comment: this.state.newMessage,
+      task: this.props.match.params.taskid
+    });
+    this.setState({ newMessage: null });
+    this.props.getTask.refetch();
+  };
+  handleNewMessageTextAreaChange = e => {
+    this.setState({
+      newMessage: e.target.value
+    });
+  };
   render() {
     return (
       <div>
@@ -119,7 +138,7 @@ class Task extends React.Component {
           edit={this.state.edit}
         />
         <Status>
-          Status: {this.state.completed ? 'Task Completed' : 'In Progress'}
+          Status: {this.state.completed ? "Task Completed" : "In Progress"}
         </Status>
         <Flex>
           <div onClick={this.handleApprove}>
@@ -135,23 +154,35 @@ class Task extends React.Component {
         <Messages>
           <ContentWrapper>
             <h3>Conversation:</h3>
-            <Textarea
-              type="text"
-              name="title"
-              placeholder="Send message to task assignee"
-            />
-            <Button>Send</Button>
+            <form onSubmit={this.handleNewMessageSubmit}>
+              <Textarea
+                type="text"
+                name="title"
+                value={this.state.newMessage}
+                onChange={this.handleNewMessageTextAreaChange}
+                placeholder="Send message to task assignee"
+              />
+              <Button type="submit">Send</Button>
+            </form>
             <Message content={this.state.description} />
-            <Message response content="Content for message" />
+            {this.state.messages.map(message => (
+              <Message
+                response
+                date={message.createdAt}
+                content={message.comment}
+              />
+            ))}
+
+            {/* <Message response content="Content for message" />
             <Message content="Content for message" />
             <Message response content="Content for message" />
             <Message alert rejected />
             <Message response content="Content for message" />
-            <Message alert completed />
+            <Message alert completed /> */}
           </ContentWrapper>
         </Messages>
       </div>
-    )
+    );
   }
 }
 
@@ -169,6 +200,7 @@ const GET_TASK = gql`
       messages {
         comment
         id
+        createdAt
       }
       assigner {
         name
@@ -176,7 +208,7 @@ const GET_TASK = gql`
       }
     }
   }
-`
+`;
 
 const DELETE_TASK_MUTATION = gql`
   mutation deleteTask($id: ID!) {
@@ -184,7 +216,16 @@ const DELETE_TASK_MUTATION = gql`
       title
     }
   }
-`
+`;
+
+const CREATE_MESSAGE_MUTATION = gql`
+  mutation createNewMessage($comment: String!, $taskId: ID!) {
+    createMessage(comment: $comment, taskId: $taskId) {
+      id
+      comment
+    }
+  }
+`;
 
 const UPDATE_TASK_MUTATION = gql`
   mutation updateTask($id: ID!, $title: String!) {
@@ -193,15 +234,15 @@ const UPDATE_TASK_MUTATION = gql`
       description
     }
   }
-`
+`;
 
 export default compose(
   graphql(GET_TASK, {
-    name: 'getTask',
+    name: "getTask",
     options: props => ({ variables: { id: props.match.params.taskid } })
   }),
   graphql(UPDATE_TASK_MUTATION, {
-    name: 'updateTaskMutation',
+    name: "updateTaskMutation",
     props: ({ ownProps, updateTaskMutation }) => ({
       updateTask: values => {
         updateTaskMutation({
@@ -209,20 +250,33 @@ export default compose(
             id: ownProps.match.params.taskid,
             title: values.title
           }
-        })
+        });
+      }
+    })
+  }),
+  graphql(CREATE_MESSAGE_MUTATION, {
+    name: "createMessageMutation",
+    props: ({ ownProps, createMessageMutation }) => ({
+      createMessage: values => {
+        createMessageMutation({
+          variables: {
+            comment: values.comment,
+            taskId: values.task
+          }
+        });
       }
     })
   }),
   graphql(DELETE_TASK_MUTATION, {
-    name: 'deleteTaskMutation',
+    name: "deleteTaskMutation",
     props: ({ ownProps, deleteTaskMutation }) => ({
       deleteTask: values => {
         deleteTaskMutation({
           variables: {
             id: ownProps.match.params.taskid
           }
-        })
+        });
       }
     })
   })
-)(Task)
+)(Task);

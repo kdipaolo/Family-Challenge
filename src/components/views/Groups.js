@@ -1,10 +1,10 @@
-import React from 'react'
-import Group from '../cards/Group'
-import ContentWrapper from '../../styles/ContentWrapper'
-import { graphql, gql, compose } from 'react-apollo'
-import Button from '../shared/Button'
-import Loading from '../shared/Loading'
-import ActionSlide from '../shared/ActionSlide'
+import React from "react";
+import Group from "../cards/Group";
+import ContentWrapper from "../../styles/ContentWrapper";
+import { graphql, gql, compose } from "react-apollo";
+import Button from "../shared/Button";
+import Loading from "../shared/Loading";
+import ActionSlide from "../shared/ActionSlide";
 
 class Groups extends React.Component {
   state = {
@@ -12,48 +12,50 @@ class Groups extends React.Component {
     openMenu: false,
     active: false,
     open: false
-  }
+  };
   componentDidMount() {
-    console.log('props', this.props.getGroups)
-    this.props.getGroups.refetch()
+    this.props.getGroups.refetch();
   }
   handleButtonClick = () => {
     this.setState(state => ({
       openMenu: !state.openMenu,
       groups: []
-    }))
-  }
+    }));
+  };
 
   handleNewGroup = async values => {
-    const response = await this.props.createGroup(values)
+    const response = await this.props.createGroup(values);
     this.setState({
       openMenu: false
-    })
-    console.log(response)
-    const id = response.data.createGroup.changedGroup.id
-    this.props.history.push(`/group/${id}`)
-  }
+    });
+
+    const id = response.data.createGroup.changedGroup.id;
+    this.props.history.push(`/group/${id}`);
+  };
 
   render() {
-    console.log('props', this.props.getGroups)
+    console.log("props", this.props.getGroups);
     return (
       <ContentWrapper>
-        {this.props.getGroups.loading
-          ? <Loading />
-          : this.props.getGroups.allGroups.map((group, i) =>
-              <Group
-                key={i}
-                id={group.id}
-                title={group.title}
-                created={group.createdAt}
-                tasks={group.tasks.length}
-                dueDate={group.dueDate}
-              />
-            )}
-        {!this.state.openMenu &&
+        {this.props.getGroups.loading ? (
+          <Loading />
+        ) : (
+          this.props.getGroups.allGroups.map((group, i) => (
+            <Group
+              key={i}
+              id={group.id}
+              title={group.title}
+              created={group.createdAt}
+              tasks={group.tasks.length}
+              dueDate={group.dueDate}
+            />
+          ))
+        )}
+        {!this.state.openMenu && (
           <Button sticky onClick={this.handleButtonClick}>
             + Add a new group
-          </Button>}
+          </Button>
+        )}
         <ActionSlide
           handleAdd={this.handleNewGroup}
           open={this.state.openMenu}
@@ -61,7 +63,7 @@ class Groups extends React.Component {
           type="Group"
         />
       </ContentWrapper>
-    )
+    );
   }
 }
 //
@@ -80,7 +82,7 @@ const GET_GROUPS = gql`
       }
     }
   }
-`
+`;
 
 const NEW_GROUP_MUTATION = gql`
   mutation CreateNewGroup($title: String!, $dueDate: DateTime!) {
@@ -89,14 +91,14 @@ const NEW_GROUP_MUTATION = gql`
       title
     }
   }
-`
+`;
 
 export default compose(
   graphql(GET_GROUPS, {
-    name: 'getGroups'
+    name: "getGroups"
   }),
   graphql(NEW_GROUP_MUTATION, {
-    name: 'newGroupMutation',
+    name: "newGroupMutation",
     props: ({ ownProps, newGroupMutation }) => ({
       createGroup: values =>
         newGroupMutation({
@@ -108,4 +110,4 @@ export default compose(
         })
     })
   })
-)(Groups)
+)(Groups);
