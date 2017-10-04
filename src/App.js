@@ -26,7 +26,7 @@ import {
 import { BLOG_AUTH_TOKEN } from './constants'
 
 const networkInterface = createNetworkInterface({
-  uri: 'https://us-west-2.api.scaphold.io/graphql/familychallenge'
+  uri: 'https://api.graph.cool/simple/v1/cj83e8far04ms0116qbqr8kox'
 })
 
 networkInterface.use([

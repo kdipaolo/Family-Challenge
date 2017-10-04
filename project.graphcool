@@ -1,0 +1,98 @@
+# project: cj83e8far04ms0116qbqr8kox
+# version: 5
+
+type Link implements Node {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  url: String!
+  description: String!
+}
+
+type File implements Node {
+  contentType: String!
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  secret: String! @isUnique
+  size: Int!
+  updatedAt: DateTime!
+  url: String! @isUnique
+}
+
+type User implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  name: String!
+  tasks: [Task!]! @relation(name: "UsersTasks")
+  role: Role! @relation(name: "UsersRole")
+  family: Family! @relation(name: "ChildrenInFamily")
+  message: [Message!]! @relation(name: "AuthorsMessages")
+  parent: Group! @relation(name: "ParentInGroup")
+  assigner: Task! @relation(name: "Parent")
+  groups: [Group!]! @relation(name: "GroupMembers")
+}
+
+type Role implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  name: String!
+  user: User! @relation(name: "UsersRole")
+}
+
+type Message implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  comment: String!
+  author: User! @relation(name: "AuthorsMessages")
+  task: Task! @relation(name: "MessagesInTasks")
+}
+
+type Task implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  title: String!
+  completed: Boolean!
+  assigner: User @relation(name: "Parent")
+  child: User @relation(name: "UsersTasks")
+  group: Group! @relation(name: "TasksInGroup")
+  needsReviewed: Boolean!
+  description: String!
+  messages: [Message!]! @relation(name: "MessagesInTasks")
+}
+
+type Group implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  title: String!
+  reward: Reward @relation(name: "GroupReward")
+  parent: User @relation(name: "ParentInGroup")
+  members: [User!]! @relation(name: "GroupMembers")
+  family: Family @relation(name: "GroupsInFamily")
+  dueDate: DateTime!
+  tasks: [Task!]! @relation(name: "TasksInGroup")
+}
+
+type Reward implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  title: String!
+  description: String!
+  group: Group! @relation(name: "GroupReward")
+}
+
+type Family implements Node {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+  groups: [Group!]! @relation(name: "GroupsInFamily")
+  children: [User!]! @relation(name: "ChildrenInFamily")
+  name: String!
+  description: String!
+}

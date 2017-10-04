@@ -26,13 +26,13 @@ class Group extends React.Component {
       this.props.getGroup.loading === true
     ) {
       this.setState({
-        title: nextProps.getGroup.getGroup.title,
-        tasks: nextProps.getGroup.getGroup.tasks.edges.map(item => {
+        title: nextProps.getGroup.Group.title,
+        tasks: nextProps.getGroup.Group.tasks.map(item => {
           return {
-            description: item.node.description,
-            completed: item.node.completed,
-            title: item.node.title,
-            id: item.node.id
+            description: item.description,
+            completed: item.completed,
+            title: item.title,
+            id: item.id
           }
         })
       })
@@ -118,53 +118,31 @@ class Group extends React.Component {
 
 const GET_GROUP = gql`
   query getGroup($id: ID!) {
-    getGroup(id: $id) {
+    Group(id: $id) {
       title
       tasks {
-        edges {
-          node {
-            id
-            completed
-            title
-            description
-          }
-        }
-      }
-    }
-  }
-`
-
-const GET_TASKS_IN_GROUP = gql`
-  query getTasksInGroup($id: ID!) {
-    getGroup(id: $id) {
-      tasks {
-        edges {
-          node {
-            title
-          }
-        }
+        id
+        completed
+        title
+        description
       }
     }
   }
 `
 
 const UPDATE_GROUP_MUTATION = gql`
-  mutation updateGroup($group: UpdateGroupInput!) {
-    updateGroup(input: $group) {
-      changedGroup {
-        id
-        title
-      }
+  mutation updateGroup($id: ID!, $title: String!) {
+    updateGroup(id: $id, title: $title) {
+      id
+      title
     }
   }
 `
 
 const DELETE_GROUP_MUTATION = gql`
-  mutation deleteGroup($group: DeleteGroupInput!) {
-    deleteGroup(input: $group) {
-      changedGroup {
-        title
-      }
+  mutation deleteGroup($id: ID!) {
+    deleteGroup(id: $id) {
+      title
     }
   }
 `
@@ -175,20 +153,18 @@ const CREATE_TASK_MUTATION = gql`
     $description: String!
     $title: String!
     $needsReviewed: Boolean!
+    $completed: Boolean!
   ) {
     createTask(
-      input: {
-        groupId: $groupId
-        description: $description
-        needsReviewed: $needsReviewed
-        title: $title
-      }
+      groupId: $groupId
+      description: $description
+      needsReviewed: $needsReviewed
+      title: $title
+      completed: $completed
     ) {
-      changedTask {
-        description
-        needsReviewed
-        title
-      }
+      description
+      needsReviewed
+      title
     }
   }
 `
@@ -204,10 +180,8 @@ export default compose(
       updateGroup: values => {
         updateGroupMutation({
           variables: {
-            group: {
-              id: ownProps.match.params.groupid,
-              title: values.title
-            }
+            id: ownProps.match.params.groupid,
+            title: values.title
           }
         })
       }
@@ -219,9 +193,7 @@ export default compose(
       deleteGroup: values => {
         deleteGroupMutation({
           variables: {
-            group: {
-              id: ownProps.match.params.groupid
-            }
+            id: ownProps.match.params.groupid
           }
         })
       }
@@ -237,7 +209,8 @@ export default compose(
             description: values.description,
             groupId: ownProps.match.params.groupid,
             needsReviewed: true,
-            title: values.title
+            title: values.title,
+            completed: false
           }
         }).then(res => {
           ownProps.getGroup.refetch()

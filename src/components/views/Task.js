@@ -53,7 +53,7 @@ class Task extends React.Component {
       nextProps.getTask.loading === false &&
       this.props.getTask.loading === true
     ) {
-      const task = nextProps.getTask.getTask
+      const task = nextProps.getTask.Task
       this.setState({
         description: task.description,
         title: task.title,
@@ -157,7 +157,7 @@ class Task extends React.Component {
 
 const GET_TASK = gql`
   query getTask($id: ID!) {
-    getTask(id: $id) {
+    Task(id: $id) {
       group {
         id
         title
@@ -166,7 +166,11 @@ const GET_TASK = gql`
       completed
       title
       createdAt
-      assignee {
+      messages {
+        comment
+        id
+      }
+      assigner {
         name
         id
       }
@@ -175,22 +179,18 @@ const GET_TASK = gql`
 `
 
 const DELETE_TASK_MUTATION = gql`
-  mutation deleteTask($task: DeleteTaskInput!) {
-    deleteTask(input: $task) {
-      changedTask {
-        title
-      }
+  mutation deleteTask($id: ID!) {
+    deleteTask(id: $id) {
+      title
     }
   }
 `
 
 const UPDATE_TASK_MUTATION = gql`
-  mutation updateTask($task: UpdateTaskInput!) {
-    updateTask(input: $task) {
-      changedTask {
-        id
-        description
-      }
+  mutation updateTask($id: ID!, $title: String!) {
+    updateTask(id: $id, title: $title) {
+      id
+      description
     }
   }
 `
@@ -206,10 +206,8 @@ export default compose(
       updateTask: values => {
         updateTaskMutation({
           variables: {
-            task: {
-              id: ownProps.match.params.taskid,
-              title: values.title
-            }
+            id: ownProps.match.params.taskid,
+            title: values.title
           }
         })
       }
@@ -221,9 +219,7 @@ export default compose(
       deleteTask: values => {
         deleteTaskMutation({
           variables: {
-            task: {
-              id: ownProps.match.params.taskid
-            }
+            id: ownProps.match.params.taskid
           }
         })
       }

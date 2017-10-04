@@ -14,6 +14,7 @@ class Groups extends React.Component {
     open: false
   }
   componentDidMount() {
+    console.log('props', this.props.getGroups)
     this.props.getGroups.refetch()
   }
   handleButtonClick = () => {
@@ -34,18 +35,19 @@ class Groups extends React.Component {
   }
 
   render() {
+    console.log('props', this.props.getGroups)
     return (
       <ContentWrapper>
         {this.props.getGroups.loading
           ? <Loading />
-          : this.props.getGroups.viewer.allGroups.edges.map((group, i) =>
+          : this.props.getGroups.allGroups.map((group, i) =>
               <Group
                 key={i}
-                id={group.node.id}
-                title={group.node.title}
-                created={group.node.createdAt}
-                tasks={group.node.tasks.edges.length}
-                dueDate={group.node.dueDate}
+                id={group.id}
+                title={group.title}
+                created={group.createdAt}
+                tasks={group.tasks.length}
+                dueDate={group.dueDate}
               />
             )}
         {!this.state.openMenu &&
@@ -62,28 +64,19 @@ class Groups extends React.Component {
     )
   }
 }
-
+//
 const GET_GROUPS = gql`
-  query testing {
-    viewer {
-      allGroups(orderBy: { field: createdAt, direction: DESC }) {
-        edges {
-          node {
-            title
-            id
-            dueDate
-            createdAt
-            tasks {
-              edges {
-                node {
-                  id
-                  completed
-                  description
-                }
-              }
-            }
-          }
-        }
+  query GetGroups {
+    allGroups(orderBy: createdAt_DESC) {
+      title
+      id
+      dueDate
+      createdAt
+      tasks {
+        id
+        completed
+        description
+        title
       }
     }
   }
@@ -91,11 +84,9 @@ const GET_GROUPS = gql`
 
 const NEW_GROUP_MUTATION = gql`
   mutation CreateNewGroup($title: String!, $dueDate: DateTime!) {
-    createGroup(input: { title: $title, dueDate: $dueDate }) {
-      changedGroup {
-        id
-        title
-      }
+    createGroup(title: $title, dueDate: $dueDate) {
+      id
+      title
     }
   }
 `
