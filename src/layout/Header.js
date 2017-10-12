@@ -1,7 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link, withRouter } from 'react-router-dom'
-import placeholder from '../../public/images/placeholder.png'
+import React from "react";
+import styled from "styled-components";
+import { Link, withRouter } from "react-router-dom";
+import placeholder from "../../public/images/placeholder.png";
 import {
   Menu,
   Bell,
@@ -10,8 +10,11 @@ import {
   UserCheck,
   ChevronDown,
   X
-} from 'react-feather'
-import SettingsView from '../components/shared/Settings'
+} from "react-feather";
+import SettingsView from "../components/shared/Settings";
+import { USER_ID } from "../constants";
+import { gql, compose, graphql } from "react-apollo";
+
 const NavigationBar = styled.div`
   background-color: ${props => props.theme.colors.primary};
   width: 100%;
@@ -26,7 +29,7 @@ const NavigationBar = styled.div`
       }
     }
   }
-`
+`;
 const NavigationMenu = styled.div`
   background-color: ${props => props.theme.colors.background};
   border-right: 4px solid ${props => props.theme.colors.gray};
@@ -39,13 +42,13 @@ const NavigationMenu = styled.div`
   z-index: 50000;
   transition: 0.2s all ease-out;
   transform: ${props =>
-    props.open ? 'translateX(0px)' : 'translateX(-300px)'};
-`
+    props.open ? "translateX(0px)" : "translateX(-300px)"};
+`;
 
 const SettingsMenu = NavigationMenu.extend`
   right: 0;
-  transform: ${props => (props.open ? 'translateX(0px)' : 'translateX(300px)')};
-`
+  transform: ${props => (props.open ? "translateX(0px)" : "translateX(300px)")};
+`;
 
 const NavItem = styled.div`
   margin: 10% 0;
@@ -54,10 +57,10 @@ const NavItem = styled.div`
     font-size: 20px;
     margin-right: 20px;
   }
-`
+`;
 
 const UserInfo = styled.div`
-  ${/* background-color: ${props.theme.colors.primary}; */ ''} padding: 5%;
+  padding: 5%;
   height: 75px;
   position: relative;
   > svg {
@@ -72,33 +75,33 @@ const UserInfo = styled.div`
   }
   p {
     float: right;
-    color: #fff;
+    color: #333;
     font-size: 12px;
     position: absolute;
     bottom: 0;
     right: 10px;
   }
-`
+`;
 
 class Header extends React.Component {
   state = {
     openNav: false,
     openSettings: false
-  }
+  };
 
   handleMenuClick = () => {
     this.setState({
       openNav: !this.state.openNav
-    })
-  }
+    });
+  };
   handleSettingsClick = () => {
     this.setState({
       openSettings: !this.state.openSettings
-    })
-  }
+    });
+  };
   render() {
-    if (this.props.location.pathname === '/') {
-      return null
+    if (this.props.location.pathname === "/") {
+      return null;
     }
     return (
       <div>
@@ -106,6 +109,7 @@ class Header extends React.Component {
           <span onClick={this.handleMenuClick}>
             <Menu />
           </span>
+
           <span onClick={this.handleSettingsClick}>
             <Settings />
           </span>
@@ -115,7 +119,8 @@ class Header extends React.Component {
             <X onClick={this.handleMenuClick} />
             <img src={placeholder} alt="" />
             <p>
-              DiPaolo Family <ChevronDown />
+              {!this.props.getUser.loading && this.props.getUser.User.name}{" "}
+              <ChevronDown />
             </p>
           </UserInfo>
           <ul>
@@ -145,8 +150,23 @@ class Header extends React.Component {
           <X onClick={this.handleSettingsClick} />
         </SettingsMenu>
       </div>
-    )
+    );
   }
 }
 
-export default withRouter(Header)
+const GET_USER = gql`
+  query getUser($id: ID!) {
+    User(id: $id) {
+      name
+    }
+  }
+`;
+
+export default withRouter(
+  compose(
+    graphql(GET_USER, {
+      name: "getUser",
+      options: props => ({ variables: { id: localStorage.getItem(USER_ID) } })
+    })(Header)
+  )
+);
