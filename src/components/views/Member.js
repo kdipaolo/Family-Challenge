@@ -3,12 +3,22 @@ import InfoCard from "../cards/InfoCard"
 import Switcher from "../shared/Switcher"
 import Task from "../cards/Task"
 import ContentWrapper from "../../styles/ContentWrapper"
+import { withRouter } from "react-router-dom"
+import { gql, compose, graphql } from "react-apollo"
 
 class Member extends React.Component {
   state = {
-    active: "Tasks"
+    active: "Tasks",
+    user: null,
+    name: null,
+    id: null
   }
-  componentDidMount() {}
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      id: newProps.getUser.User.id,
+      name: newProps.getUser.User.name
+    })
+  }
   handleSwitcherClick = e => {
     this.setState({
       active: e.target.dataset.item
@@ -18,7 +28,8 @@ class Member extends React.Component {
   render() {
     return (
       <div>
-        <InfoCard member />
+        <InfoCard member groupId={this.state.id} name={this.state.name} />
+
         <Switcher
           handleSwitcherClick={this.handleSwitcherClick}
           active={this.state.active}
@@ -43,4 +54,19 @@ class Member extends React.Component {
     )
   }
 }
-export default Member
+
+const GET_USER = gql`
+  query getAUser($id: ID!) {
+    User(id: $id) {
+      name
+      id
+    }
+  }
+`
+
+export default compose(
+  graphql(GET_USER, {
+    name: "getUser",
+    options: props => ({ variables: { id: props.match.params.memberid } })
+  })
+)(withRouter(Member))

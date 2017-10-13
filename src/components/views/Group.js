@@ -1,25 +1,27 @@
-import React from "react";
-import Button from "../shared/Button";
-import ActionSlide from "../shared/ActionSlide";
-import ContentWrapper from "../../styles/ContentWrapper";
-import InfoCard from "../cards/InfoCard";
-import Switcher from "../shared/Switcher";
-import TaskList from "../shared/TaskList";
-import MemberList from "../shared/MemberList";
-import { gql, graphql, withApollo, compose } from "react-apollo";
-import { Motion, spring } from "react-motion";
-import styled, { css } from "styled-components";
-import Users from "react-feather";
-
+import React from "react"
+import Button from "../shared/Button"
+import ActionSlide from "../shared/ActionSlide"
+import ContentWrapper from "../../styles/ContentWrapper"
+import InfoCard from "../cards/InfoCard"
+import Switcher from "../shared/Switcher"
+import TaskList from "../shared/TaskList"
+import MemberList from "../shared/MemberList"
+import { gql, graphql, withApollo, compose } from "react-apollo"
+import { Motion, spring } from "react-motion"
+import styled, { css } from "styled-components"
+import Users from "react-feather"
+import Modal from "../shared/Modal"
+import AddTask from "../shared/AddTask"
 class Group extends React.Component {
   state = {
     openMenu: false,
     active: "Tasks",
     title: null,
     edit: false,
+    id: null,
     tasks: [],
     completed: false
-  };
+  }
   componentWillUpdate(nextProps) {
     if (
       nextProps.getGroup.loading === false &&
@@ -27,55 +29,56 @@ class Group extends React.Component {
     ) {
       this.setState({
         title: nextProps.getGroup.Group.title,
+        id: nextProps.getGroup.Group.id,
         tasks: nextProps.getGroup.Group.tasks.map(item => {
           return {
             description: item.description,
             completed: item.completed,
             title: item.title,
             id: item.id
-          };
+          }
         })
-      });
+      })
     }
   }
   handleGroupDelete = () => {
-    var confirmation = confirm("are you sure?");
+    var confirmation = confirm("are you sure?")
     if (confirmation) {
-      this.props.deleteGroup();
-      this.props.history.goBack();
+      this.props.deleteGroup()
+      this.props.history.goBack()
     } else {
-      console.log("DENIED");
+      console.log("DENIED")
     }
-  };
+  }
   handleSwitcherClick = e => {
     this.setState({
       active: e.target.dataset.item,
       completed: false
-    });
-  };
+    })
+  }
 
   handleStateUpdate = (e, textValue) => {
     if (textValue) {
       this.setState({
         [textValue]: !this.state[textValue]
-      });
-      return;
+      })
+      return
     } else {
-      const value = e.target.value;
-      const name = e.target.name;
+      const value = e.target.value
+      const name = e.target.name
 
       if (value) {
         this.setState({
           [name]: value
-        });
+        })
       } else {
         this.setState({
           [name]: !this.state[name]
-        });
+        })
       }
     }
-  };
-  handleCreateTask = state => {};
+  }
+  handleCreateTask = state => {}
   render() {
     return (
       <div>
@@ -84,6 +87,7 @@ class Group extends React.Component {
           handleUpdate={this.props.updateGroup}
           handleDelete={this.handleGroupDelete}
           tasks={this.state.tasks}
+          groupId={this.state.id}
           edit={this.state.edit}
           handleStateUpdate={this.handleStateUpdate}
         />
@@ -107,6 +111,10 @@ class Group extends React.Component {
             <MemberList />
           )}
 
+          <Modal button={<Button sticky>+ Add a new Task</Button>}>
+            {({ handleOpenCloseModal }) => <AddTask />}
+          </Modal>
+
           <ActionSlide
             open={this.state.openMenu}
             handleClose={this.handleStateUpdate}
@@ -115,7 +123,7 @@ class Group extends React.Component {
           />
         </ContentWrapper>
       </div>
-    );
+    )
   }
 }
 
@@ -131,7 +139,7 @@ const GET_GROUP = gql`
       }
     }
   }
-`;
+`
 
 const UPDATE_GROUP_MUTATION = gql`
   mutation updateGroup($id: ID!, $title: String!) {
@@ -140,7 +148,7 @@ const UPDATE_GROUP_MUTATION = gql`
       title
     }
   }
-`;
+`
 
 const DELETE_GROUP_MUTATION = gql`
   mutation deleteGroup($id: ID!) {
@@ -148,7 +156,7 @@ const DELETE_GROUP_MUTATION = gql`
       title
     }
   }
-`;
+`
 
 const CREATE_TASK_MUTATION = gql`
   mutation CreateNewTask(
@@ -170,7 +178,7 @@ const CREATE_TASK_MUTATION = gql`
       title
     }
   }
-`;
+`
 
 export default compose(
   graphql(GET_GROUP, {
@@ -186,7 +194,7 @@ export default compose(
             id: ownProps.match.params.groupid,
             title: values.title
           }
-        });
+        })
       }
     })
   }),
@@ -198,7 +206,7 @@ export default compose(
           variables: {
             id: ownProps.match.params.groupid
           }
-        });
+        })
       }
     })
   }),
@@ -216,9 +224,9 @@ export default compose(
             completed: false
           }
         }).then(res => {
-          ownProps.getGroup.refetch();
-        });
+          ownProps.getGroup.refetch()
+        })
       }
     })
   })
-)(Group);
+)(Group)

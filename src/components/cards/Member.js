@@ -7,7 +7,7 @@ import { CardText, CardHeader, Flex, CardIcon, Image } from "../../styles/Cards"
 class Member extends React.Component {
   render() {
     return (
-      <Link to="/member/1">
+      <Link to={`/member/${this.props.user.id}`}>
         <CardWrapper>
           <Flex image>
             <div>

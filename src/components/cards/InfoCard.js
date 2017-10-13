@@ -1,13 +1,13 @@
-import React from 'react'
-import styled from 'styled-components'
-import placeholder from '../../../public/images/placeholder.png'
-import { graphql, gql } from 'react-apollo'
-import dateFormat from 'dateformat'
-import Settings from '../shared/Settings'
-import { Motion, spring } from 'react-motion'
-import house from '../../../public/images/house.svg'
-import paperAirplane from '../../../public/images/paper-airplane.svg'
-import { MinusCircle, Edit, CheckCircle } from 'react-feather'
+import React from "react"
+import styled from "styled-components"
+import placeholder from "../../../public/images/placeholder.png"
+import { graphql, gql } from "react-apollo"
+import dateFormat from "dateformat"
+import Settings from "../shared/Settings"
+import { Motion, spring } from "react-motion"
+import house from "../../../public/images/house.svg"
+import paperAirplane from "../../../public/images/paper-airplane.svg"
+import { MinusCircle, Edit, CheckCircle } from "react-feather"
 
 const Info = styled.div`
   background: ${props => props.theme.colors.primary};
@@ -63,63 +63,79 @@ class InfoCard extends React.Component {
   handleSubmit = e => {
     e.preventDefault()
     this.props.handleUpdate({ title: this.props.title })
-    this.props.handleStateUpdate(e, 'edit')
+    this.props.handleStateUpdate(e, "edit")
   }
   render() {
     const { member, task, title, created, tasks } = this.props
+    const MemberView = () => this.props.member && <h1>{member.name}</h1>
     return (
-      <div>
-        <Info>
-          <MinusCircleIcon onClick={this.props.handleDelete} />
+      <Info>
+        <MinusCircleIcon onClick={this.props.handleDelete} />
 
-          {member && <Image src={placeholder} alt="" />}
-          <Image src={task ? paperAirplane : house} />
-          <EditIcon onClick={e => this.props.handleStateUpdate(e, 'edit')} />
-          <Header>
-            {task ? 'Task: ' : 'Group: '}
-            <strong>
-              {!this.props.edit && title}
-              {this.props.edit &&
-                <div>
-                  <input
-                    type="text"
-                    name="title"
-                    value={this.props.title}
-                    onChange={this.props.handleStateUpdate}
-                  />
-                  <CheckCircle onClick={this.handleSubmit} />
-                </div>}
-            </strong>
-          </Header>
-
-          <DetailWrapper>
-            {task
-              ? <Detail>
-                  Tasks Assigned By: <Highlight>Mom</Highlight>
-                </Detail>
-              : <Detail>
-                  <Highlight>{tasks.length}</Highlight> Tasks Assigned
-                </Detail>}
-            {!task &&
-              <Detail>
-                <Highlight>
-                  {tasks.filter(task => task.completed).length}
-                </Highlight>{' '}
-                Tasks Completed
-              </Detail>}
-            <Detail>
-              <Highlight>{dateFormat(created, 'fullDate')}</Highlight>
-              {member ? 'Signed up' : 'Created'} on{' '}
-            </Detail>
-            {member &&
-              <Detail>
-                Groups: <Highlight>Children</Highlight>
-              </Detail>}
-          </DetailWrapper>
-        </Info>
-      </div>
+        <Header>{this.props.name}</Header>
+      </Info>
     )
   }
 }
 
 export default InfoCard
+
+// <div>
+//   <Info>
+//     <MinusCircleIcon onClick={this.props.handleDelete} />
+
+//     {member ? (
+//       <Image src={placeholder} alt="" />
+//     ) : (
+//       <Image src={task ? paperAirplane : house} />
+//     )}
+//     <EditIcon onClick={e => this.props.handleStateUpdate(e, "edit")} />
+//     <Header>
+//       {task ? "Task: " : "Group: "}
+//       <strong>
+//         {!this.props.edit && name}
+//         {this.props.edit && (
+//           <div>
+//             <input
+//               type="text"
+//               name="title"
+//               value={this.props.title || this.props.name}
+//               onChange={this.props.handleStateUpdate}
+//             />
+//             <CheckCircle onClick={this.handleSubmit} />
+//           </div>
+//         )}
+//       </strong>
+//     </Header>
+
+//     <DetailWrapper>
+//       {task ? (
+//         <Detail>
+//           Tasks Assigned By: <Highlight>Mom</Highlight>
+//         </Detail>
+//       ) : (
+//         <Detail>
+//           <Highlight>{tasks.length}</Highlight> Tasks Assigned
+//         </Detail>
+//       )}
+//       {!task && (
+//         <Detail>
+//           <Highlight>
+//             {tasks.filter(task => task.completed).length}
+//           </Highlight>{" "}
+//           Tasks Completed
+//         </Detail>
+//       )}
+//       <Detail>
+//         <Highlight>{dateFormat(created, "fullDate")}</Highlight>
+//         {member ? "Signed up" : "Created"} on{" "}
+//       </Detail>
+//       {member && (
+//         <Detail>
+//           Groups: <Highlight>Children</Highlight>
+//         </Detail>
+//       )}
+//     </DetailWrapper>
+//   </Info>
+// </div>
+//)
