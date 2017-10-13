@@ -29,7 +29,8 @@ function rejected() {
 const Content = styled.p`
   flex: 4;
   margin: 0;
-`;
+`
+
 
 const MessageWrapper = styled.div`
   border: 1px solid ${props => props.theme.colors.cardBorer};
@@ -42,7 +43,8 @@ const MessageWrapper = styled.div`
   align-items: center;
   ${props => props.response && response()} ${props =>
       props.completed && completed()} ${props => props.rejected && rejected()};
-`;
+`
+
 
 const Timestamp = styled.p`
   flex: 1;
@@ -84,6 +86,7 @@ class Message extends React.Component {
         <Timestamp>{moment(date).format("MMM Do YY")}</Timestamp>
       </MessageWrapper>
     );
+
   }
 }
 

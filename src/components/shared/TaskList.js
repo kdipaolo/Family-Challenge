@@ -5,6 +5,7 @@ import Loading from "./Loading";
 import NoResults from "./NoResults";
 class TaskList extends React.Component {
   render() {
+    console.log(this.props.tasks)
     return (
       <div>
         {!this.props.loading ? (

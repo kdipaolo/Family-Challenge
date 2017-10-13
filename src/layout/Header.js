@@ -14,7 +14,6 @@ import {
 import SettingsView from "../components/shared/Settings";
 import { USER_ID } from "../constants";
 import { gql, compose, graphql } from "react-apollo";
-
 const NavigationBar = styled.div`
   background-color: ${props => props.theme.colors.primary};
   width: 100%;
@@ -49,6 +48,11 @@ const SettingsMenu = NavigationMenu.extend`
   right: 0;
   transform: ${props => (props.open ? "translateX(0px)" : "translateX(300px)")};
 `;
+
+const SettingsMenu = NavigationMenu.extend`
+  right: 0;
+  transform: ${props => (props.open ? 'translateX(0px)' : 'translateX(300px)')};
+`
 
 const NavItem = styled.div`
   margin: 10% 0;
@@ -109,7 +113,6 @@ class Header extends React.Component {
           <span onClick={this.handleMenuClick}>
             <Menu />
           </span>
-
           <span onClick={this.handleSettingsClick}>
             <Settings />
           </span>

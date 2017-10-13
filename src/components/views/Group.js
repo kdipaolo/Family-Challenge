@@ -11,6 +11,7 @@ import { Motion, spring } from "react-motion";
 import styled, { css } from "styled-components";
 import Users from "react-feather";
 
+
 class Group extends React.Component {
   state = {
     openMenu: false,
@@ -19,7 +20,7 @@ class Group extends React.Component {
     edit: false,
     tasks: [],
     completed: false
-  };
+  }
   componentWillUpdate(nextProps) {
     if (
       nextProps.getGroup.loading === false &&
@@ -36,13 +37,14 @@ class Group extends React.Component {
           };
         })
       });
+
     }
   }
   handleGroupDelete = () => {
     var confirmation = confirm("are you sure?");
     if (confirmation) {
-      this.props.deleteGroup();
-      this.props.history.goBack();
+      this.props.deleteGroup()
+      this.props.history.goBack()
     } else {
       console.log("DENIED");
     }
@@ -76,6 +78,7 @@ class Group extends React.Component {
     }
   };
   handleCreateTask = state => {};
+
   render() {
     return (
       <div>
@@ -106,6 +109,7 @@ class Group extends React.Component {
           ) : (
             <MemberList />
           )}
+
 
           <ActionSlide
             open={this.state.openMenu}
@@ -191,7 +195,7 @@ export default compose(
     })
   }),
   graphql(DELETE_GROUP_MUTATION, {
-    name: "deleteGroupMutation",
+    name: 'deleteGroupMutation',
     props: ({ ownProps, deleteGroupMutation }) => ({
       deleteGroup: values => {
         deleteGroupMutation({
@@ -199,6 +203,7 @@ export default compose(
             id: ownProps.match.params.groupid
           }
         });
+
       }
     })
   }),
@@ -222,3 +227,4 @@ export default compose(
     })
   })
 )(Group);
+

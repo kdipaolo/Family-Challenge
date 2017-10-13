@@ -6,6 +6,7 @@ import { gql, compose, graphql } from "react-apollo"
 import { SingleDatePicker } from "react-dates"
 import "react-dates/lib/css/_datepicker.css"
 
+
 const Container = styled.div`
   transform: ${props => (props.open ? "translateY(0vh)" : "translateY(100vh)")};
   transition: 0.2s all ease-out;
@@ -23,7 +24,6 @@ const Container = styled.div`
   padding: 10% 5%;
   @media (min-width: 700px) {
     padding: 5% 3%;
-    ${"" /* position: relative; */};
   }
 `
 
@@ -60,6 +60,7 @@ const DropdownItem = styled.a`
   z-index: 999999999;
   padding: 3%;
 `
+
 
 // const StyledDatePicker = styled(SingleDatePicker)`
 //     width: 100%!important;
@@ -118,7 +119,9 @@ class ActionSlide extends React.Component {
               onFocusChange={({ focused }) => this.setState({ focused })}
             />
           </StyledDatePicker>
+
           <Label htmlFor="">{type} Description</Label>
+
           <Textarea
             name="description"
             value={this.state.description}
@@ -151,6 +154,7 @@ class ActionSlide extends React.Component {
 
           <Flex>
             <Button type="submit">+ Add {type}</Button>
+
             {/* <Button onClick={this.closeMenu} name="openMenu">
               x Close
             </Button> */}

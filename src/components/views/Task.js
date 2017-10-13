@@ -8,6 +8,7 @@ import { Input, Textarea, Form, Label } from "../../styles/Forms";
 import ContentWrapper from "../../styles/ContentWrapper";
 import Button from "../shared/Button";
 
+
 const Status = styled.div`
   background: ${props => props.theme.colors.Highlight};
   padding: 2%;
@@ -16,7 +17,8 @@ const Status = styled.div`
   border: 1px solid ${props => props.theme.colors.cardBorer};
   border-left: 1px solid ${props => props.theme.colors.cardBorer};
   border-right: 1px solid ${props => props.theme.colors.cardBorer};
-`;
+`
+
 
 const Flex = styled.div`
   display: flex;
@@ -31,13 +33,13 @@ const Flex = styled.div`
       margin-right: 10px;
     }
   }
-`;
+`
 
 const Messages = styled.div`
   background: ${props => props.theme.colors.cardBackground};
   padding: 2%;
   border: 1px solid ${props => props.theme.colors.cardBorer};
-`;
+`
 
 class Task extends React.Component {
   state = {
@@ -56,7 +58,6 @@ class Task extends React.Component {
       this.props.getTask.loading === true
     ) {
       const task = nextProps.getTask.Task;
-
       this.setState({
         description: task.description,
         title: task.title,
@@ -97,7 +98,7 @@ class Task extends React.Component {
         });
       }
     }
-  };
+  }
   handleApprove = () => {
     this.props.client.mutate({
       mutation: UPDATE_TASK_MUTATION,
