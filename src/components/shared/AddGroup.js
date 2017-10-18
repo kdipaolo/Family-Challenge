@@ -171,15 +171,6 @@ class AddGroup extends React.Component {
             </Label>
           )}
 
-          {this.state.members.map(member => {
-            return (
-              <AddedMember
-                onClick={() => this.addRemoveUserToMemberState(member)}
-              >
-                {member.name} <X />
-              </AddedMember>
-            )
-          })}
           <Dropdown>
             <Input
               name="title"

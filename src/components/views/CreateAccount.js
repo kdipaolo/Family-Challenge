@@ -3,38 +3,43 @@ import styled from "styled-components"
 import LoginWrapper from "../../styles/LoginWrapper"
 import { Redirect } from "react-router-dom"
 import apple from "../../../public/images/apple.svg"
-import { Input } from "../../styles/Forms"
+import { Input, Label } from "../../styles/Forms"
 import { HeaderTwo } from "../../styles/Typography"
 import { Form } from "../../styles/Forms"
 import { gql, compose, graphql } from "react-apollo"
-import { USER_ID, AUTH_TOKEN } from "../../constants"
+import { USER_ID, AUTH_TOKEN } from "../../utils/constants"
 
 const Apple = styled.img`width: 100px;`
-const Label = styled.label`
-  font-size: 18px;
-  margin: 0;
-`
+
 class CreateAccount extends React.Component {
   state = {
     email: null,
     password: null,
     name: null,
+    family: null,
     signUp: true
   }
 
   handleSubmit = async e => {
     e.preventDefault()
     if (this.state.signUp) {
-      const result = await this.props.createUserMutation({
+      const newUser = await this.props.createUserMutation({
         variables: {
           name: this.state.name,
           email: this.state.email,
           password: this.state.password
         }
       })
-      const id = result.data.signinUser.user.id
-      const token = result.data.signinUser.token
+      const id = newUser.data.signinUser.user.id
+      const token = newUser.data.signinUser.token
       this.saveUserData(id, token)
+      const newFamily = await this.props.createFamilyMutation({
+        variables: {
+          name: this.state.family,
+          description: "Description",
+          userId: id
+        }
+      })
     } else {
       const signUserIn = await this.props.signinUserMutation({
         variables: {
@@ -71,25 +76,37 @@ class CreateAccount extends React.Component {
         <HeaderTwo>
           Sign {!this.state.signUp ? "In" : "Up"} for Family Challenge!
         </HeaderTwo>
-        <HeaderTwo>Sign {!this.state.signUp ? "In" : "Up"}</HeaderTwo>
 
         <Form onSubmit={this.handleSubmit}>
           {this.state.signUp && (
-            <Input
-              onChange={this.handleStateChange}
-              type="text"
-              name="name"
-              placeholder="name"
-              required
-            />
+            <div>
+              <Label>Name</Label>
+              <Input
+                onChange={this.handleStateChange}
+                type="text"
+                name="name"
+                placeholder="i.e John Doe"
+                required
+              />
+            </div>
           )}
+          <Label>Family Name (Could just be your last name)</Label>
+          <Input
+            onChange={this.handleStateChange}
+            type="text"
+            name="family"
+            placeholder="i.e Smith"
+            required
+          />
+          <Label>Email</Label>
           <Input
             onChange={this.handleStateChange}
             type="email"
             name="email"
-            placeholder="email"
+            placeholder="john@doe.com"
             required
           />
+          <Label>Password</Label>
           <Input
             onChange={this.handleStateChange}
             type="password"
@@ -139,7 +156,17 @@ const SIGNIN_USER_MUTATION = gql`
   }
 `
 
+const CREATE_FAMILY_MUTATION = gql`
+  mutation newFamily($name: String!, $description: String!, $userId: ID!) {
+    createFamily(name: $name, userId: $userId, description: $description) {
+      name
+      id
+    }
+  }
+`
+
 export default compose(
   graphql(CREATE_USER_MUTATION, { name: "createUserMutation" }),
+  graphql(CREATE_FAMILY_MUTATION, { name: "createFamilyMutation" }),
   graphql(SIGNIN_USER_MUTATION, { name: "signinUserMutation" })
 )(CreateAccount)

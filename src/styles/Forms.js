@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components"
 
 export const Input = styled.input`
   box-sizing: border-box;
@@ -28,7 +28,6 @@ export const Textarea = styled.textarea`
 `
 export const Label = styled.label`
   color: ${props => props.theme.colors.secondary};
-  margin: 2% 0;
   font-size: 16px;
   margin: 5% 0 1% 0;
   margin-left: 10px;

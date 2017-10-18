@@ -1,12 +1,22 @@
-import React from "react";
-import InfoCard from "../cards/InfoCard.js";
-import Message from "../shared/Message.js";
-import { gql, graphql, compose } from "react-apollo";
-import styled from "styled-components";
-import { CheckCircle, XCircle } from "react-feather";
-import { Input, Textarea, Form, Label } from "../../styles/Forms";
-import ContentWrapper from "../../styles/ContentWrapper";
-import Button from "../shared/Button";
+import React from "react"
+import Message from "../shared/Message.js"
+import { gql, graphql, compose } from "react-apollo"
+import styled from "styled-components"
+import { CheckCircle, XCircle } from "react-feather"
+import { Input, Textarea, Form, Label } from "../../styles/Forms"
+import ContentWrapper from "../../styles/ContentWrapper"
+import Button from "../shared/Button"
+import paperAirplane from "../../../public/images/paper-airplane.svg"
+import {
+  EditIcon,
+  Info,
+  MinusCircleIcon,
+  Image,
+  Header,
+  Detail,
+  DetailWrapper,
+  Highlight
+} from "../../styles/theme/infoCard"
 
 const Status = styled.div`
   background: ${props => props.theme.colors.Highlight};
@@ -16,7 +26,7 @@ const Status = styled.div`
   border: 1px solid ${props => props.theme.colors.cardBorer};
   border-left: 1px solid ${props => props.theme.colors.cardBorer};
   border-right: 1px solid ${props => props.theme.colors.cardBorer};
-`;
+`
 
 const Flex = styled.div`
   display: flex;
@@ -31,13 +41,13 @@ const Flex = styled.div`
       margin-right: 10px;
     }
   }
-`;
+`
 
 const Messages = styled.div`
   background: ${props => props.theme.colors.cardBackground};
   padding: 2%;
   border: 1px solid ${props => props.theme.colors.cardBorer};
-`;
+`
 
 class Task extends React.Component {
   state = {
@@ -46,58 +56,60 @@ class Task extends React.Component {
     title: null,
     settings: false,
     completed: false,
+    assignedTo: null,
     edit: false,
     messages: [],
     newMessage: null
-  };
+  }
   componentWillUpdate(nextProps) {
     if (
       nextProps.getTask.loading === false &&
       this.props.getTask.loading === true
     ) {
-      const task = nextProps.getTask.Task;
+      const task = nextProps.getTask.Task
 
       this.setState({
         description: task.description,
+        assignedTo: task.child.name,
         title: task.title,
         id: task.id,
         completed: task.completed,
         createdAt: task.createdAt,
         messages: task.messages
-      });
+      })
     }
   }
 
   handleTaskDelete = () => {
-    var confirmation = confirm("are you sure?");
+    var confirmation = confirm("are you sure?")
     if (confirmation) {
-      this.props.deleteTask();
-      this.props.history.goBack();
+      this.props.deleteTask()
+      this.props.history.goBack()
     } else {
-      console.log("DENIED");
+      console.log("DENIED")
     }
-  };
+  }
   handleStateUpdate = (e, textValue) => {
     if (textValue) {
       this.setState({
         [textValue]: !this.state[textValue]
-      });
-      return;
+      })
+      return
     } else {
-      const value = e.target.value;
-      const name = e.target.name;
+      const value = e.target.value
+      const name = e.target.name
 
       if (value) {
         this.setState({
           [name]: value
-        });
+        })
       } else {
         this.setState({
           [name]: !this.state[name]
-        });
+        })
       }
     }
-  };
+  }
   handleApprove = () => {
     this.props.client.mutate({
       mutation: UPDATE_TASK_MUTATION,
@@ -107,36 +119,57 @@ class Task extends React.Component {
           completed: true
         }
       }
-    });
-  };
+    })
+  }
   handleNewMessageSubmit = e => {
-    e.preventDefault();
+    e.preventDefault()
 
     this.props.createMessage({
       comment: this.state.newMessage,
       task: this.props.match.params.taskid
-    });
-    this.setState({ newMessage: null });
-    this.props.getTask.refetch();
-  };
+    })
+    this.setState({ newMessage: null })
+    this.props.getTask.refetch()
+  }
   handleNewMessageTextAreaChange = e => {
     this.setState({
       newMessage: e.target.value
-    });
-  };
+    })
+  }
   render() {
+    console.log(this.props)
     return (
       <div>
-        <InfoCard
-          task
-          title={this.state.title}
-          created={this.state.createdAt}
-          settings={this.state.settings}
-          handleUpdate={this.props.updateTask}
-          handleDelete={this.handleTaskDelete}
-          handleStateUpdate={this.handleStateUpdate}
-          edit={this.state.edit}
-        />
+        <Info>
+          <Image src={paperAirplane} />
+          <Header>
+            <EditIcon onClick={this.handleStateUpdate} />
+            {this.state.edit ? (
+              <div>
+                <input
+                  type="text"
+                  name="title"
+                  value={this.state.name}
+                  onChange={this.handleStateUpdate}
+                />
+                <CheckCircle onClick={this.handleSubmit} />
+              </div>
+            ) : (
+              this.state.title
+            )}
+          </Header>
+          <DetailWrapper>
+            <Detail>
+              Assigned By: <Highlight>Mom</Highlight>
+            </Detail>
+            <Detail>
+              Assigned To: <Highlight>{this.state.assignedTo}</Highlight>
+            </Detail>
+          </DetailWrapper>
+          <Detail>
+            Groups: <Highlight>Children</Highlight>
+          </Detail>
+        </Info>
         <Status>
           Status: {this.state.completed ? "Task Completed" : "In Progress"}
         </Status>
@@ -182,7 +215,7 @@ class Task extends React.Component {
           </ContentWrapper>
         </Messages>
       </div>
-    );
+    )
   }
 }
 
@@ -192,6 +225,9 @@ const GET_TASK = gql`
       group {
         id
         title
+      }
+      child {
+        name
       }
       description
       completed
@@ -208,7 +244,7 @@ const GET_TASK = gql`
       }
     }
   }
-`;
+`
 
 const DELETE_TASK_MUTATION = gql`
   mutation deleteTask($id: ID!) {
@@ -216,7 +252,7 @@ const DELETE_TASK_MUTATION = gql`
       title
     }
   }
-`;
+`
 
 const CREATE_MESSAGE_MUTATION = gql`
   mutation createNewMessage($comment: String!, $taskId: ID!) {
@@ -225,7 +261,7 @@ const CREATE_MESSAGE_MUTATION = gql`
       comment
     }
   }
-`;
+`
 
 const UPDATE_TASK_MUTATION = gql`
   mutation updateTask($id: ID!, $title: String!) {
@@ -234,7 +270,7 @@ const UPDATE_TASK_MUTATION = gql`
       description
     }
   }
-`;
+`
 
 export default compose(
   graphql(GET_TASK, {
@@ -250,7 +286,7 @@ export default compose(
             id: ownProps.match.params.taskid,
             title: values.title
           }
-        });
+        })
       }
     })
   }),
@@ -263,7 +299,7 @@ export default compose(
             comment: values.comment,
             taskId: values.task
           }
-        });
+        })
       }
     })
   }),
@@ -275,8 +311,8 @@ export default compose(
           variables: {
             id: ownProps.match.params.taskid
           }
-        });
+        })
       }
     })
   })
-)(Task);
+)(Task)

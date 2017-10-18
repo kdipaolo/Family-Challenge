@@ -2,7 +2,6 @@ import React from "react"
 import Button from "../shared/Button"
 import ActionSlide from "../shared/ActionSlide"
 import ContentWrapper from "../../styles/ContentWrapper"
-import InfoCard from "../cards/InfoCard"
 import Switcher from "../shared/Switcher"
 import TaskList from "../shared/TaskList"
 import MemberList from "../shared/MemberList"
@@ -12,24 +11,48 @@ import styled, { css } from "styled-components"
 import Users from "react-feather"
 import Modal from "../shared/Modal"
 import AddTask from "../shared/AddTask"
+import AddGroupMember from "../shared/AddGroupMember"
+import house from "../../../public/images/house.svg"
+import { CheckCircle } from "react-feather"
+import dateFormat from "dateformat"
+import {
+  EditIcon,
+  Info,
+  MinusCircleIcon,
+  Image,
+  Header,
+  Detail,
+  DetailWrapper,
+  Highlight
+} from "../../styles/theme/infoCard"
+
 class Group extends React.Component {
   state = {
     openMenu: false,
     active: "Tasks",
+    members: [],
     title: null,
     edit: false,
     id: null,
     tasks: [],
-    completed: false
+    completed: false,
+    edit: false
   }
   componentWillUpdate(nextProps) {
     if (
       nextProps.getGroup.loading === false &&
       this.props.getGroup.loading === true
     ) {
+      console.log(nextProps.getGroup)
       this.setState({
         title: nextProps.getGroup.Group.title,
         id: nextProps.getGroup.Group.id,
+        members: nextProps.getGroup.Group.members.map(member => {
+          return {
+            name: member.name,
+            id: member.id
+          }
+        }),
         tasks: nextProps.getGroup.Group.tasks.map(item => {
           return {
             description: item.description,
@@ -41,6 +64,7 @@ class Group extends React.Component {
       })
     }
   }
+
   handleGroupDelete = () => {
     var confirmation = confirm("are you sure?")
     if (confirmation) {
@@ -55,6 +79,12 @@ class Group extends React.Component {
       active: e.target.dataset.item,
       completed: false
     })
+  }
+
+  handleSubmit = e => {
+    e.preventDefault()
+    this.props.updateGroup({ title: this.state.title })
+    this.handleStateUpdate(e, "edit")
   }
 
   handleStateUpdate = (e, textValue) => {
@@ -80,17 +110,44 @@ class Group extends React.Component {
   }
   handleCreateTask = state => {}
   render() {
+    const { member, task, title, created, tasks } = this.props
+
     return (
       <div>
-        <InfoCard
-          title={this.state.title}
-          handleUpdate={this.props.updateGroup}
-          handleDelete={this.handleGroupDelete}
-          tasks={this.state.tasks}
-          groupId={this.state.id}
-          edit={this.state.edit}
-          handleStateUpdate={this.handleStateUpdate}
-        />
+        <Info>
+          <MinusCircleIcon onClick={this.handleGroupDelete} />
+          <Image src={house} />
+          <Header>
+            <EditIcon onClick={e => this.handleStateUpdate(e, "edit")} />
+            {this.state.edit ? (
+              <div>
+                <input
+                  type="text"
+                  name="title"
+                  value={this.state.title}
+                  onChange={this.handleStateUpdate}
+                />
+                <CheckCircle onClick={this.handleSubmit} />
+              </div>
+            ) : (
+              this.state.title
+            )}
+          </Header>
+          <DetailWrapper>
+            <Detail>
+              <Highlight>{this.state.tasks.length}</Highlight> Tasks Assigned
+            </Detail>
+            <Detail>
+              <Highlight>
+                {this.state.tasks.filter(task => task.completed).length}
+              </Highlight>{" "}
+              Tasks Completed
+            </Detail>
+            <Detail>
+              <Highlight>{dateFormat(created, "fullDate")}</Highlight>
+            </Detail>
+          </DetailWrapper>
+        </Info>
 
         <Switcher
           active={this.state.active}
@@ -108,19 +165,31 @@ class Group extends React.Component {
               openMenu={this.state.openMenu}
             />
           ) : (
-            <MemberList />
+            <MemberList members={this.state.members} />
           )}
 
-          <Modal button={<Button sticky>+ Add a new Task</Button>}>
-            {({ handleOpenCloseModal }) => <AddTask />}
-          </Modal>
-
-          <ActionSlide
+          {this.state.active === "Tasks" ? (
+            <Modal button={<Button sticky>+ Add a new Task</Button>}>
+              {({ handleOpenCloseModal }) => (
+                <AddTask
+                  handleOpenCloseModal={handleOpenCloseModal}
+                  groupId={this.props.match.params.groupid}
+                />
+              )}
+            </Modal>
+          ) : (
+            <Modal button={<Button sticky>+ Add a Member to Group</Button>}>
+              {({ handleOpenCloseModal }) => (
+                <AddGroupMember groupId={this.props.match.params.groupid} />
+              )}
+            </Modal>
+          )}
+          {/* <ActionSlide
             open={this.state.openMenu}
             handleClose={this.handleStateUpdate}
             handleAdd={this.props.createTask}
             type={this.state.active}
-          />
+          /> */}
         </ContentWrapper>
       </div>
     )
@@ -131,6 +200,10 @@ const GET_GROUP = gql`
   query getGroup($id: ID!) {
     Group(id: $id) {
       title
+      members {
+        name
+        id
+      }
       tasks {
         id
         completed

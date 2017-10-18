@@ -97,10 +97,11 @@ class AddTask extends React.Component {
         title,
         completed: false,
         needsReviewed: true,
-        // groupId: ,
+        groupId: this.props.groupId,
         childId: member.id
       }
     })
+    this.props.handleOpenCloseModal(e)
   }
   handleDatePickerChange = date => {
     this.setState({

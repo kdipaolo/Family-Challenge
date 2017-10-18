@@ -44,10 +44,10 @@ class Groups extends React.Component {
     )
   }
 }
-//
+
 const GET_GROUPS = gql`
-  query GetGroups {
-    allGroups(orderBy: createdAt_DESC) {
+  query GetGroups($id: ID!) {
+    allGroups(orderBy: createdAt_DESC, filter: { family: { id: $id } }) {
       title
       id
       dueDate
@@ -73,7 +73,8 @@ const NEW_GROUP_MUTATION = gql`
 
 export default compose(
   graphql(GET_GROUPS, {
-    name: "getGroups"
+    name: "getGroups",
+    options: props => ({ variables: { id: "cj84sf2fe01y60195cvidh9sx" } })
   }),
   graphql(NEW_GROUP_MUTATION, {
     name: "newGroupMutation",

@@ -36,8 +36,8 @@ class Members extends React.Component {
 }
 
 const GET_USERS = gql`
-  query getUsers {
-    allUsers {
+  query getUsers($id: ID!) {
+    allUsers(filter: { family: { id: $id } }) {
       name
       id
     }
@@ -52,7 +52,28 @@ const ADD_MEMBER = gql`
     }
   }
 `
+
+const GET_GROUPS = gql`
+  query GetGroups($id: ID!) {
+    allGroups(orderBy: createdAt_DESC, filter: { family: { id: $id } }) {
+      title
+      id
+      dueDate
+      createdAt
+      tasks {
+        id
+        completed
+        description
+        title
+      }
+    }
+  }
+`
+
 export default compose(
-  graphql(GET_USERS, { name: "getUsers" }),
+  graphql(GET_USERS, {
+    name: "getUsers",
+    options: props => ({ variables: { id: "cj8vx5df81tp30121ya5wk42s" } })
+  }),
   graphql(ADD_MEMBER, { name: "addMember" })
 )(Members)
