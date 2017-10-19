@@ -38,33 +38,42 @@ class Group extends React.Component {
     completed: false,
     edit: false
   }
+  componentWillReceiveProps(nextProps) {}
+
   componentWillUpdate(nextProps) {
     if (
       nextProps.getGroup.loading === false &&
       this.props.getGroup.loading === true
     ) {
-      console.log(nextProps.getGroup)
-      this.setState({
-        title: nextProps.getGroup.Group.title,
-        id: nextProps.getGroup.Group.id,
-        members: nextProps.getGroup.Group.members.map(member => {
-          return {
-            name: member.name,
-            id: member.id
-          }
-        }),
-        tasks: nextProps.getGroup.Group.tasks.map(item => {
-          return {
-            description: item.description,
-            completed: item.completed,
-            title: item.title,
-            id: item.id
-          }
-        })
-      })
+      console.log(nextProps.getGroup.Group)
+      this.populateGroupData(nextProps.getGroup.Group)
     }
   }
-
+  componentDidMount() {
+    if (!this.props.getGroup.loading) {
+      this.populateGroupData(this.props.getGroup.Group)
+    }
+  }
+  populateGroupData = group => {
+    this.setState({
+      title: group.title,
+      id: group.id,
+      members: group.members.map(member => {
+        return {
+          name: member.name,
+          id: member.id
+        }
+      }),
+      tasks: group.tasks.map(item => {
+        return {
+          description: item.description,
+          completed: item.completed,
+          title: item.title,
+          id: item.id
+        }
+      })
+    })
+  }
   handleGroupDelete = () => {
     var confirmation = confirm("are you sure?")
     if (confirmation) {
@@ -108,7 +117,7 @@ class Group extends React.Component {
       }
     }
   }
-  handleCreateTask = state => {}
+
   render() {
     const { member, task, title, created, tasks } = this.props
 
@@ -172,6 +181,7 @@ class Group extends React.Component {
             <Modal button={<Button sticky>+ Add a new Task</Button>}>
               {({ handleOpenCloseModal }) => (
                 <AddTask
+                  refetch={this.props.getGroup.refetch}
                   handleOpenCloseModal={handleOpenCloseModal}
                   groupId={this.props.match.params.groupid}
                 />

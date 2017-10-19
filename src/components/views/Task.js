@@ -67,17 +67,25 @@ class Task extends React.Component {
       this.props.getTask.loading === true
     ) {
       const task = nextProps.getTask.Task
-
-      this.setState({
-        description: task.description,
-        assignedTo: task.child.name,
-        title: task.title,
-        id: task.id,
-        completed: task.completed,
-        createdAt: task.createdAt,
-        messages: task.messages
-      })
+      this.populateTask(task)
     }
+  }
+  componentDidMount() {
+    if (!this.props.getTask.loading) {
+      const task = this.props.getTask.Task
+      this.populateTask(task)
+    }
+  }
+  populateTask(data) {
+    this.setState({
+      description: data.description,
+      assignedTo: data.child.name,
+      title: data.title,
+      id: data.id,
+      completed: data.completed,
+      createdAt: data.createdAt,
+      messages: data.messages
+    })
   }
 
   handleTaskDelete = () => {

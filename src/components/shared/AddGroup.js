@@ -54,13 +54,14 @@ const DropdownItem = styled.a`
 `
 
 const AddedMember = styled.a`
-  background: gray;
-  padding: 1%;
+  background: #ececec;
+  padding: 2%;
+  border: 1px solid #71a45a;
   border-radius: 10px;
   font-size: 14px;
   font-weight: bold;
   margin: 2%;
-  display: inline-block;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 `
@@ -116,18 +117,19 @@ class AddGroup extends React.Component {
     })
   }
   addRemoveUserToMemberState = user => {
-    console.log(user)
     const someting = this.state.members.find(member => member.id === user.id)
     if (someting) {
       const index = this.state.members.indexOf(someting)
       let newMembers = this.state.members
       newMembers.splice(index, 1)
       this.setState({
-        members: newMembers
+        members: newMembers,
+        search: ""
       })
     } else {
       this.setState({
-        members: [user, ...this.state.members]
+        members: [user, ...this.state.members],
+        search: ""
       })
     }
   }
@@ -166,9 +168,19 @@ class AddGroup extends React.Component {
           />
           <AddNewMember href="#">Add a new member to the family.</AddNewMember>
           {this.state.members.length > 0 && (
-            <Label htmlFor="">
-              Adding These Members to {this.state.title} Group
-            </Label>
+            <div>
+              <Label htmlFor="">
+                Adding These Members to {this.state.title} Group
+              </Label>
+              {this.state.members.map(member => (
+                <AddedMember
+                  onClick={() => this.addRemoveUserToMemberState(member)}
+                >
+                  <span>{member.name}</span>
+                  <X />
+                </AddedMember>
+              ))}
+            </div>
           )}
 
           <Dropdown>

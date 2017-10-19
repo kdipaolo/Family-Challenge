@@ -12,11 +12,14 @@ class AddGroupMember extends React.Component {
     })
   }
   addMembersToGroup = () => {}
+  addMemberToState = member => {
+    console.log(member)
+  }
   render() {
     return (
       <div>
         <h2>Add New Members to Group</h2>
-        <MemberDropdown addMembersToState={this.addMembersToState} />
+        <MemberDropdown addMemberToState={this.addMemberToState} />
         <Button onClick={this.addMembersToGroup}>+ Add Members</Button>
       </div>
     )

@@ -101,6 +101,7 @@ class AddTask extends React.Component {
         childId: member.id
       }
     })
+    this.props.refetch()
     this.props.handleOpenCloseModal(e)
   }
   handleDatePickerChange = date => {
