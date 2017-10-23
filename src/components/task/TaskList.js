@@ -1,8 +1,8 @@
-import React from "react";
-import Task from "../cards/Task";
-import Button from "./Button";
-import Loading from "./Loading";
-import NoResults from "./NoResults";
+import React from "react"
+import Task from "../task/TaskCard"
+import Button from "../shared/Button"
+import Loading from "../shared/Loading"
+import NoResults from "../shared/NoResults"
 class TaskList extends React.Component {
   render() {
     return (
@@ -13,7 +13,7 @@ class TaskList extends React.Component {
               <a
                 href="#"
                 name="completed"
-                onClick={e => this.props.handleStateUpdate(e, "completed")}
+                onClick={this.props.handleToggleCompleted}
               >
                 {this.props.completed ? "Hide" : "Show"} Completed
               </a>
@@ -28,7 +28,7 @@ class TaskList extends React.Component {
                       id={task.id}
                       completed={task.completed}
                     />
-                  );
+                  )
                 })}
             </div>
           ) : (
@@ -48,8 +48,8 @@ class TaskList extends React.Component {
           </Button>
         )}
       </div>
-    );
+    )
   }
 }
 
-export default TaskList;
+export default TaskList

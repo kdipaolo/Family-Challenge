@@ -4,7 +4,7 @@ import CardWrapper from "../../styles/CardWrapper"
 import { Link } from "react-router-dom"
 import { CardText, CardHeader, Flex, CardIcon, Image } from "../../styles/Cards"
 
-class Member extends React.Component {
+class MemberCard extends React.Component {
   render() {
     return (
       <Link to={`/member/${this.props.user.id}`}>
@@ -28,4 +28,4 @@ class Member extends React.Component {
   }
 }
 
-export default Member
+export default MemberCard

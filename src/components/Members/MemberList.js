@@ -1,12 +1,14 @@
 import React from "react"
-import Member from "../cards/Member"
-import Button from "./Button"
+import MemberCard from "./MemberCard"
+import Button from "../shared/Button"
 
 class MemberList extends React.Component {
   render() {
     return (
       <div>
-        {this.props.members.map(user => <Member user={user} />)}
+        {this.props.members.map(user => (
+          <MemberCard key={user.id} user={user} />
+        ))}
 
         <Button sticky onClick={this.handleStateUpdate}>
           + Add A Memeber

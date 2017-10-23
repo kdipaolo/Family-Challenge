@@ -1,6 +1,6 @@
 import React from "react"
-import MemberDropdown from "./MemberDropdown"
-import Button from "./Button"
+import MemberDropdown from "../Members/MemberDropdown"
+import Button from "../shared/Button"
 class AddGroupMember extends React.Component {
   state = {
     members: []

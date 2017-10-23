@@ -1,9 +1,8 @@
 import React from "react"
 import Button from "../shared/Button"
-import ActionSlide from "../shared/ActionSlide"
 import Modal from "../shared/Modal"
-import AddMember from "../shared/AddMember"
-import Member from "../cards/Member"
+import AddMember from "./AddMember"
+import MemberCard from "./MemberCard"
 import ContentWrapper from "../../styles/ContentWrapper"
 import { gql, compose, graphql } from "react-apollo"
 
@@ -13,7 +12,7 @@ class Members extends React.Component {
       <ContentWrapper>
         {!this.props.getUsers.loading &&
           this.props.getUsers.allUsers.map(user => {
-            return <Member user={user} />
+            return <MemberCard user={user} />
           })}
 
         <Modal

@@ -175,6 +175,7 @@ const GET_USER = gql`
       name
       family {
         name
+        id
       }
     }
   }

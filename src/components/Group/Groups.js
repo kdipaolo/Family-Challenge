@@ -1,12 +1,11 @@
 import React from "react"
-import Group from "../cards/Group"
+import GroupCard from "./GroupCard"
 import ContentWrapper from "../../styles/ContentWrapper"
 import { graphql, gql, compose } from "react-apollo"
 import Button from "../shared/Button"
 import Loading from "../shared/Loading"
-import ActionSlide from "../shared/ActionSlide"
 import Modal from "../shared/Modal"
-import AddGroup from "../shared//AddGroup"
+import AddGroup from "./AddGroup"
 
 class Groups extends React.Component {
   state = {
@@ -26,7 +25,7 @@ class Groups extends React.Component {
           <Loading />
         ) : (
           this.props.getGroups.allGroups.map((group, i) => (
-            <Group
+            <GroupCard
               key={i}
               id={group.id}
               title={group.title}

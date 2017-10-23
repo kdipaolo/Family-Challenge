@@ -1,8 +1,9 @@
 import React from "react"
-import Button from "./Button"
+import Button from "../shared/Button"
 import styled from "styled-components"
 import { Input, Textarea, Form, Label } from "../../styles/Forms"
 import { gql, compose, graphql } from "react-apollo"
+import { withRouter } from "react-router-dom"
 
 const Flex = styled.div`
   display: flex;
@@ -87,17 +88,16 @@ class AddTask extends React.Component {
     }
   }
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     const { title, description, member, group } = this.state
-
     e.preventDefault()
-    this.props.addTask({
+    await this.props.createTask({
       variables: {
         description,
         title,
         completed: false,
         needsReviewed: true,
-        groupId: this.props.groupId,
+        groupId: this.props.match.params.groupid,
         childId: member.id
       }
     })
@@ -187,7 +187,7 @@ const GET_USERS = gql`
     }
   }
 `
-const NEW_TASK = gql`
+const CREATE_TASK_MUTATION = gql`
   mutation newTask(
     $description: String!
     $title: String!
@@ -210,7 +210,9 @@ const NEW_TASK = gql`
   }
 `
 
-export default compose(
-  graphql(GET_USERS, { name: "getUsers" }),
-  graphql(NEW_TASK, { name: "addTask" })
-)(AddTask)
+export default withRouter(
+  compose(
+    graphql(GET_USERS, { name: "getUsers" }),
+    graphql(CREATE_TASK_MUTATION, { name: "createTask" })
+  )(AddTask)
+)

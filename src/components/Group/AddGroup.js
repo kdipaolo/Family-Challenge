@@ -1,5 +1,5 @@
 import React from "react"
-import Button from "./Button"
+import Button from "../shared/Button"
 import styled from "styled-components"
 import { Input, Textarea, Form, Label } from "../../styles/Forms"
 import { gql, compose, graphql } from "react-apollo"
