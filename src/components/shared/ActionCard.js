@@ -1,9 +1,9 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import placeholder from '../../../public/images/placeholder.png'
-import { ThumbsUp, Mail } from 'react-feather'
-import CardWrapper from '../../styles/CardWrapper'
-import { CardText, Flex, CardIcon, Image } from '../../styles/Cards.js'
+import React from "react"
+import styled, { css } from "styled-components"
+import placeholder from "../../../public/images/placeholder.png"
+import { ThumbsUp, Mail } from "react-feather"
+import CardWrapper from "../../styles/CardWrapper"
+import { CardText, Flex, CardIcon, Image } from "../../styles/Cards.js"
 
 const Action = styled.div`
   padding: 3%;
@@ -21,14 +21,9 @@ const ActionIcon = css`
   margin: auto;
   width: 20px;
   margin-bottom: 3px;
-
 `
-const ThumbsUpIcon = styled(ThumbsUp)`
-  ${ActionIcon}
-`
-const MailIcon = styled(Mail)`
-  ${ActionIcon}
-`
+const ThumbsUpIcon = styled(ThumbsUp)`${ActionIcon};`
+const MailIcon = styled(Mail)`${ActionIcon};`
 
 export const FlexAction = styled.div`
   display: flex;

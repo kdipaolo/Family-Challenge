@@ -1,13 +1,11 @@
 import React from "react"
-import Group from "../cards/Group"
+import GroupCard from "./GroupCard"
 import ContentWrapper from "../../styles/ContentWrapper"
 import { graphql, gql, compose } from "react-apollo"
 import Button from "../shared/Button"
 import Loading from "../shared/Loading"
-import ActionSlide from "../shared/ActionSlide"
 import Modal from "../shared/Modal"
-import AddGroup from "../shared//AddGroup"
-
+import AddGroup from "./AddGroup"
 
 class Groups extends React.Component {
   state = {
@@ -27,7 +25,7 @@ class Groups extends React.Component {
           <Loading />
         ) : (
           this.props.getGroups.allGroups.map((group, i) => (
-            <Group
+            <GroupCard
               key={i}
               id={group.id}
               title={group.title}
@@ -45,10 +43,10 @@ class Groups extends React.Component {
     )
   }
 }
-//
+
 const GET_GROUPS = gql`
-  query GetGroups {
-    allGroups(orderBy: createdAt_DESC) {
+  query GetGroups($id: ID!) {
+    allGroups(orderBy: createdAt_DESC, filter: { family: { id: $id } }) {
       title
       id
       dueDate
@@ -74,7 +72,8 @@ const NEW_GROUP_MUTATION = gql`
 
 export default compose(
   graphql(GET_GROUPS, {
-    name: "getGroups"
+    name: "getGroups",
+    options: props => ({ variables: { id: "cj84sf2fe01y60195cvidh9sx" } })
   }),
   graphql(NEW_GROUP_MUTATION, {
     name: "newGroupMutation",

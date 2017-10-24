@@ -1,24 +1,20 @@
 import React from "react"
-import InfoCard from "../cards/InfoCard"
-import Switcher from "../shared/Switcher"
-import Task from "../cards/Task"
+import Task from "../task/TaskCard"
 import ContentWrapper from "../../styles/ContentWrapper"
+import Switcher from "../shared/Switcher"
 
-class Member extends React.Component {
+class MemberLists extends React.Component {
   state = {
     active: "Tasks"
   }
-  componentDidMount() {}
   handleSwitcherClick = e => {
     this.setState({
       active: e.target.dataset.item
     })
   }
-
   render() {
     return (
       <div>
-        <InfoCard member />
         <Switcher
           handleSwitcherClick={this.handleSwitcherClick}
           active={this.state.active}
@@ -27,11 +23,9 @@ class Member extends React.Component {
         <ContentWrapper>
           {this.state.active === "Tasks" ? (
             <div>
-              <Task />
-              <Task />
-              <Task />
-              <Task />
-              <Task />
+              {this.props.User.tasks.map(task => (
+                <Task key={task.id} {...task} />
+              ))}
             </div>
           ) : (
             <div>
@@ -43,4 +37,5 @@ class Member extends React.Component {
     )
   }
 }
-export default Member
+
+export default MemberLists
