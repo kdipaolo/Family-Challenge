@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 import React from "react"
 import styled from "styled-components"
 import { Link, withRouter } from "react-router-dom"
 import placeholder from "../../public/images/placeholder.png"
 import { AUTH_TOKEN, USER_ID } from "../utils/constants"
+=======
+import React from "react";
+import styled from "styled-components";
+import { Link, withRouter } from "react-router-dom";
+import placeholder from "../../public/images/placeholder.png";
+>>>>>>> master
 import {
   Menu,
   Bell,
@@ -12,10 +19,17 @@ import {
   ChevronDown,
   UserMinus,
   X
+<<<<<<< HEAD
 } from "react-feather"
 
 import { gql, compose, graphql } from "react-apollo"
 
+=======
+} from "react-feather";
+import SettingsView from "../components/shared/Settings";
+import { USER_ID } from "../constants";
+import { gql, compose, graphql } from "react-apollo";
+>>>>>>> master
 const NavigationBar = styled.div`
   background-color: ${props => props.theme.colors.primary};
   width: 100%;
@@ -30,6 +44,7 @@ const NavigationBar = styled.div`
       }
     }
   }
+<<<<<<< HEAD
 `
 
 const FamilyName = styled.h4`
@@ -38,6 +53,9 @@ const FamilyName = styled.h4`
   padding: 0;
 `
 
+=======
+`;
+>>>>>>> master
 const NavigationMenu = styled.div`
   background-color: ${props => props.theme.colors.background};
   border-right: 4px solid ${props => props.theme.colors.gray};
@@ -51,6 +69,19 @@ const NavigationMenu = styled.div`
   transition: 0.2s all ease-out;
   transform: ${props =>
     props.open ? "translateX(0px)" : "translateX(-300px)"};
+<<<<<<< HEAD
+=======
+`;
+
+const SettingsMenu = NavigationMenu.extend`
+  right: 0;
+  transform: ${props => (props.open ? "translateX(0px)" : "translateX(300px)")};
+`;
+
+const SettingsMenu = NavigationMenu.extend`
+  right: 0;
+  transform: ${props => (props.open ? 'translateX(0px)' : 'translateX(300px)')};
+>>>>>>> master
 `
 
 const NavItem = styled.div`
@@ -60,7 +91,7 @@ const NavItem = styled.div`
     font-size: 20px;
     margin-right: 20px;
   }
-`
+`;
 
 const UserInfo = styled.div`
   padding: 5%;
@@ -84,17 +115,22 @@ const UserInfo = styled.div`
     bottom: 0;
     right: 10px;
   }
-`
+`;
 
 class Header extends React.Component {
   state = {
     openNav: false,
     openSettings: false
+<<<<<<< HEAD
   }
+=======
+  };
+>>>>>>> master
 
   handleMenuClick = () => {
     this.setState({
       openNav: !this.state.openNav
+<<<<<<< HEAD
     })
   }
   handleSettingsClick = () => {
@@ -111,6 +147,18 @@ class Header extends React.Component {
   render() {
     if (this.props.location.pathname === "/") {
       return null
+=======
+    });
+  };
+  handleSettingsClick = () => {
+    this.setState({
+      openSettings: !this.state.openSettings
+    });
+  };
+  render() {
+    if (this.props.location.pathname === "/") {
+      return null;
+>>>>>>> master
     }
     return (
       <div>
@@ -118,6 +166,7 @@ class Header extends React.Component {
           <span onClick={this.handleMenuClick}>
             <Menu />
           </span>
+<<<<<<< HEAD
 
           <span onClick={this.handleSettingsClick}>
             {!this.props.getUser.loading && (
@@ -125,6 +174,10 @@ class Header extends React.Component {
                 {this.props.getUser.User.family.name} Family
               </FamilyName>
             )}
+=======
+          <span onClick={this.handleSettingsClick}>
+            <Settings />
+>>>>>>> master
           </span>
         </NavigationBar>
         <NavigationMenu open={this.state.openNav}>
@@ -164,8 +217,11 @@ class Header extends React.Component {
             </a>
           </ul>
         </NavigationMenu>
+        <SettingsMenu open={this.state.openSettings}>
+          <X onClick={this.handleSettingsClick} />
+        </SettingsMenu>
       </div>
-    )
+    );
   }
 }
 
@@ -173,6 +229,7 @@ const GET_USER = gql`
   query getUser($id: ID!) {
     User(id: $id) {
       name
+<<<<<<< HEAD
       family {
         name
         id
@@ -180,6 +237,11 @@ const GET_USER = gql`
     }
   }
 `
+=======
+    }
+  }
+`;
+>>>>>>> master
 
 export default withRouter(
   compose(
@@ -188,4 +250,8 @@ export default withRouter(
       options: props => ({ variables: { id: localStorage.getItem(USER_ID) } })
     })(Header)
   )
+<<<<<<< HEAD
 )
+=======
+);
+>>>>>>> master

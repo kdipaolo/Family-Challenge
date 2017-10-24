@@ -5,27 +5,7 @@ import { Input, Textarea, Form, Label } from "../../styles/Forms"
 import { gql, compose, graphql } from "react-apollo"
 import { SingleDatePicker } from "react-dates"
 import "react-dates/lib/css/_datepicker.css"
-
-const Container = styled.div`
-  transform: ${props => (props.open ? "translateY(0vh)" : "translateY(100vh)")};
-  transition: 0.2s all ease-out;
-  background-color: ${props => props.theme.colors.cardBackground};
-  border-top: 5px solid ${props => props.theme.colors.secondary};
-  position: fixed;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 700px;
-  margin: auto;
-  display: block;
-  height: auto;
-  bottom: 0;
-  text-align: center;
-  padding: 10% 5%;
-  @media (min-width: 700px) {
-    padding: 5% 3%;
-    ${"" /* position: relative; */};
-  }
-`
+import { X } from "react-feather"
 
 const Flex = styled.div`
   display: flex;
@@ -49,28 +29,55 @@ const StyledDatePicker = styled.div`
   }
 `
 
-const Dropdown = styled.div``
-const Results = styled.div`position: relative;`
+const Dropdown = styled.div`position: relative;`
+const Results = styled.div`
+  position: absolute;
+  top: 60px;
+  position: absolute;
+  width: 100%;
+
+  z-index: 999999999;
+  border: 2px solid #c5c5c5;
+`
 
 const DropdownItem = styled.a`
-  position: absolute;
-  top: 70px;
-  width: 100%;
-  background: #b9b9b9;
-  z-index: 999999999;
   padding: 3%;
+  width: auto;
+  background: #efefef;
+  display: block;
+  background: #efefef;
+  border-bottom: 1px solid gray;
+  &:hover {
+    background: #929090;
+    cursor: pointer;
+  }
 `
+
+const AddedMember = styled.a`
+  background: gray;
+  padding: 1%;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 2%;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+`
+
+const AddNewMember = styled.a`display: block;`
 
 // const StyledDatePicker = styled(SingleDatePicker)`
 //     width: 100%!important;
 // `
 
-class ActionSlide extends React.Component {
+class AddGroup extends React.Component {
   state = {
     title: "",
     dueDate: "",
     description: "",
-    search: null
+    search: null,
+    members: []
   }
 
   handleChange = e => {
@@ -84,14 +91,45 @@ class ActionSlide extends React.Component {
     })
   }
 
+  handleNewGroup = async () => {
+    const newGroup = {
+      variables: {
+        title: this.state.title,
+        dueDate: this.state.dueDate,
+        memberIds: this.state.members.map(member => member.id)
+      }
+    }
+
+    const response = await this.props.addGroup(newGroup)
+    console.log(response)
+    // const id = response.data.createGroup.changedGroup.id
+    // this.props.history.push(`/group/${id}`)
+  }
+
   handleSubmit = e => {
     e.preventDefault()
-    this.props.handleAdd(this.state)
+    this.handleNewGroup()
   }
   handleDatePickerChange = date => {
     this.setState({
       dueDate: date
     })
+  }
+  addRemoveUserToMemberState = user => {
+    console.log(user)
+    const someting = this.state.members.find(member => member.id === user.id)
+    if (someting) {
+      const index = this.state.members.indexOf(someting)
+      let newMembers = this.state.members
+      newMembers.splice(index, 1)
+      this.setState({
+        members: newMembers
+      })
+    } else {
+      this.setState({
+        members: [user, ...this.state.members]
+      })
+    }
   }
   closeMenu = e => {
     this.props.handleClose(e, "openMenu")
@@ -99,7 +137,7 @@ class ActionSlide extends React.Component {
   render() {
     const { open, type, handleClose, handleAdd } = this.props
     return (
-      <Container open={open}>
+      <div>
         <Text>+ Add a New {type}</Text>
         <Form onSubmit={this.handleSubmit}>
           <Input
@@ -107,7 +145,7 @@ class ActionSlide extends React.Component {
             value={this.state.title}
             onChange={this.handleChange}
             type="text"
-            placeholder={type + " Name"}
+            placeholder="Group Name"
           />
 
           <StyledDatePicker>
@@ -126,6 +164,22 @@ class ActionSlide extends React.Component {
             onChange={this.handleChange}
             placeholder=""
           />
+          <AddNewMember href="#">Add a new member to the family.</AddNewMember>
+          {this.state.members.length > 0 && (
+            <Label htmlFor="">
+              Adding These Members to {this.state.title} Group
+            </Label>
+          )}
+
+          {this.state.members.map(member => {
+            return (
+              <AddedMember
+                onClick={() => this.addRemoveUserToMemberState(member)}
+              >
+                {member.name} <X />
+              </AddedMember>
+            )
+          })}
           <Dropdown>
             <Input
               name="title"
@@ -141,10 +195,18 @@ class ActionSlide extends React.Component {
                 this.props.getUsers.allUsers
                   .filter(
                     user =>
-                      this.state.search && user.name.includes(this.state.search)
+                      this.state.search &&
+                      user.name.includes(this.state.search) &&
+                      !this.state.members.find(member => member.id === user.id)
                   )
                   .map(user => {
-                    return <DropdownItem>{user.name}</DropdownItem>
+                    return (
+                      <DropdownItem
+                        onClick={() => this.addRemoveUserToMemberState(user)}
+                      >
+                        {user.name}
+                      </DropdownItem>
+                    )
                   })}
             </Results>
           </Dropdown>
@@ -156,7 +218,7 @@ class ActionSlide extends React.Component {
             </Button> */}
           </Flex>
         </Form>
-      </Container>
+      </div>
     )
   }
 }
@@ -169,5 +231,16 @@ const GET_USERS = gql`
     }
   }
 `
+const ADD_GROUP = gql`
+  mutation newGroup($dueDate: DateTime!, $title: String!, $memberIds: [ID!]) {
+    createGroup(dueDate: $dueDate, title: $title, membersIds: $memberIds) {
+      title
+      id
+    }
+  }
+`
 
-export default compose(graphql(GET_USERS, { name: "getUsers" }))(ActionSlide)
+export default compose(
+  graphql(GET_USERS, { name: "getUsers" }),
+  graphql(ADD_GROUP, { name: "addGroup" })
+)(AddGroup)
