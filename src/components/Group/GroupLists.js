@@ -7,6 +7,7 @@ import Modal from "../shared/Modal"
 import AddGroupMember from "./AddGroupMember"
 import AddTask from "../task/AddTask"
 import Button from "../shared/Button"
+import { withRouter } from "react-router-dom"
 class GroupLists extends React.Component {
   state = {
     active: "Tasks",
@@ -66,4 +67,4 @@ class GroupLists extends React.Component {
   }
 }
 
-export default GroupLists
+export default withRouter(GroupLists)

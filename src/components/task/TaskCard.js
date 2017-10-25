@@ -20,6 +20,10 @@ class TaskCard extends React.Component {
             <div>
               <CardHeader>{this.props.title}</CardHeader>
               <CardText secondary>Assigned By: Mom</CardText>
+              <CardText secondary>
+                Assigned To: {this.props.assignedTo}
+              </CardText>
+
               <CardText secondary>1/26/2017</CardText>
             </div>
             <div>

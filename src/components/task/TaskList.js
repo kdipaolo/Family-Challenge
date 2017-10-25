@@ -1,5 +1,5 @@
 import React from "react"
-import Task from "../task/TaskCard"
+import TaskCard from "../task/TaskCard"
 import Button from "../shared/Button"
 import Loading from "../shared/Loading"
 import NoResults from "../shared/NoResults"
@@ -22,8 +22,9 @@ class TaskList extends React.Component {
                 .filter(task => (this.props.completed ? task : !task.completed))
                 .map(task => {
                   return (
-                    <Task
+                    <TaskCard
                       description={task.description}
+                      assignedTo={task.child.name}
                       title={task.title}
                       key={task.id}
                       id={task.id}
@@ -37,16 +38,6 @@ class TaskList extends React.Component {
           )
         ) : (
           <Loading />
-        )}
-
-        {!this.props.openMenu && (
-          <Button
-            sticky
-            name="openMenu"
-            onClick={e => this.props.handleStateUpdate(e)}
-          >
-            + Add A Task
-          </Button>
         )}
       </div>
     )

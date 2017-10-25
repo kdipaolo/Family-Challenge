@@ -53,7 +53,7 @@ class CreateAccount extends React.Component {
       )
       console.log(signUserIn)
     }
-    this.props.history.push("/dashboard")
+    // this.props.history.push("/dashboard")
   }
   handleStateChange = e => {
     e.preventDefault()
@@ -88,16 +88,17 @@ class CreateAccount extends React.Component {
                 placeholder="i.e John Doe"
                 required
               />
+              <Label>Family Name (Could just be your last name)</Label>
+              <Input
+                onChange={this.handleStateChange}
+                type="text"
+                name="family"
+                placeholder="i.e Smith"
+                required
+              />
             </div>
           )}
-          <Label>Family Name (Could just be your last name)</Label>
-          <Input
-            onChange={this.handleStateChange}
-            type="text"
-            name="family"
-            placeholder="i.e Smith"
-            required
-          />
+
           <Label>Email</Label>
           <Input
             onChange={this.handleStateChange}

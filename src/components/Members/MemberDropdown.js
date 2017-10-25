@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { Input } from "../../styles/Forms"
 import { gql, compose, graphql } from "react-apollo"
 import { X } from "react-feather"
-
+import { Label } from "../../styles/Forms"
 const Dropdown = styled.div`position: relative;`
 const Results = styled.div`
   position: absolute;
@@ -39,45 +39,52 @@ const DropdownItem = styled.a`
     cursor: pointer;
   }
 `
+
+const SelectedMember = styled.h4`
+  border: 1px solid ${props => props.theme.colors.secondary};
+  padding: 3%;
+  color: ${props => props.theme.colors.secondary};
+  border-radius: 5px;
+  cursor: pointer;
+`
+
+const Remove = styled.span`
+  color: red;
+  cursor: pointer;
+  font-size: 12px;
+`
 class MemberDropdown extends React.Component {
   state = {
     search: null,
     members: []
   }
+  // componentDidMount() {
+  //   this.setState(state => ({
+  //     members: this.props.members
+  //   }))
+  // }
+  // componentWillReceiveProps(nextProps) {
+  // console.log("nextProps", nextProps.members)
+  // console.log("nextState", nextState.members)
+  // if (this.state.members !== nextProps.members) {
+  // this.setState(state => ({
+  //   members: nextProps.members
+  // }))
+  // }
+  // if (nextState.member !== this.state.member && nextState.member) {
+  //   this.props.addMemberToState(nextState.member)
+  // }
+  // }
 
   handleUserSearch = e => {
     this.setState({
       search: e.target.value
     })
   }
-  addRemoveUserToMemberState = user => {
-    console.log(user)
-    const someting = this.state.members.find(member => member.id === user.id)
-    if (someting) {
-      const index = this.state.members.indexOf(someting)
-      let newMembers = this.state.members
-      newMembers.splice(index, 1)
-      this.setState({
-        members: newMembers
-      })
-    } else {
-      this.setState({
-        members: [user, ...this.state.members]
-      })
-    }
-  }
+
   render() {
     return (
       <Dropdown>
-        {this.state.members.map(member => {
-          return (
-            <AddedMember
-              onClick={() => this.addRemoveUserToMemberState(member)}
-            >
-              {member.name} <X />
-            </AddedMember>
-          )
-        })}
         <Input
           name="title"
           value={this.state.search}
@@ -87,19 +94,36 @@ class MemberDropdown extends React.Component {
           placeholder="Group Members"
         />
 
+        {/* <SelectedMember
+          onClick={() => this.props.addMemberToState(this.state.members)}
+        >
+          Task Assigned to: {this.state.members.name} -{" "}
+          <Remove>Remove User From This Task</Remove>
+        </SelectedMember> */}
+
+        {this.props.members.length > 0 && (
+          <div>
+            <Label htmlFor="">Adding These Members to Group</Label>
+            {this.props.members.map(member => (
+              <AddedMember onClick={() => this.props.addMemberToState(member)}>
+                <span>{member.name}</span>
+                <X />
+              </AddedMember>
+            ))}
+          </div>
+        )}
+
         <Results>
           {!this.props.getUsers.loading &&
             this.props.getUsers.allUsers
               .filter(
                 user =>
-                  this.state.search &&
-                  user.name.includes(this.state.search) &&
-                  !this.state.members.find(member => member.id === user.id)
+                  this.state.search && user.name.includes(this.state.search)
               )
               .map(user => {
                 return (
                   <DropdownItem
-                    onClick={() => this.addRemoveUserToMemberState(user)}
+                    onClick={() => this.props.addMemberToState(user)}
                   >
                     {user.name}
                   </DropdownItem>

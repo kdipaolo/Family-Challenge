@@ -23,6 +23,9 @@ const GET_GROUP = gql`
       tasks {
         id
         completed
+        child {
+          name
+        }
         title
         description
       }

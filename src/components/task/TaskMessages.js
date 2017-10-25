@@ -30,8 +30,10 @@ class TaskMessages extends React.Component {
   handleNewMessageSubmit = async e => {
     e.preventDefault()
     await this.props.createMessage({
-      comment: this.state.newMessage,
-      task: this.props.match.params.taskid
+      variables: {
+        comment: this.state.newMessage,
+        taskId: this.props.match.params.taskid
+      }
     })
     this.props.refetch()
     this.setState({ newMessage: "" })
@@ -48,6 +50,7 @@ class TaskMessages extends React.Component {
           <h3>Conversation:</h3>
           <form onSubmit={this.handleNewMessageSubmit}>
             <Textarea
+              required
               type="text"
               name="title"
               value={this.state.newMessage}
@@ -91,17 +94,7 @@ const CREATE_MESSAGE_MUTATION = gql`
 export default withRouter(
   compose(
     graphql(CREATE_MESSAGE_MUTATION, {
-      name: "createMessageMutation",
-      props: ({ ownProps, createMessageMutation }) => ({
-        createMessage: values => {
-          createMessageMutation({
-            variables: {
-              comment: values.comment,
-              taskId: values.task
-            }
-          })
-        }
-      })
+      name: "createMessage"
     })
   )(TaskMessages)
 )
