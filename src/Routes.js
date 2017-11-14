@@ -93,7 +93,6 @@ const GET_USER = gql`
 export default compose(
   graphql(GET_USER, {
     name: "getUser",
-
     options: props => ({
       skip: !localStorage.getItem(USER_ID),
       variables: { id: localStorage.getItem(USER_ID) }
