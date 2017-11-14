@@ -9,7 +9,6 @@ import styled, { ThemeProvider, css } from "styled-components"
 import Header from "./layout/Header"
 import theme from "./styles/theme/index"
 import Dashboard from "./components/views/Dashboard"
-import CreateFamily from "./components/views/CreateFamily"
 import Groups from "./components/Group/Groups"
 import Group from "./components/Group/Group"
 import CreateAccount from "./components/views/CreateAccount"
@@ -50,14 +49,12 @@ class Routes extends React.Component {
       <Router testing>
         <ThemeProvider theme={theme}>
           <AppBackground>
-            <Header getUser={this.props.getUser} />
+            {localStorage.getItem(USER_ID) && (
+              <Header getUser={this.props.getUser} />
+            )}
             <Switch>
               <ContentWrapper>
-                <Route
-                  exact
-                  path="/"
-                  component={requireNonAuth(CreateFamily)}
-                />
+                <Route exact path="/" component={CreateAccount} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route
                   path="/groups"
@@ -96,6 +93,10 @@ const GET_USER = gql`
 export default compose(
   graphql(GET_USER, {
     name: "getUser",
-    options: props => ({ variables: { id: localStorage.getItem(USER_ID) } })
+
+    options: props => ({
+      skip: !localStorage.getItem(USER_ID),
+      variables: { id: localStorage.getItem(USER_ID) }
+    })
   })
 )(Routes)
