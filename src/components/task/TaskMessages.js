@@ -63,8 +63,10 @@ class TaskMessages extends React.Component {
           {this.props.Task.messages.map(message => (
             <Message
               response
+              key={message.id}
               date={message.createdAt}
               content={message.comment}
+              status={message.status}
             />
           ))}
         </ContentWrapper>

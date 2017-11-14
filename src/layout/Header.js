@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { Link, withRouter } from "react-router-dom"
 import placeholder from "../../public/images/placeholder.png"
+import getUser from "../utils/getUser"
 import { AUTH_TOKEN, USER_ID } from "../utils/constants"
 import {
   Menu,
@@ -13,7 +14,6 @@ import {
   UserMinus,
   X
 } from "react-feather"
-
 import { gql, compose, graphql } from "react-apollo"
 
 const NavigationBar = styled.div`
@@ -166,24 +166,5 @@ class Header extends React.Component {
     )
   }
 }
-
-const GET_USER = gql`
-  query getUser($id: ID!) {
-    User(id: $id) {
-      name
-      family {
-        name
-        id
-      }
-    }
-  }
-`
-
-export default withRouter(
-  compose(
-    graphql(GET_USER, {
-      name: "getUser",
-      options: props => ({ variables: { id: localStorage.getItem(USER_ID) } })
-    })(Header)
-  )
-)
+//this.props.currentUser
+export default withRouter(Header)

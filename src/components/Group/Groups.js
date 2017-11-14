@@ -15,9 +15,6 @@ class Groups extends React.Component {
     active: false,
     open: false
   }
-  componentDidMount() {
-    console.log(this.props)
-  }
 
   render() {
     const ifParent = this.props.user && this.props.user.role.name === "Parent"
@@ -40,9 +37,7 @@ class Groups extends React.Component {
         )}
         {ifParent && (
           <Modal button={<Button sticky>+ Add a new group</Button>}>
-            {({ handleOpenCloseModal }) => (
-              <AddGroup familyId="cj84seori01xr0195h9fnhql1" />
-            )}
+            {({ handleOpenCloseModal }) => <AddGroup familyId="cj84seori01xr0195h9fnhql1" />}
           </Modal>
         )}
       </ContentWrapper>
@@ -54,12 +49,7 @@ const GET_GROUPS = gql`
   query getGroups($parentId: ID!, $memberId: ID!) {
     allGroups(
       orderBy: createdAt_DESC
-      filter: {
-        OR: [
-          { members_every: { id: $memberId } }
-          { parent: { id: $parentId } }
-        ]
-      }
+      filter: { OR: [{ members_every: { id: $memberId } }, { parent: { id: $parentId } }] }
     ) {
       title
       id
@@ -67,7 +57,7 @@ const GET_GROUPS = gql`
       createdAt
       tasks {
         id
-        completed
+        status
         description
         title
       }

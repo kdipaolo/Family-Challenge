@@ -58,7 +58,11 @@ class GroupLists extends React.Component {
         ) : (
           <Modal button={<Button sticky>+ Add a Member to Group</Button>}>
             {({ handleOpenCloseModal }) => (
-              <AddGroupMember groupId={this.props.match.params.groupid} />
+              <AddGroupMember
+                refetch={this.props.refetch}
+                handleOpenCloseModal={handleOpenCloseModal}
+                groupId={this.props.match.params.groupid}
+              />
             )}
           </Modal>
         )}

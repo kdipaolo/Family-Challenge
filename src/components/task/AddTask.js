@@ -4,7 +4,6 @@ import styled from "styled-components"
 import { Input, Textarea, Form, Label } from "../../styles/Forms"
 import { gql, compose, graphql } from "react-apollo"
 import { withRouter } from "react-router-dom"
-
 const Flex = styled.div`
   display: flex;
   & > div {
@@ -95,7 +94,7 @@ class AddTask extends React.Component {
       variables: {
         description,
         title,
-        completed: false,
+        status: "Assigned",
         needsReviewed: true,
         groupId: this.props.match.params.groupid,
         childId: member.id
@@ -191,15 +190,15 @@ const CREATE_TASK_MUTATION = gql`
   mutation newTask(
     $description: String!
     $title: String!
-    $completed: Boolean!
     $needsReviewed: Boolean!
     $groupId: ID
     $childId: ID
+    $status: String!
   ) {
     createTask(
       description: $description
       title: $title
-      completed: $completed
+      status: $status
       needsReviewed: $needsReviewed
       groupId: $groupId
       childId: $childId

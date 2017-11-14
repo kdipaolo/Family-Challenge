@@ -50,7 +50,7 @@ class Routes extends React.Component {
       <Router testing>
         <ThemeProvider theme={theme}>
           <AppBackground>
-            <Header />
+            <Header getUser={this.props.getUser} />
             <Switch>
               <ContentWrapper>
                 <Route
@@ -58,7 +58,7 @@ class Routes extends React.Component {
                   path="/"
                   component={requireNonAuth(CreateFamily)}
                 />
-                <Route path="/dashboard" component={requireAuth(Dashboard)} />
+                <Route path="/dashboard" component={Dashboard} />
                 <Route
                   path="/groups"
                   component={() => <Groups user={this.props.getUser.User} />}
@@ -85,7 +85,7 @@ const GET_USER = gql`
       role {
         name
       }
-      family {
+      familyMember {
         name
         id
       }

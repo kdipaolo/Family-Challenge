@@ -14,17 +14,22 @@ class AddMember extends React.Component {
       [e.target.name]: e.target.value
     })
   }
-  submitNewUser = e => {
+  submitNewUser = async e => {
     e.preventDefault()
-    this.props.addMember({
-      variables: {
-        name: this.state.name,
-        email: this.state.email,
-        password: "FamilyChallenge"
-      }
-    })
-    this.props.handleOpenCloseModal(e)
-    this.props.fetchMembers()
+    try {
+      const addMember = await this.props.addMember({
+        variables: {
+          name: this.state.name,
+          familyId: "cj8vx5df81tp30121ya5wk42s",
+          email: this.state.email,
+          password: "FamilyChallenge"
+        }
+      })
+      this.props.handleOpenCloseModal(e)
+      this.props.refetch()
+    } catch (e) {
+      alert(e.message)
+    }
   }
   render() {
     return (
@@ -68,18 +73,14 @@ const CREATE_USER_MUTATION = gql`
     $name: String!
     $email: String!
     $password: String!
+    $familyId: ID!
   ) {
     createUser(
       name: $name
+      familyMemberId: $familyId
       authProvider: { email: { email: $email, password: $password } }
     ) {
       id
-    }
-    signinUser(email: { email: $email, password: $password }) {
-      token
-      user {
-        id
-      }
     }
   }
 `

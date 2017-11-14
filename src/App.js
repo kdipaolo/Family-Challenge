@@ -1,13 +1,9 @@
 import React, { Component } from "react"
 import Routes from "./Routes"
-
+import { gql } from "react-apollo"
 import styled, { ThemeProvider, css } from "styled-components"
 import "./styles/theme/global"
-import {
-  ApolloProvider,
-  createNetworkInterface,
-  ApolloClient
-} from "react-apollo"
+import { ApolloProvider, createNetworkInterface, ApolloClient } from "react-apollo"
 import { BLOG_AUTH_TOKEN } from "./utils/constants"
 import { withRouter } from "react-router-dom"
 const networkInterface = createNetworkInterface({
@@ -22,9 +18,7 @@ networkInterface.use([
       }
       // get the authentication token from local storage if it exists
       if (localStorage.getItem(BLOG_AUTH_TOKEN)) {
-        req.options.headers.authorization = `Bearer ${localStorage.getItem(
-          BLOG_AUTH_TOKEN
-        )}`
+        req.options.headers.authorization = `Bearer ${localStorage.getItem(BLOG_AUTH_TOKEN)}`
       }
       next()
     }

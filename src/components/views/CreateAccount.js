@@ -51,9 +51,8 @@ class CreateAccount extends React.Component {
         signUserIn.data.signinUser.user.id,
         signUserIn.data.signinUser.token
       )
-      console.log(signUserIn)
     }
-    // this.props.history.push("/dashboard")
+    this.props.history.push("/dashboard")
   }
   handleStateChange = e => {
     e.preventDefault()
