@@ -51,7 +51,6 @@ class CreateAccount extends React.Component {
         signUserIn.data.signinUser.user.id,
         signUserIn.data.signinUser.token
       )
-      console.log(signUserIn)
     }
     this.props.history.push("/dashboard")
   }
@@ -88,16 +87,17 @@ class CreateAccount extends React.Component {
                 placeholder="i.e John Doe"
                 required
               />
+              <Label>Family Name (Could just be your last name)</Label>
+              <Input
+                onChange={this.handleStateChange}
+                type="text"
+                name="family"
+                placeholder="i.e Smith"
+                required
+              />
             </div>
           )}
-          <Label>Family Name (Could just be your last name)</Label>
-          <Input
-            onChange={this.handleStateChange}
-            type="text"
-            name="family"
-            placeholder="i.e Smith"
-            required
-          />
+
           <Label>Email</Label>
           <Input
             onChange={this.handleStateChange}

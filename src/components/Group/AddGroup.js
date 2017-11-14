@@ -6,6 +6,8 @@ import { gql, compose, graphql } from "react-apollo"
 import { SingleDatePicker } from "react-dates"
 import "react-dates/lib/css/_datepicker.css"
 import { X } from "react-feather"
+import { withRouter } from "react-router-dom"
+import { USER_ID } from "../../utils/constants"
 
 const Flex = styled.div`
   display: flex;
@@ -97,14 +99,16 @@ class AddGroup extends React.Component {
       variables: {
         title: this.state.title,
         dueDate: this.state.dueDate,
-        memberIds: this.state.members.map(member => member.id)
+        familyId: this.props.familyId,
+        memberIds: this.state.members.map(member => member.id),
+        parentId: localStorage.getItem(USER_ID)
       }
     }
 
     const response = await this.props.addGroup(newGroup)
     console.log(response)
-    // const id = response.data.createGroup.changedGroup.id
-    // this.props.history.push(`/group/${id}`)
+    const id = response.data.createGroup.id
+    this.props.history.push(`/group/${id}`)
   }
 
   handleSubmit = e => {
@@ -235,15 +239,29 @@ const GET_USERS = gql`
   }
 `
 const ADD_GROUP = gql`
-  mutation newGroup($dueDate: DateTime!, $title: String!, $memberIds: [ID!]) {
-    createGroup(dueDate: $dueDate, title: $title, membersIds: $memberIds) {
+  mutation newGroup(
+    $familyId: ID!
+    $parentId: ID!
+    $dueDate: DateTime!
+    $title: String!
+    $memberIds: [ID!]
+  ) {
+    createGroup(
+      familyId: $familyId
+      parentId: $parentId
+      dueDate: $dueDate
+      title: $title
+      membersIds: $memberIds
+    ) {
       title
       id
     }
   }
 `
 
-export default compose(
-  graphql(GET_USERS, { name: "getUsers" }),
-  graphql(ADD_GROUP, { name: "addGroup" })
-)(AddGroup)
+export default withRouter(
+  compose(
+    graphql(GET_USERS, { name: "getUsers" }),
+    graphql(ADD_GROUP, { name: "addGroup" })
+  )(AddGroup)
+)

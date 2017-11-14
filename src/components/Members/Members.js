@@ -12,7 +12,7 @@ class Members extends React.Component {
       <ContentWrapper>
         {!this.props.getUsers.loading &&
           this.props.getUsers.allUsers.map(user => {
-            return <MemberCard user={user} />
+            return <MemberCard key={user.id} user={user} />
           })}
 
         <Modal
@@ -24,7 +24,8 @@ class Members extends React.Component {
         >
           {({ handleOpenCloseModal }) => (
             <AddMember
-              fetchMembers={this.props.getUsers.refetch}
+              handleOpenCloseModal={handleOpenCloseModal}
+              refetch={this.props.getUsers.refetch}
               handleOpenCloseModal={handleOpenCloseModal}
             />
           )}
@@ -36,16 +37,7 @@ class Members extends React.Component {
 
 const GET_USERS = gql`
   query getUsers($id: ID!) {
-    allUsers(filter: { family: { id: $id } }) {
-      name
-      id
-    }
-  }
-`
-
-const ADD_MEMBER = gql`
-  query getUsers {
-    allUsers {
+    allUsers(filter: { familyMember: { id: $id } }) {
       name
       id
     }
@@ -61,7 +53,7 @@ const GET_GROUPS = gql`
       createdAt
       tasks {
         id
-        completed
+        status
         description
         title
       }
@@ -73,6 +65,5 @@ export default compose(
   graphql(GET_USERS, {
     name: "getUsers",
     options: props => ({ variables: { id: "cj8vx5df81tp30121ya5wk42s" } })
-  }),
-  graphql(ADD_MEMBER, { name: "addMember" })
+  })
 )(Members)

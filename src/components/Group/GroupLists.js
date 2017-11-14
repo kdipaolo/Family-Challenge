@@ -7,6 +7,7 @@ import Modal from "../shared/Modal"
 import AddGroupMember from "./AddGroupMember"
 import AddTask from "../task/AddTask"
 import Button from "../shared/Button"
+import { withRouter } from "react-router-dom"
 class GroupLists extends React.Component {
   state = {
     active: "Tasks",
@@ -57,7 +58,11 @@ class GroupLists extends React.Component {
         ) : (
           <Modal button={<Button sticky>+ Add a Member to Group</Button>}>
             {({ handleOpenCloseModal }) => (
-              <AddGroupMember groupId={this.props.match.params.groupid} />
+              <AddGroupMember
+                refetch={this.props.refetch}
+                handleOpenCloseModal={handleOpenCloseModal}
+                groupId={this.props.match.params.groupid}
+              />
             )}
           </Modal>
         )}
@@ -66,4 +71,4 @@ class GroupLists extends React.Component {
   }
 }
 
-export default GroupLists
+export default withRouter(GroupLists)

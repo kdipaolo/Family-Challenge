@@ -9,10 +9,6 @@ class MemberList extends React.Component {
         {this.props.members.map(user => (
           <MemberCard key={user.id} user={user} />
         ))}
-
-        <Button sticky onClick={this.handleStateUpdate}>
-          + Add A Memeber
-        </Button>
       </div>
     )
   }

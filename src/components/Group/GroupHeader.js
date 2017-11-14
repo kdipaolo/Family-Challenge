@@ -83,7 +83,7 @@ class GroupHeader extends React.Component {
             </Detail>
             <Detail>
               <Highlight>
-                {tasks.filter(task => task.completed).length}
+                /* {tasks.filter(task => task.completed).length} */
               </Highlight>{" "}
               Tasks Completed
             </Detail>

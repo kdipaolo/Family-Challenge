@@ -6,6 +6,7 @@ import Button from "../shared/Button"
 import Loading from "../shared/Loading"
 import Modal from "../shared/Modal"
 import AddGroup from "./AddGroup"
+import { USER_ID } from "../../utils/constants"
 
 class Groups extends React.Component {
   state = {
@@ -14,11 +15,10 @@ class Groups extends React.Component {
     active: false,
     open: false
   }
-  componentDidMount() {
-    this.props.getGroups.refetch()
-  }
 
   render() {
+    const ifParent = this.props.user && this.props.user.role.name === "Parent"
+
     return (
       <ContentWrapper>
         {this.props.getGroups.loading ? (
@@ -35,25 +35,29 @@ class Groups extends React.Component {
             />
           ))
         )}
-
-        <Modal button={<Button sticky>+ Add a new group</Button>}>
-          {({ handleOpenCloseModal }) => <AddGroup />}
-        </Modal>
+        {ifParent && (
+          <Modal button={<Button sticky>+ Add a new group</Button>}>
+            {({ handleOpenCloseModal }) => <AddGroup familyId="cj84seori01xr0195h9fnhql1" />}
+          </Modal>
+        )}
       </ContentWrapper>
     )
   }
 }
 
 const GET_GROUPS = gql`
-  query GetGroups($id: ID!) {
-    allGroups(orderBy: createdAt_DESC, filter: { family: { id: $id } }) {
+  query getGroups($parentId: ID!, $memberId: ID!) {
+    allGroups(
+      orderBy: createdAt_DESC
+      filter: { OR: [{ members_every: { id: $memberId } }, { parent: { id: $parentId } }] }
+    ) {
       title
       id
       dueDate
       createdAt
       tasks {
         id
-        completed
+        status
         description
         title
       }
@@ -61,31 +65,16 @@ const GET_GROUPS = gql`
   }
 `
 
-const NEW_GROUP_MUTATION = gql`
-  mutation CreateNewGroup($title: String!, $dueDate: DateTime!) {
-    createGroup(title: $title, dueDate: $dueDate) {
-      id
-      title
-    }
-  }
-`
-
 export default compose(
   graphql(GET_GROUPS, {
     name: "getGroups",
-    options: props => ({ variables: { id: "cj84sf2fe01y60195cvidh9sx" } })
-  }),
-  graphql(NEW_GROUP_MUTATION, {
-    name: "newGroupMutation",
-    props: ({ ownProps, newGroupMutation }) => ({
-      createGroup: values =>
-        newGroupMutation({
-          variables: {
-            title: values.title,
-            dueDate: values.dueDate,
-            description: values.description
-          }
-        })
-    })
+    options: props => {
+      return {
+        variables: {
+          parentId: localStorage.getItem(USER_ID),
+          memberId: localStorage.getItem(USER_ID)
+        }
+      }
+    }
   })
 )(Groups)

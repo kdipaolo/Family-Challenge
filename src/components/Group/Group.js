@@ -22,7 +22,10 @@ const GET_GROUP = gql`
       }
       tasks {
         id
-        completed
+        status
+        child {
+          name
+        }
         title
         description
       }
