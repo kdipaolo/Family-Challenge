@@ -6,7 +6,7 @@ export const Input = styled.input`
   padding: 3% 0;
   border-radius: 3px;
   background: transparent;
-  margin: 2% 0;
+  margin: 1% 0;
   border: none;
   padding-left: 10px;
   color: ${props => props.theme.colors.secondary};
@@ -29,10 +29,10 @@ export const Textarea = styled.textarea`
 export const Label = styled.label`
   color: ${props => props.theme.colors.secondary};
   font-size: 16px;
-  margin: 5% 0 1% 0;
+  margin: 2% 0 1% 0;
   margin-left: 10px;
   text-align: left;
   display: block;
 `
 
-export const Form = styled.form`margin: 6% 0;`
+export const Form = styled.form`margin: 2% 0;`

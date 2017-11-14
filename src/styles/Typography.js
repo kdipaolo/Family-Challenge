@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components"
 
 export const HeaderOne = styled.h1``
 export const HeaderTwo = styled.h2`color: #333;`
