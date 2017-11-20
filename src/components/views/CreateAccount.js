@@ -1,14 +1,14 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
-import { Redirect } from "react-router-dom"
-import apple from "../../../public/images/apple.svg"
-import { Input, Label } from "../../styles/Forms"
-import { HeaderTwo } from "../../styles/Typography"
-import { Form } from "../../styles/Forms"
-import { gql, compose, graphql } from "react-apollo"
-import { USER_ID, AUTH_TOKEN } from "../../utils/constants"
-import Button from "../shared/Button"
+import { Redirect } from 'react-router-dom'
+import apple from '../../../public/images/apple.svg'
+import { Input, Label } from '../../styles/Forms'
+import { HeaderTwo } from '../../styles/Typography'
+import { Form } from '../../styles/Forms'
+import { gql, compose, graphql } from 'react-apollo'
+import { USER_ID, AUTH_TOKEN } from '../../utils/constants'
+import Button from '../shared/Button'
 const Apple = styled.img`width: 100px;`
 const Wrapper = styled.div`
   width: 100%;
@@ -65,7 +65,7 @@ class CreateAccount extends React.Component {
       } else {
         this.signInUser()
       }
-      this.props.history.push("/dashboard")
+      this.props.history.push('/dashboard')
     } catch (error) {
       this.setState({
         error: error.message
@@ -91,7 +91,7 @@ class CreateAccount extends React.Component {
       <Wrapper>
         <Apple src={apple} alt="" />
         <HeaderTwo>
-          Sign {!this.state.signUp ? "In" : "Up"} for Family Challenge!
+          Sign {!this.state.signUp ? 'In' : 'Up'} for Family Challenge!
         </HeaderTwo>
 
         <Form onSubmit={this.handleSubmit}>
@@ -186,7 +186,7 @@ const CREATE_FAMILY_MUTATION = gql`
 `
 
 export default compose(
-  graphql(CREATE_USER_MUTATION, { name: "createUserMutation" }),
-  graphql(CREATE_FAMILY_MUTATION, { name: "createFamilyMutation" }),
-  graphql(SIGNIN_USER_MUTATION, { name: "signinUserMutation" })
+  graphql(CREATE_USER_MUTATION, { name: 'createUserMutation' }),
+  graphql(CREATE_FAMILY_MUTATION, { name: 'createFamilyMutation' }),
+  graphql(SIGNIN_USER_MUTATION, { name: 'signinUserMutation' })
 )(CreateAccount)
