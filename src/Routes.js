@@ -1,25 +1,25 @@
-import React from "react"
+import React from 'react'
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   withRouter
-} from "react-router-dom"
-import styled, { ThemeProvider, css } from "styled-components"
-import Header from "./layout/Header"
-import theme from "./styles/theme/index"
-import Dashboard from "./components/views/Dashboard"
-import Groups from "./components/Group/Groups"
-import Group from "./components/Group/Group"
-import CreateAccount from "./components/views/CreateAccount"
-import Members from "./components/Members/Members"
-import Member from "./components/Members/Member"
-import Task from "./components/task/Task"
-import Settings from "./components/views/Settings"
-import requireAuth from "./utils/requireAuth"
-import requireNonAuth from "./utils/requireNonAuth"
-import { graphql, gql, compose } from "react-apollo"
-import { USER_ID } from "./utils/constants"
+} from 'react-router-dom'
+import styled, { ThemeProvider, css } from 'styled-components'
+import Header from './layout/Header'
+import theme from './styles/theme/index'
+import Dashboard from './components/views/Dashboard'
+import Groups from './components/Group/Groups'
+import Group from './components/Group/Group'
+import CreateAccount from './components/views/CreateAccount'
+import Members from './components/Members/Members'
+import Member from './components/Members/Member'
+import Task from './components/task/Task'
+import Settings from './components/views/Settings'
+import requireAuth from './utils/requireAuth'
+import requireNonAuth from './utils/requireNonAuth'
+import { graphql, gql, compose } from 'react-apollo'
+import { USER_ID } from './utils/constants'
 
 const ContentWrapper = styled.div`
   max-width: 700px;
@@ -27,7 +27,7 @@ const ContentWrapper = styled.div`
 `
 
 const setBackgroundColor = props =>
-  props.location.pathname === "/"
+  props.location.pathname === '/'
     ? css`
         background: linear-gradient(#fff 0%, #fbfbfb 100%);
       `
@@ -64,7 +64,15 @@ class Routes extends React.Component {
                 <Route path="/members" component={Members} />
                 <Route path="/member/:memberid" component={Member} />
                 <Route path="/task/:taskid" component={Task} />
-                <Route path="/settings" component={Settings} />
+                <Route
+                  path="/settings"
+                  component={() => (
+                    <Settings
+                      refetch={this.props.getUser.refetch}
+                      user={this.props.getUser.User}
+                    />
+                  )}
+                />
                 <Route path="/login" component={CreateAccount} />
               </ContentWrapper>
             </Switch>
@@ -92,7 +100,7 @@ const GET_USER = gql`
 
 export default compose(
   graphql(GET_USER, {
-    name: "getUser",
+    name: 'getUser',
     options: props => ({
       skip: !localStorage.getItem(USER_ID),
       variables: { id: localStorage.getItem(USER_ID) }
