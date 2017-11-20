@@ -1,9 +1,9 @@
-import React from "react"
-import styled from "styled-components"
-import { Link, withRouter } from "react-router-dom"
-import placeholder from "../../public/images/placeholder.png"
-import getUser from "../utils/getUser"
-import { AUTH_TOKEN, USER_ID } from "../utils/constants"
+import React from 'react'
+import styled from 'styled-components'
+import { Link, withRouter } from 'react-router-dom'
+import placeholder from '../../public/images/placeholder.png'
+import getUser from '../utils/getUser'
+import { AUTH_TOKEN, USER_ID } from '../utils/constants'
 import {
   Menu,
   Bell,
@@ -13,8 +13,8 @@ import {
   ChevronDown,
   UserMinus,
   X
-} from "react-feather"
-import { gql, compose, graphql } from "react-apollo"
+} from 'react-feather'
+import { gql, compose, graphql } from 'react-apollo'
 
 const NavigationBar = styled.div`
   background-color: ${props => props.theme.colors.primary};
@@ -50,7 +50,7 @@ const NavigationMenu = styled.div`
   z-index: 50000;
   transition: 0.2s all ease-out;
   transform: ${props =>
-    props.open ? "translateX(0px)" : "translateX(-300px)"};
+    props.open ? 'translateX(0px)' : 'translateX(-300px)'};
 `
 
 const NavItem = styled.div`
@@ -106,10 +106,10 @@ class Header extends React.Component {
     e.preventDefault()
     localStorage.removeItem(AUTH_TOKEN)
     localStorage.removeItem(USER_ID)
-    this.props.history.push("/login")
+    window.location.href = '/login'
   }
   render() {
-    if (this.props.location.pathname === "/") {
+    if (this.props.location.pathname === '/') {
       return null
     }
     return (
@@ -130,7 +130,7 @@ class Header extends React.Component {
             <X onClick={this.handleMenuClick} />
             <img src={placeholder} alt="" />
             <p>
-              {!this.props.getUser.loading && this.props.getUser.User.name}{" "}
+              {!this.props.getUser.loading && this.props.getUser.User.name}{' '}
               <ChevronDown />
             </p>
           </UserInfo>
