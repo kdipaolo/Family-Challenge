@@ -54,7 +54,7 @@ class GroupHeader extends React.Component {
 
   handleTitleUpdate = e => {
     e.preventDefault()
-    this.props.updateGroup({ title: this.state.title })
+    this.props.updateGroup({ title: this.state.title, completed: false })
     this.handleEditToggle()
   }
   handleCompleteGroup = () => {
@@ -138,7 +138,8 @@ export default withRouter(
           updateGroupMutation({
             variables: {
               id: ownProps.match.params.groupid,
-              title: values.title
+              title: values.title,
+              completed: values.completed
             }
           })
         }
