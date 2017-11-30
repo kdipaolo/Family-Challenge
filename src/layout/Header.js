@@ -147,7 +147,7 @@ class Header extends React.Component {
             </Link>
             <Link to="/members" onClick={this.handleMenuClick}>
               <NavItem>
-                <UserCheck /> Memebers
+                <UserCheck /> Members
               </NavItem>
             </Link>
             <Link to="/settings" onClick={this.handleMenuClick}>

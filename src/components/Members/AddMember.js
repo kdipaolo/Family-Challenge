@@ -1,7 +1,8 @@
-import React from "react"
-import { Input, Textarea, Form, Label } from "../../styles/Forms"
-import styled from "styled-components"
-import { gql, compose, graphql } from "react-apollo"
+import React from 'react'
+import { Input, Textarea, Form, Label } from '../../styles/Forms'
+import styled from 'styled-components'
+import { gql, compose, graphql } from 'react-apollo'
+import { USER_ID } from '../../utils/constants'
 
 class AddMember extends React.Component {
   state = {
@@ -17,20 +18,28 @@ class AddMember extends React.Component {
   submitNewUser = async e => {
     e.preventDefault()
     try {
-      const addMember = await this.props.addMember({
+      const newMember = await this.props.addMember({
         variables: {
           name: this.state.name,
-          familyId: "cj8vx5df81tp30121ya5wk42s",
           email: this.state.email,
-          password: "FamilyChallenge"
+          password: 'FamilyChallenge',
+          role: 'Member'
         }
       })
-      this.props.handleOpenCloseModal(e)
-      this.props.refetch()
+
+      await this.props.addUserToParent({
+        variables: {
+          parentUserId: localStorage.getItem(USER_ID),
+          membersUserId: newMember.data.createUser.id
+        }
+      })
+      await this.props.handleOpenCloseModal(e)
+      await this.props.refetch()
     } catch (e) {
       alert(e.message)
     }
   }
+
   render() {
     return (
       <div>
@@ -73,11 +82,11 @@ const CREATE_USER_MUTATION = gql`
     $name: String!
     $email: String!
     $password: String!
-    $familyId: ID!
+    $role: String!
   ) {
     createUser(
       name: $name
-      familyMemberId: $familyId
+      role: $role
       authProvider: { email: { email: $email, password: $password } }
     ) {
       id
@@ -85,6 +94,20 @@ const CREATE_USER_MUTATION = gql`
   }
 `
 
-export default compose(graphql(CREATE_USER_MUTATION, { name: "addMember" }))(
-  AddMember
-)
+const ADD_USER_TO_PARENT = gql`
+  mutation addMemberToParent($parentUserId: ID!, $membersUserId: ID!) {
+    addToUserOnUser(
+      parentUserId: $parentUserId
+      membersUserId: $membersUserId
+    ) {
+      membersUser {
+        id
+      }
+    }
+  }
+`
+
+export default compose(
+  graphql(CREATE_USER_MUTATION, { name: 'addMember' }),
+  graphql(ADD_USER_TO_PARENT, { name: 'addUserToParent' })
+)(AddMember)

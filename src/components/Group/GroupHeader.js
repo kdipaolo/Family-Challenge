@@ -1,7 +1,7 @@
-import React from "react"
-import { CheckCircle } from "react-feather"
-import { withRouter } from "react-router-dom"
-import { gql, graphql, withApollo, compose } from "react-apollo"
+import React from 'react'
+import { CheckCircle } from 'react-feather'
+import { withRouter } from 'react-router-dom'
+import { gql, graphql, withApollo, compose } from 'react-apollo'
 import {
   EditIcon,
   Info,
@@ -11,10 +11,11 @@ import {
   Detail,
   DetailWrapper,
   Highlight
-} from "../../styles/theme/infoCard"
+} from '../../styles/theme/infoCard'
+import Button from '../shared/Button'
 
-import house from "../../../public/images/house.svg"
-import dateFormat from "dateformat"
+import house from '../../../public/images/house.svg'
+import dateFormat from 'dateformat'
 
 class GroupHeader extends React.Component {
   state = {
@@ -34,12 +35,12 @@ class GroupHeader extends React.Component {
     }
   }
   handleGroupDelete = () => {
-    var confirmation = confirm("are you sure?")
+    var confirmation = confirm('are you sure?')
     if (confirmation) {
       this.props.deleteGroup()
       this.props.history.goBack()
     } else {
-      console.log("DENIED")
+      console.log('DENIED')
     }
   }
   handleEditToggle = () => {
@@ -56,10 +57,23 @@ class GroupHeader extends React.Component {
     this.props.updateGroup({ title: this.state.title })
     this.handleEditToggle()
   }
+  handleCompleteGroup = () => {
+    // Change group completed value to true
+    this.props.updateGroup({ completed: true })
+  }
   render() {
     const { tasks, createdAt } = this.props.Group
+    const numOfCompletedTasks = tasks.filter(
+      task => task.status === 'Completed'
+    ).length
     return (
       <Info>
+        {numOfCompletedTasks === tasks.length &&
+          tasks.length !== 0 && (
+            <Button onClick={this.handleCompleteGroup}>
+              Close and Complete Group
+            </Button>
+          )}
         <Header>
           <MinusCircleIcon onClick={this.handleGroupDelete} />
           <Image src={house} />
@@ -82,13 +96,13 @@ class GroupHeader extends React.Component {
               <Highlight>{tasks.length}</Highlight> Tasks Assigned
             </Detail>
             <Detail>
-              <Highlight>
-                /* {tasks.filter(task => task.completed).length} */
-              </Highlight>{" "}
-              Tasks Completed
+              <Highlight>{numOfCompletedTasks}</Highlight> Tasks Completed
             </Detail>
             <Detail>
-              <Highlight>{dateFormat(createdAt, "fullDate")}</Highlight>
+              <Highlight>{dateFormat(createdAt, 'fullDate')}</Highlight>
+            </Detail>
+            <Detail>
+              <Highlight>Reward:</Highlight> {this.props.Group.reward}
             </Detail>
           </DetailWrapper>
         </Header>
@@ -98,10 +112,11 @@ class GroupHeader extends React.Component {
 }
 
 const UPDATE_GROUP_MUTATION = gql`
-  mutation updateGroup($id: ID!, $title: String!) {
-    updateGroup(id: $id, title: $title) {
+  mutation updateGroup($id: ID!, $title: String!, $completed: Boolean!) {
+    updateGroup(id: $id, title: $title, completed: $completed) {
       id
       title
+      completed
     }
   }
 `
@@ -117,7 +132,7 @@ const DELETE_GROUP_MUTATION = gql`
 export default withRouter(
   compose(
     graphql(UPDATE_GROUP_MUTATION, {
-      name: "updateGroupMutation",
+      name: 'updateGroupMutation',
       props: ({ ownProps, updateGroupMutation }) => ({
         updateGroup: values => {
           updateGroupMutation({
@@ -130,7 +145,7 @@ export default withRouter(
       })
     }),
     graphql(DELETE_GROUP_MUTATION, {
-      name: "deleteGroupMutation",
+      name: 'deleteGroupMutation',
       props: ({ ownProps, deleteGroupMutation }) => ({
         deleteGroup: values => {
           deleteGroupMutation({

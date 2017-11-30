@@ -1,16 +1,16 @@
-import React from "react"
-import TaskList from "../task/TaskList"
-import MemberList from "../Members/MemberList"
-import Switcher from "../shared/Switcher"
-import ContentWrapper from "../../styles/ContentWrapper"
-import Modal from "../shared/Modal"
-import AddGroupMember from "./AddGroupMember"
-import AddTask from "../task/AddTask"
-import Button from "../shared/Button"
-import { withRouter } from "react-router-dom"
+import React from 'react'
+import TaskList from '../task/TaskList'
+import MemberList from '../Members/MemberList'
+import Switcher from '../shared/Switcher'
+import ContentWrapper from '../../styles/ContentWrapper'
+import Modal from '../shared/Modal'
+import AddGroupMember from './AddGroupMember'
+import AddTask from '../task/AddTask'
+import Button from '../shared/Button'
+import { withRouter } from 'react-router-dom'
 class GroupLists extends React.Component {
   state = {
-    active: "Tasks",
+    active: 'Tasks',
     completed: null
   }
   handleSwitcherClick = e => {
@@ -32,10 +32,10 @@ class GroupLists extends React.Component {
         <Switcher
           active={active}
           handleSwitcherClick={this.handleSwitcherClick}
-          links={["Tasks", "Members"]}
+          links={['Tasks', 'Members']}
         />
         <ContentWrapper>
-          {active === "Tasks" ? (
+          {active === 'Tasks' ? (
             <TaskList
               handleToggleCompleted={this.handleToggleCompleted}
               tasks={tasks}
@@ -46,12 +46,13 @@ class GroupLists extends React.Component {
             <MemberList members={members} />
           )}
         </ContentWrapper>
-        {active === "Tasks" ? (
+        {active === 'Tasks' ? (
           <Modal button={<Button sticky>+ Add a new Task</Button>}>
             {({ handleOpenCloseModal }) => (
               <AddTask
                 refetch={this.props.refetch}
                 handleOpenCloseModal={handleOpenCloseModal}
+                user={this.props.user}
               />
             )}
           </Modal>
@@ -62,6 +63,7 @@ class GroupLists extends React.Component {
                 refetch={this.props.refetch}
                 handleOpenCloseModal={handleOpenCloseModal}
                 groupId={this.props.match.params.groupid}
+                user={this.props.user}
               />
             )}
           </Modal>

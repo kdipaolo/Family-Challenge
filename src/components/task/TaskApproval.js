@@ -1,9 +1,9 @@
-import React from "react"
-import styled from "styled-components"
-import { CheckCircle, XCircle } from "react-feather"
-import { USER_ID } from "../../utils/constants"
-import { graphql, gql, compose } from "react-apollo"
-import { withRouter } from "react-router-dom"
+import React from 'react'
+import styled from 'styled-components'
+import { CheckCircle, XCircle } from 'react-feather'
+import { USER_ID } from '../../utils/constants'
+import { graphql, gql, compose } from 'react-apollo'
+import { withRouter } from 'react-router-dom'
 const Status = styled.div`
   background: ${props => props.theme.colors.Highlight};
   padding: 2%;
@@ -41,11 +41,39 @@ class TaskApproval extends React.Component {
       }
     })
 
+    const newStatus = updateTask.data.updateTask.status
+    const parentName = updateTask.data.updateTask.group.groupOwner.name
+    const memberName = updateTask.data.updateTask.assignee.name
+    const taskName = updateTask.data.updateTask.title
+    const taskId = this.props.match.params.taskid
+
     await this.props.createMessage({
       variables: {
-        comment: "Task Status: " + updateTask.data.updateTask.status,
-        taskId: this.props.match.params.taskid,
-        status: updateTask.data.updateTask.status
+        comment: 'Task Status: ' + newStatus,
+        taskId,
+        status: newStatus
+      }
+    })
+
+    const content = () => {
+      if (newStatus === 'In Progress') {
+        return `${memberName} has begun working on ${taskName}` // In Progress
+      } else if (newStatus === 'Submitted') {
+        return `${memberName} has submitted ${taskName} for approval` // Submitted
+      } else if (newStatus === 'Completed') {
+        return `${parentName} has approved ${taskName} for completion`
+      }
+    }
+
+    await this.props.createNotification({
+      variables: {
+        seen: false,
+        taskId,
+        content: content(),
+        userId:
+          newStatus === 'Completed'
+            ? updateTask.data.updateTask.assignee.id
+            : updateTask.data.updateTask.group.groupOwner.id
       }
     })
     this.props.refetch()
@@ -55,20 +83,20 @@ class TaskApproval extends React.Component {
 
     const ParentAssigned = () => (
       <div>
-        <Status>Waiting on {Task.child.name} to accept task.</Status>
+        <Status>Waiting on {Task.assignee.name} to accept task.</Status>
       </div>
     )
     const ParentSubmitted = () => (
       <div>
         <Status>
-          {Task.child.name} has subbmited their task fro approval.
+          {Task.assignee.name} has subbmited their task for approval.
         </Status>
         <Flex>
-          <div onClick={() => this.handleUpdateTaskStatus("Completed")}>
+          <div onClick={() => this.handleUpdateTaskStatus('Completed')}>
             <span>Approve Task</span>
             <CheckCircle />
           </div>
-          <div onClick={() => this.handleUpdateTaskStatus("In Progress")}>
+          <div onClick={() => this.handleUpdateTaskStatus('In Progress')}>
             <span>Decline Task</span>
             <XCircle />
           </div>
@@ -89,7 +117,7 @@ class TaskApproval extends React.Component {
       <div>
         <Status>You have been assigned this task.</Status>
         <Flex>
-          <div onClick={() => this.handleUpdateTaskStatus("In Progress")}>
+          <div onClick={() => this.handleUpdateTaskStatus('In Progress')}>
             <span>Begin Working on Task</span>
             <CheckCircle />
           </div>
@@ -101,7 +129,7 @@ class TaskApproval extends React.Component {
       <div>
         <Status>You are currently working on this task.</Status>
         <Flex>
-          <div onClick={() => this.handleUpdateTaskStatus("Submitted")}>
+          <div onClick={() => this.handleUpdateTaskStatus('Submitted')}>
             <span>Submit task for completion</span>
             <CheckCircle />
           </div>
@@ -111,7 +139,7 @@ class TaskApproval extends React.Component {
     const ParentInProgress = () => (
       <div>
         <Status>
-          {Task.child.name} has accepted and is working on this task.
+          {Task.assignee.name} has accepted and is working on this task.
         </Status>
       </div>
     )
@@ -135,20 +163,20 @@ class TaskApproval extends React.Component {
         {currentUser &&
           Task && (
             <div>
-              {currentUser.role.name === "Parent" && (
+              {currentUser.role === 'Parent' && (
                 <div>
-                  {Task.status === "Assigned" && <ParentAssigned />}
-                  {Task.status === "In Progress" && <ParentInProgress />}
-                  {Task.status === "Submitted" && <ParentSubmitted />}
-                  {Task.status === "Completed" && <ParentCompleted />}
+                  {Task.status === 'Assigned' && <ParentAssigned />}
+                  {Task.status === 'In Progress' && <ParentInProgress />}
+                  {Task.status === 'Submitted' && <ParentSubmitted />}
+                  {Task.status === 'Completed' && <ParentCompleted />}
                 </div>
               )}
-              {currentUser.role.name === "Member" && (
+              {currentUser.role === 'Member' && (
                 <div>
-                  {Task.status === "Assigned" && <MemberAssigned />}
-                  {Task.status === "In Progress" && <MemberInProgress />}
-                  {Task.status === "Submitted" && <MemberSubmitted />}
-                  {Task.status === "Completed" && <MemberCompleted />}
+                  {Task.status === 'Assigned' && <MemberAssigned />}
+                  {Task.status === 'In Progress' && <MemberInProgress />}
+                  {Task.status === 'Submitted' && <MemberSubmitted />}
+                  {Task.status === 'Completed' && <MemberCompleted />}
                 </div>
               )}
             </div>
@@ -164,6 +192,17 @@ const UPDATE_TASK_MUTATION = gql`
       id
       description
       status
+      title
+      group {
+        groupOwner {
+          id
+          name
+        }
+      }
+      assignee {
+        id
+        name
+      }
     }
   }
 `
@@ -178,13 +217,38 @@ const CREATE_MESSAGE_MUTATION = gql`
   }
 `
 
+const CREATE_NOTIFICATION = gql`
+  mutation newNotification(
+    $seen: Boolean!
+    $taskId: ID!
+    $userId: ID!
+    $content: String!
+  ) {
+    createNotification(
+      seen: $seen
+      taskId: $taskId
+      userId: $userId
+      content: $content
+    ) {
+      id
+      task {
+        id
+      }
+      user {
+        id
+      }
+    }
+  }
+`
+
 export default withRouter(
   compose(
     graphql(UPDATE_TASK_MUTATION, {
-      name: "updateTaskStatus"
+      name: 'updateTaskStatus'
     }),
     graphql(CREATE_MESSAGE_MUTATION, {
-      name: "createMessage"
-    })
+      name: 'createMessage'
+    }),
+    graphql(CREATE_NOTIFICATION, { name: 'createNotification' })
   )(TaskApproval)
 )
