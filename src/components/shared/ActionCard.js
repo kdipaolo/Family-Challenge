@@ -1,10 +1,10 @@
-import React from "react"
-import styled, { css } from "styled-components"
-import placeholder from "../../../public/images/placeholder.png"
-import { ThumbsUp, Mail } from "react-feather"
-import CardWrapper from "../../styles/CardWrapper"
-import { CardText, Flex, CardIcon, Image } from "../../styles/Cards.js"
-import { Link } from "react-router-dom"
+import React from 'react'
+import styled, { css } from 'styled-components'
+import placeholder from '../../../public/images/placeholder.png'
+import { ThumbsUp, Mail } from 'react-feather'
+import CardWrapper from '../../styles/CardWrapper'
+import { CardText, Flex, CardIcon, Image } from '../../styles/Cards.js'
+import { Link } from 'react-router-dom'
 const Action = styled.div`
   padding: 3%;
   margin: 4%;
@@ -47,22 +47,26 @@ class ActionCard extends React.Component {
             </div>
             <div>
               <CardText bold>{this.props.data.title} </CardText>
+              <CardText secondary>
+                Group: {this.props.data.group.title}
+              </CardText>
+              <CardText secondary>{this.props.data.status}</CardText>
+
               <CardText secondary>1/26/2017</CardText>
-              <CardText>Completed: Mowing the lawn</CardText>
             </div>
             <div>
               <CardIcon />
             </div>
           </Flex>
 
-          <FlexAction>
+          {/* <FlexAction>
             <Action>
               <ThumbsUpIcon />Approve
             </Action>
             <Action>
               <MailIcon />Reply
             </Action>
-          </FlexAction>
+          </FlexAction> */}
         </CardWrapper>
       </Link>
     )

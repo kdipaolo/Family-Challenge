@@ -21,40 +21,37 @@ class CreateAccount extends React.Component {
     email: null,
     password: null,
     name: null,
-    family: null,
     signUp: true,
     error: null
   }
   createNewUser = async e => {
+    const { name, email, password } = this.state
     const newUser = await this.props.createUserMutation({
       variables: {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password
+        name,
+        email,
+        password,
+        role: 'Parent'
       }
     })
 
     const id = newUser.data.signinUser.user.id
     const token = newUser.data.signinUser.token
+
     this.saveUserData(id, token)
-    const newFamily = await this.props.createFamilyMutation({
-      variables: {
-        name: this.state.family,
-        parentId: id
-      }
-    })
   }
   signInUser = async e => {
-    const signUserIn = await this.props.signinUserMutation({
+    const { email, password } = this.state
+    const { signInUser } = this.props
+    const signUserIn = await signInUser({
       variables: {
-        email: this.state.email,
-        password: this.state.password
+        email,
+        password
       }
     })
-    this.saveUserData(
-      signUserIn.data.signinUser.user.id,
-      signUserIn.data.signinUser.token
-    )
+    const id = signUserIn.data.signinUser.user.id
+    const token = signUserIn.data.signinUser.token
+    this.saveUserData(id, token)
   }
 
   handleSubmit = async e => {
@@ -105,14 +102,6 @@ class CreateAccount extends React.Component {
                 placeholder="i.e John Doe"
                 required
               />
-              <Label>Family Name (Could just be your last name)</Label>
-              <Input
-                onChange={this.handleStateChange}
-                type="text"
-                name="family"
-                placeholder="i.e Smith"
-                required
-              />
             </div>
           )}
 
@@ -149,9 +138,11 @@ const CREATE_USER_MUTATION = gql`
     $name: String!
     $email: String!
     $password: String!
+    $role: String!
   ) {
     createUser(
       name: $name
+      role: $role
       authProvider: { email: { email: $email, password: $password } }
     ) {
       id
@@ -165,8 +156,8 @@ const CREATE_USER_MUTATION = gql`
   }
 `
 
-const SIGNIN_USER_MUTATION = gql`
-  mutation SigninUserMutation($email: String!, $password: String!) {
+const SIGN_IN_USER_MUTATION = gql`
+  mutation signInUser($email: String!, $password: String!) {
     signinUser(email: { email: $email, password: $password }) {
       token
       user {
@@ -176,17 +167,7 @@ const SIGNIN_USER_MUTATION = gql`
   }
 `
 
-const CREATE_FAMILY_MUTATION = gql`
-  mutation newFamily($name: String!, $parentId: ID!) {
-    createFamily(name: $name, parentId: $parentId) {
-      name
-      id
-    }
-  }
-`
-
 export default compose(
   graphql(CREATE_USER_MUTATION, { name: 'createUserMutation' }),
-  graphql(CREATE_FAMILY_MUTATION, { name: 'createFamilyMutation' }),
-  graphql(SIGNIN_USER_MUTATION, { name: 'signinUserMutation' })
+  graphql(SIGN_IN_USER_MUTATION, { name: 'signInUser' })
 )(CreateAccount)

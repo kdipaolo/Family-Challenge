@@ -1,9 +1,10 @@
-import React from "react"
-import Button from "../shared/Button"
-import styled from "styled-components"
-import { Input, Textarea, Form, Label } from "../../styles/Forms"
-import { gql, compose, graphql } from "react-apollo"
-import { withRouter } from "react-router-dom"
+import React from 'react'
+import Button from '../shared/Button'
+import styled from 'styled-components'
+import { Input, Textarea, Form, Label } from '../../styles/Forms'
+import { gql, compose, graphql } from 'react-apollo'
+import { withRouter } from 'react-router-dom'
+import { USER_ID } from '../../constants'
 const Flex = styled.div`
   display: flex;
   & > div {
@@ -34,7 +35,9 @@ const Remove = styled.span`
   font-size: 12px;
 `
 
-const Dropdown = styled.div`position: relative;`
+const Dropdown = styled.div`
+  position: relative;
+`
 const Results = styled.div`
   position: absolute;
   top: 60px;
@@ -56,9 +59,9 @@ const DropdownItem = styled.a`
 `
 class AddTask extends React.Component {
   state = {
-    title: "",
+    title: '',
     member: null,
-    description: "",
+    description: '',
     search: null,
     member: null
   }
@@ -90,16 +93,29 @@ class AddTask extends React.Component {
   handleSubmit = async e => {
     const { title, description, member, group } = this.state
     e.preventDefault()
-    await this.props.createTask({
+    const newTask = await this.props.createTask({
       variables: {
         description,
         title,
-        status: "Assigned",
+        status: 'Assigned',
         needsReviewed: true,
         groupId: this.props.match.params.groupid,
-        childId: member.id
+        assigneeId: member.id,
+        completed: false
       }
     })
+
+    const newMemberNotification = await this.props.createNotification({
+      variables: {
+        seen: false,
+        taskId: newTask.data.createTask.id,
+        userId: member.id,
+        content: `You have been assigned to complete ${
+          newTask.data.createTask.title
+        }`
+      }
+    })
+
     this.props.refetch()
     this.props.handleOpenCloseModal(e)
   }
@@ -109,7 +125,7 @@ class AddTask extends React.Component {
     })
   }
   closeMenu = e => {
-    this.props.handleClose(e, "openMenu")
+    this.props.handleClose(e, 'openMenu')
   }
   render() {
     const { handleClose, handleAdd } = this.props
@@ -145,27 +161,26 @@ class AddTask extends React.Component {
               />
             ) : (
               <SelectedMember onClick={this.addRemoveUserToMemberState}>
-                Task Assigned to: {this.state.member.name} -{" "}
+                Task Assigned to: {this.state.member.name} -{' '}
                 <Remove>Remove User From This Task</Remove>
               </SelectedMember>
             )}
 
             <Results>
-              {!this.props.getUsers.loading &&
-                this.props.getUsers.allUsers
-                  .filter(
-                    user =>
-                      this.state.search && user.name.includes(this.state.search)
+              {this.props.user.User.members
+                .filter(
+                  user =>
+                    this.state.search && user.name.includes(this.state.search)
+                )
+                .map(user => {
+                  return (
+                    <DropdownItem
+                      onClick={() => this.addRemoveUserToMemberState(user)}
+                    >
+                      {user.name}
+                    </DropdownItem>
                   )
-                  .map(user => {
-                    return (
-                      <DropdownItem
-                        onClick={() => this.addRemoveUserToMemberState(user)}
-                      >
-                        {user.name}
-                      </DropdownItem>
-                    )
-                  })}
+                })}
             </Results>
           </Dropdown>
 
@@ -178,21 +193,14 @@ class AddTask extends React.Component {
   }
 }
 
-const GET_USERS = gql`
-  query getUsers {
-    allUsers {
-      name
-      id
-    }
-  }
-`
 const CREATE_TASK_MUTATION = gql`
   mutation newTask(
     $description: String!
     $title: String!
     $needsReviewed: Boolean!
+    $completed: Boolean!
     $groupId: ID
-    $childId: ID
+    $assigneeId: ID
     $status: String!
   ) {
     createTask(
@@ -200,8 +208,9 @@ const CREATE_TASK_MUTATION = gql`
       title: $title
       status: $status
       needsReviewed: $needsReviewed
+      completed: $completed
       groupId: $groupId
-      childId: $childId
+      assigneeId: $assigneeId
     ) {
       title
       id
@@ -209,9 +218,33 @@ const CREATE_TASK_MUTATION = gql`
   }
 `
 
+const CREATE_NOTIFICATION = gql`
+  mutation newNotification(
+    $seen: Boolean!
+    $taskId: ID!
+    $userId: ID!
+    $content: String!
+  ) {
+    createNotification(
+      seen: $seen
+      taskId: $taskId
+      userId: $userId
+      content: $content
+    ) {
+      id
+      task {
+        id
+      }
+      user {
+        id
+      }
+    }
+  }
+`
+
 export default withRouter(
   compose(
-    graphql(GET_USERS, { name: "getUsers" }),
-    graphql(CREATE_TASK_MUTATION, { name: "createTask" })
+    graphql(CREATE_TASK_MUTATION, { name: 'createTask' }),
+    graphql(CREATE_NOTIFICATION, { name: 'createNotification' })
   )(AddTask)
 )

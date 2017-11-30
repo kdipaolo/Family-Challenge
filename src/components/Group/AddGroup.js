@@ -1,13 +1,13 @@
-import React from "react"
-import Button from "../shared/Button"
-import styled from "styled-components"
-import { Input, Textarea, Form, Label } from "../../styles/Forms"
-import { gql, compose, graphql } from "react-apollo"
-import { SingleDatePicker } from "react-dates"
-import "react-dates/lib/css/_datepicker.css"
-import { X } from "react-feather"
-import { withRouter } from "react-router-dom"
-import { USER_ID } from "../../utils/constants"
+import React from 'react'
+import Button from '../shared/Button'
+import styled from 'styled-components'
+import { Input, Textarea, Form, Label } from '../../styles/Forms'
+import { gql, compose, graphql } from 'react-apollo'
+import { SingleDatePicker } from 'react-dates'
+import 'react-dates/lib/css/_datepicker.css'
+import { X } from 'react-feather'
+import { withRouter } from 'react-router-dom'
+import { USER_ID } from '../../utils/constants'
 
 const Flex = styled.div`
   display: flex;
@@ -31,7 +31,9 @@ const StyledDatePicker = styled.div`
   }
 `
 
-const Dropdown = styled.div`position: relative;`
+const Dropdown = styled.div`
+  position: relative;
+`
 const Results = styled.div`
   position: absolute;
   top: 60px;
@@ -68,17 +70,15 @@ const AddedMember = styled.a`
   justify-content: center;
 `
 
-const AddNewMember = styled.a`display: block;`
-
-// const StyledDatePicker = styled(SingleDatePicker)`
-//     width: 100%!important;
-// `
+const AddNewMember = styled.a`
+  display: block;
+`
 
 class AddGroup extends React.Component {
   state = {
-    title: "",
-    dueDate: "",
-    description: "",
+    title: '',
+    dueDate: '',
+    description: '',
     search: null,
     members: []
   }
@@ -99,9 +99,8 @@ class AddGroup extends React.Component {
       variables: {
         title: this.state.title,
         dueDate: this.state.dueDate,
-        familyId: this.props.familyId,
-        memberIds: this.state.members.map(member => member.id),
-        parentId: localStorage.getItem(USER_ID)
+        membersIds: this.state.members.map(member => member.id),
+        groupOwnerId: localStorage.getItem(USER_ID)
       }
     }
 
@@ -128,17 +127,17 @@ class AddGroup extends React.Component {
       newMembers.splice(index, 1)
       this.setState({
         members: newMembers,
-        search: ""
+        search: ''
       })
     } else {
       this.setState({
         members: [user, ...this.state.members],
-        search: ""
+        search: ''
       })
     }
   }
   closeMenu = e => {
-    this.props.handleClose(e, "openMenu")
+    this.props.handleClose(e, 'openMenu')
   }
   render() {
     const { open, type, handleClose, handleAdd } = this.props
@@ -198,23 +197,22 @@ class AddGroup extends React.Component {
             />
 
             <Results>
-              {!this.props.getUsers.loading &&
-                this.props.getUsers.allUsers
-                  .filter(
-                    user =>
-                      this.state.search &&
-                      user.name.includes(this.state.search) &&
-                      !this.state.members.find(member => member.id === user.id)
+              {this.props.user.members
+                .filter(
+                  user =>
+                    this.state.search &&
+                    user.name.includes(this.state.search) &&
+                    !this.state.members.find(member => member.id === user.id)
+                )
+                .map(user => {
+                  return (
+                    <DropdownItem
+                      onClick={() => this.addRemoveUserToMemberState(user)}
+                    >
+                      {user.name}
+                    </DropdownItem>
                   )
-                  .map(user => {
-                    return (
-                      <DropdownItem
-                        onClick={() => this.addRemoveUserToMemberState(user)}
-                      >
-                        {user.name}
-                      </DropdownItem>
-                    )
-                  })}
+                })}
             </Results>
           </Dropdown>
 
@@ -230,28 +228,18 @@ class AddGroup extends React.Component {
   }
 }
 
-const GET_USERS = gql`
-  query getUsers {
-    allUsers {
-      name
-      id
-    }
-  }
-`
 const ADD_GROUP = gql`
   mutation newGroup(
-    $familyId: ID!
-    $parentId: ID!
+    $groupOwnerId: ID!
     $dueDate: DateTime!
     $title: String!
-    $memberIds: [ID!]
+    $membersIds: [ID!]
   ) {
     createGroup(
-      familyId: $familyId
-      parentId: $parentId
+      groupOwnerId: $groupOwnerId
       dueDate: $dueDate
       title: $title
-      membersIds: $memberIds
+      membersIds: $membersIds
     ) {
       title
       id
@@ -260,8 +248,5 @@ const ADD_GROUP = gql`
 `
 
 export default withRouter(
-  compose(
-    graphql(GET_USERS, { name: "getUsers" }),
-    graphql(ADD_GROUP, { name: "addGroup" })
-  )(AddGroup)
+  compose(graphql(ADD_GROUP, { name: 'addGroup' }))(AddGroup)
 )

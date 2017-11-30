@@ -1,11 +1,11 @@
-import React from "react"
-import Button from "../shared/Button"
-import styled from "styled-components"
-import { Input } from "../../styles/Forms"
-import { gql, compose, graphql } from "react-apollo"
-import { X } from "react-feather"
-import { Label } from "../../styles/Forms"
-import { withRouter } from "react-router-dom"
+import React from 'react'
+import Button from '../shared/Button'
+import styled from 'styled-components'
+import { Input } from '../../styles/Forms'
+import { gql, compose, graphql } from 'react-apollo'
+import { X } from 'react-feather'
+import { Label } from '../../styles/Forms'
+import { withRouter } from 'react-router-dom'
 const Dropdown = styled.div`position: relative;`
 const Results = styled.div`
   position: absolute;
@@ -92,8 +92,8 @@ class AddGroupMember extends React.Component {
     this.state.members.map(async member => {
       await this.props.addMemberToGroup({
         variables: {
-          groupId: this.props.match.params.groupid,
-          memberId: member.id
+          groupsGroupId: this.props.match.params.groupid,
+          membersUserId: member.id
         }
       })
       this.props.refetch()
@@ -128,19 +128,18 @@ class AddGroupMember extends React.Component {
             )}
 
             <Results>
-              {!this.props.getUsers.loading &&
-                this.props.getUsers.allUsers
-                  .filter(
-                    user =>
-                      this.state.search && user.name.includes(this.state.search)
+              {this.props.user.User.members
+                .filter(
+                  user =>
+                    this.state.search && user.name.includes(this.state.search)
+                )
+                .map(user => {
+                  return (
+                    <DropdownItem onClick={() => this.addMemberToState(user)}>
+                      {user.name}
+                    </DropdownItem>
                   )
-                  .map(user => {
-                    return (
-                      <DropdownItem onClick={() => this.addMemberToState(user)}>
-                        {user.name}
-                      </DropdownItem>
-                    )
-                  })}
+                })}
             </Results>
           </Dropdown>
           <Button type="submit">+ Add Members</Button>
@@ -150,32 +149,23 @@ class AddGroupMember extends React.Component {
   }
 }
 
-const GET_USERS = gql`
-  query getUsers {
-    allUsers {
-      name
-      id
-    }
-  }
-`
 const ADD_MEMBER_TO_GROUP = gql`
-  mutation addMemberToGroup($groupId: ID!, $memberId: ID!) {
-    addToGroupMembers(groupsGroupId: $groupId, membersUserId: $memberId) {
+  mutation addMemberToGroup($groupsGroupId: ID!, $membersUserId: ID!) {
+    addToMembersInGroup(
+      groupsGroupId: $groupsGroupId
+      membersUserId: $membersUserId
+    ) {
       membersUser {
         name
-      }
-      groupsGroup {
-        title
       }
     }
   }
 `
 
 export default withRouter(
-  compose(
-    graphql(GET_USERS, { name: "getUsers" }),
-    graphql(ADD_MEMBER_TO_GROUP, { name: "addMemberToGroup" })
-  )(AddGroupMember)
+  compose(graphql(ADD_MEMBER_TO_GROUP, { name: 'addMemberToGroup' }))(
+    AddGroupMember
+  )
 )
 
 {

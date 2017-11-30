@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  withRouter
+  withRouter,
+  Redirect
 } from 'react-router-dom'
 import styled, { ThemeProvider, css } from 'styled-components'
 import Header from './layout/Header'
@@ -45,25 +46,46 @@ const AppBackground = withRouter(
 
 class Routes extends React.Component {
   render() {
+    const currentUser = localStorage.getItem(USER_ID)
     return (
       <Router testing>
         <ThemeProvider theme={theme}>
           <AppBackground>
-            {localStorage.getItem(USER_ID) && (
-              <Header getUser={this.props.getUser} />
-            )}
+            {currentUser && <Header getUser={this.props.getUser} />}
             <Switch>
               <ContentWrapper>
-                <Route exact path="/" component={CreateAccount} />
-                <Route path="/dashboard" component={Dashboard} />
+                <Route
+                  exact
+                  path="/"
+                  component={() =>
+                    currentUser ? (
+                      <Redirect to="/dashboard" />
+                    ) : (
+                      <CreateAccount />
+                    )
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  component={() => <Dashboard user={this.props.getUser.User} />}
+                />
                 <Route
                   path="/groups"
                   component={() => <Groups user={this.props.getUser.User} />}
                 />
-                <Route path="/group/:groupid" component={Group} />
-                <Route path="/members" component={Members} />
+                <Route
+                  path="/group/:groupid"
+                  component={() => <Group user={this.props.getUser} />}
+                />
+                <Route
+                  path="/members"
+                  component={() => <Members user={this.props.getUser} />}
+                />
                 <Route path="/member/:memberid" component={Member} />
-                <Route path="/task/:taskid" component={Task} />
+                <Route
+                  path="/task/:taskid"
+                  component={() => <Task user={this.props.getUser.User} />}
+                />
                 <Route
                   path="/settings"
                   component={() => (
@@ -87,13 +109,33 @@ const GET_USER = gql`
   query getUser($id: ID!) {
     User(id: $id) {
       name
-      role {
-        name
-      }
-      familyMember {
+      role
+      id
+      members {
         name
         id
       }
+      ownedGroups {
+        title
+        tasks {
+          ...taskItems
+        }
+      }
+      tasks {
+        ...taskItems
+      }
+    }
+  }
+
+  fragment taskItems on Task {
+    title
+    id
+    completed
+    description
+    status
+    needsReviewed
+    group {
+      title
     }
   }
 `

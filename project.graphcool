@@ -1,7 +1,7 @@
-# project: cj83e8far04ms0116qbqr8kox
-# version: 5
+# projectId: cj83e8far04ms0116qbqr8kox
+# version: 58
 
-type Link implements Node {
+type Link @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -9,7 +9,7 @@ type Link implements Node {
   description: String!
 }
 
-type File implements Node {
+type File @model {
   contentType: String!
   createdAt: DateTime!
   id: ID! @isUnique
@@ -20,79 +20,79 @@ type File implements Node {
   url: String! @isUnique
 }
 
-type User implements Node {
+type User @model {
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
   name: String!
-  tasks: [Task!]! @relation(name: "UsersTasks")
-  role: Role! @relation(name: "UsersRole")
-  family: Family! @relation(name: "ChildrenInFamily")
   message: [Message!]! @relation(name: "AuthorsMessages")
-  parent: Group! @relation(name: "ParentInGroup")
-  assigner: Task! @relation(name: "Parent")
-  groups: [Group!]! @relation(name: "GroupMembers")
+  email: String @isUnique
+  password: String
+  parent: Parent @relation(name: "UserOnParent")
+  member: Member @relation(name: "UserOnMember")
+  userType: UserType!
 }
 
-type Role implements Node {
-  createdAt: DateTime!
+type Parent @model {
   id: ID! @isUnique
-  updatedAt: DateTime!
-  name: String!
-  user: User! @relation(name: "UsersRole")
+  groups: [Group!]! @relation(name: "GroupsInFamily")
+  user: User @relation(name: "UserOnParent")
+  assigner: Task @relation(name: "Parent")
 }
 
-type Message implements Node {
+type Member @model {
+  id: ID! @isUnique
+  groups: [Group!]! @relation(name: "GroupMembers")
+  user: User @relation(name: "UserOnMember")
+  tasks: [Task!]! @relation(name: "UsersTasks")
+}
+
+enum UserType {
+  Parent,
+  Member
+}
+
+type Message @model {
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
   comment: String!
-  author: User! @relation(name: "AuthorsMessages")
-  task: Task! @relation(name: "MessagesInTasks")
+  author: User @relation(name: "AuthorsMessages")
+  task: Task @relation(name: "MessagesInTasks")
+  status: String
 }
 
-type Task implements Node {
+type Task @model {
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
   title: String!
-  completed: Boolean!
-  assigner: User @relation(name: "Parent")
-  child: User @relation(name: "UsersTasks")
-  group: Group! @relation(name: "TasksInGroup")
+  status: String!
+  assigner: Parent @relation(name: "Parent")
+  group: Group @relation(name: "TasksInGroup")
   needsReviewed: Boolean!
   description: String!
   messages: [Message!]! @relation(name: "MessagesInTasks")
+  member: Member @relation(name: "UsersTasks")
 }
 
-type Group implements Node {
+type Group @model {
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
   title: String!
+  parent: Parent @relation(name: "GroupsInFamily")
   reward: Reward @relation(name: "GroupReward")
-  parent: User @relation(name: "ParentInGroup")
-  members: [User!]! @relation(name: "GroupMembers")
-  family: Family @relation(name: "GroupsInFamily")
+  members: [Member!]! @relation(name: "GroupMembers")
   dueDate: DateTime!
   tasks: [Task!]! @relation(name: "TasksInGroup")
 }
 
-type Reward implements Node {
+type Reward @model {
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
   title: String!
   description: String!
   group: Group! @relation(name: "GroupReward")
-}
-
-type Family implements Node {
-  createdAt: DateTime!
-  id: ID! @isUnique
-  updatedAt: DateTime!
-  groups: [Group!]! @relation(name: "GroupsInFamily")
-  children: [User!]! @relation(name: "ChildrenInFamily")
-  name: String!
-  description: String!
 }

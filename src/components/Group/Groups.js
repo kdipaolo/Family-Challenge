@@ -1,13 +1,15 @@
-import React from "react"
-import GroupCard from "./GroupCard"
-import ContentWrapper from "../../styles/ContentWrapper"
-import { graphql, gql, compose } from "react-apollo"
-import Button from "../shared/Button"
-import Loading from "../shared/Loading"
-import Modal from "../shared/Modal"
-import AddGroup from "./AddGroup"
-import { USER_ID } from "../../utils/constants"
-import { SSL_OP_PKCS1_CHECK_1 } from "constants"
+import React from 'react'
+import GroupCard from './GroupCard'
+import ContentWrapper from '../../styles/ContentWrapper'
+import { graphql, gql, compose } from 'react-apollo'
+import Button from '../shared/Button'
+import NoInfo from '../shared/NoInfo'
+import Loading from '../shared/Loading'
+import Modal from '../shared/Modal'
+import AddGroup from './AddGroup'
+import { USER_ID } from '../../utils/constants'
+import { SSL_OP_PKCS1_CHECK_1 } from 'constants'
+import { DIRECTIVE } from 'graphql/language/kinds'
 
 class Groups extends React.Component {
   state = {
@@ -18,32 +20,31 @@ class Groups extends React.Component {
   }
 
   render() {
-    const ifParent =
-      this.props.user &&
-      this.props.user.role &&
-      this.props.user.role.name === "Parent"
-
+    const ifParent = this.props.user && this.props.user.role === 'Parent'
+    const { loading, allGroups } = this.props.getGroups
     return (
       <ContentWrapper>
-        {this.props.getGroups.loading ? (
+        {loading ? (
           <Loading />
         ) : (
-          this.props.getGroups.allGroups.map((group, i) => (
-            <GroupCard
-              key={i}
-              id={group.id}
-              title={group.title}
-              created={group.createdAt}
-              tasks={group.tasks.length}
-              dueDate={group.dueDate}
-            />
-          ))
+          <div>
+            {allGroups.map((group, i) => (
+              <GroupCard
+                key={i}
+                id={group.id}
+                title={group.title}
+                created={group.createdAt}
+                tasks={group.tasks.length}
+                dueDate={group.dueDate}
+              />
+            ))}
+            {allGroups.length === 0 && <NoInfo />}
+          </div>
         )}
+
         {ifParent && (
           <Modal button={<Button sticky>+ Add a new group</Button>}>
-            {({ handleOpenCloseModal }) => (
-              <AddGroup familyId="cj84seori01xr0195h9fnhql1" />
-            )}
+            {({ handleOpenCloseModal }) => <AddGroup user={this.props.user} />}
           </Modal>
         )}
       </ContentWrapper>
@@ -72,6 +73,6 @@ const GET_GROUPS = gql`
 
 export default compose(
   graphql(GET_GROUPS, {
-    name: "getGroups"
+    name: 'getGroups'
   })
 )(Groups)

@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import {
   EditIcon,
   Info,
@@ -8,11 +8,11 @@ import {
   Detail,
   DetailWrapper,
   Highlight
-} from "../../styles/theme/infoCard"
-import paperAirplane from "../../../public/images/paper-airplane.svg"
-import { CheckCircle, XCircle } from "react-feather"
-import { gql, graphql, compose } from "react-apollo"
-import { withRouter } from "react-router-dom"
+} from '../../styles/theme/infoCard'
+import paperAirplane from '../../../public/images/paper-airplane.svg'
+import { CheckCircle, XCircle } from 'react-feather'
+import { gql, graphql, compose } from 'react-apollo'
+import { withRouter } from 'react-router-dom'
 
 class TaskHeader extends React.Component {
   state = {
@@ -33,12 +33,12 @@ class TaskHeader extends React.Component {
     }
   }
   handleTaskDelete = () => {
-    var confirmation = confirm("are you sure?")
+    var confirmation = confirm('are you sure?')
     if (confirmation) {
       this.props.deleteTask()
       this.props.history.goBack()
     } else {
-      console.log("DENIED")
+      console.log('DENIED')
     }
   }
 
@@ -67,36 +67,46 @@ class TaskHeader extends React.Component {
     this.handleEditToggle()
   }
   render() {
-    const { name } = this.props.Task.child
     return (
-      <Info>
-        <Image src={paperAirplane} />
-        <Header>
-          <MinusCircleIcon onClick={this.handleTaskDelete} />
-          <EditIcon onClick={this.handleEditToggle} />
-          {this.state.edit ? (
-            <div>
-              <input
-                type="text"
-                name="title"
-                value={this.state.title}
-                onChange={this.handleStateChange}
-              />
-              <CheckCircle onClick={this.handleTitleUpdate} />
-            </div>
-          ) : (
-            this.state.title
-          )}
-        </Header>
-        <DetailWrapper>
-          <Detail>
-            Assigned By: <Highlight>Mom</Highlight>
-          </Detail>
-          <Detail>
-            Assigned To: <Highlight>{name}</Highlight>
-          </Detail>
-        </DetailWrapper>
-      </Info>
+      <div>
+        {this.props.Task && (
+          <Info>
+            <Image src={paperAirplane} />
+            <Header>
+              <MinusCircleIcon onClick={this.handleTaskDelete} />
+              <EditIcon onClick={this.handleEditToggle} />
+              {this.state.edit ? (
+                <div>
+                  <input
+                    type="text"
+                    name="title"
+                    value={this.state.title}
+                    onChange={this.handleStateChange}
+                  />
+                  <CheckCircle onClick={this.handleTitleUpdate} />
+                </div>
+              ) : (
+                this.state.title
+              )}
+            </Header>
+            <DetailWrapper>
+              <Detail>
+                Assigned By:{' '}
+                <Highlight>{this.props.Task.group.groupOwner.name}</Highlight>
+              </Detail>
+              <Detail>
+                Assigned To:{' '}
+                <Highlight>{this.props.Task.assignee.name}</Highlight>
+              </Detail>
+              <Detail>
+                If all tasks in {this.props.Task.group.title} are completed by{' '}
+                {this.props.Task.group.dueDate} you will recieve this award:
+                <Highlight>{this.props.Task.group.reward}</Highlight>
+              </Detail>
+            </DetailWrapper>
+          </Info>
+        )}
+      </div>
     )
   }
 }
@@ -119,7 +129,7 @@ const UPDATE_TASK_MUTATION = gql`
 export default withRouter(
   compose(
     graphql(DELETE_TASK_MUTATION, {
-      name: "deleteTaskMutation",
+      name: 'deleteTaskMutation',
       props: ({ ownProps, deleteTaskMutation }) => ({
         deleteTask: values => {
           deleteTaskMutation({
@@ -131,7 +141,7 @@ export default withRouter(
       })
     }),
     graphql(UPDATE_TASK_MUTATION, {
-      name: "updateTaskMutation",
+      name: 'updateTaskMutation',
       props: ({ ownProps, updateTaskMutation }) => ({
         updateTask: values => {
           updateTaskMutation({

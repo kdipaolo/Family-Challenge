@@ -1,8 +1,8 @@
-import React from "react"
-import TaskCard from "../task/TaskCard"
-import Button from "../shared/Button"
-import Loading from "../shared/Loading"
-import NoResults from "../shared/NoResults"
+import React from 'react'
+import TaskCard from '../task/TaskCard'
+import Button from '../shared/Button'
+import Loading from '../shared/Loading'
+import NoResults from '../shared/NoResults'
 class TaskList extends React.Component {
   render() {
     console.log(this.props.tasks)
@@ -16,7 +16,7 @@ class TaskList extends React.Component {
                 name="completed"
                 onClick={this.props.handleToggleCompleted}
               >
-                {this.props.completed ? "Hide" : "Show"} Completed
+                {this.props.completed ? 'Hide' : 'Show'} Completed
               </a>
               {this.props.tasks
                 .filter(task => (this.props.completed ? task : !task.completed))
@@ -24,7 +24,7 @@ class TaskList extends React.Component {
                   return (
                     <TaskCard
                       description={task.description}
-                      assignedTo={task.child.name}
+                      assignedTo={task.assignee.name}
                       title={task.title}
                       key={task.id}
                       id={task.id}

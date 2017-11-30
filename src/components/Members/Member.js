@@ -1,8 +1,8 @@
-import React from "react"
-import { withRouter } from "react-router-dom"
-import { gql, compose, graphql } from "react-apollo"
-import MemberHeader from "./MemberHeader"
-import MemberLists from "./MemberLists"
+import React from 'react'
+import { withRouter } from 'react-router-dom'
+import { gql, compose, graphql } from 'react-apollo'
+import MemberHeader from './MemberHeader'
+import MemberLists from './MemberLists'
 
 const Member = props =>
   !props.getUser.loading && (
@@ -28,7 +28,7 @@ const GET_USER = gql`
 
 export default compose(
   graphql(GET_USER, {
-    name: "getUser",
+    name: 'getUser',
     options: props => ({ variables: { id: props.match.params.memberid } })
   })
 )(withRouter(Member))
