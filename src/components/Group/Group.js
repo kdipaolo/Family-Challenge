@@ -14,6 +14,7 @@ const Group = props =>
 const GET_GROUP = gql`
   query getGroup($id: ID!) {
     Group(id: $id) {
+      id
       createdAt
       title
       reward

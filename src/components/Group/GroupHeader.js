@@ -57,9 +57,28 @@ class GroupHeader extends React.Component {
     this.props.updateGroup({ title: this.state.title, completed: false })
     this.handleEditToggle()
   }
-  handleCompleteGroup = () => {
-    // Change group completed value to true
-    this.props.updateGroup({ completed: true })
+  handleCompleteGroup = async () => {
+    console.log(this.props.Group)
+    const { id, title, reward, members } = this.props.Group
+    await this.props.updateGroup({
+      title: title,
+      completed: true
+    })
+    members.map(async member => {
+      await this.props.createNotification({
+        variables: {
+          seen: false,
+          groupId: id,
+          content: `${
+            title
+          } has been completed you have earned the following reward:  ${
+            reward
+          }`,
+          userId: member.id
+        }
+      })
+    })
+    this.props.history.push('/groups')
   }
   render() {
     const { tasks, createdAt } = this.props.Group
@@ -129,6 +148,30 @@ const DELETE_GROUP_MUTATION = gql`
   }
 `
 
+const CREATE_NOTIFICATION = gql`
+  mutation newNotification(
+    $seen: Boolean!
+    $groupId: ID!
+    $userId: ID!
+    $content: String!
+  ) {
+    createNotification(
+      seen: $seen
+      groupId: $groupId
+      userId: $userId
+      content: $content
+    ) {
+      id
+      task {
+        id
+      }
+      user {
+        id
+      }
+    }
+  }
+`
+
 export default withRouter(
   compose(
     graphql(UPDATE_GROUP_MUTATION, {
@@ -156,6 +199,7 @@ export default withRouter(
           })
         }
       })
-    })
+    }),
+    graphql(CREATE_NOTIFICATION, { name: 'createNotification' })
   )(GroupHeader)
 )

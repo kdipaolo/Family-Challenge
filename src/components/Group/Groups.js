@@ -28,16 +28,18 @@ class Groups extends React.Component {
           <Loading />
         ) : (
           <div>
-            {allGroups.map((group, i) => (
-              <GroupCard
-                key={i}
-                id={group.id}
-                title={group.title}
-                created={group.createdAt}
-                tasks={group.tasks.length}
-                dueDate={group.dueDate}
-              />
-            ))}
+            {allGroups
+              .filter(group => !group.completed)
+              .map((group, i) => (
+                <GroupCard
+                  key={i}
+                  id={group.id}
+                  title={group.title}
+                  created={group.createdAt}
+                  tasks={group.tasks.length}
+                  dueDate={group.dueDate}
+                />
+              ))}
             {allGroups.length === 0 && <NoInfo />}
           </div>
         )}
@@ -58,6 +60,7 @@ const GET_GROUPS = gql`
       title
       id
       dueDate
+      completed
       createdAt
       tasks {
         id
