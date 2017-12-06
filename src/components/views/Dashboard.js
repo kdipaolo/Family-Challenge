@@ -26,7 +26,11 @@ class Dashboard extends React.Component {
                 notification => (
                   <Notification
                     title={notification.content}
-                    link={`/task/${notification.task.id}`}
+                    link={
+                      notification.task
+                        ? `/task/${notification.task.id}`
+                        : `/group/${notification.group.id}`
+                    }
                     award={notification.group}
                   />
                 )
@@ -44,6 +48,10 @@ const GET_NOTIFICATIONS = gql`
       id
       seen
       content
+      group {
+        id
+        title
+      }
       task {
         id
         title

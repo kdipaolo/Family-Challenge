@@ -79,6 +79,7 @@ class AddGroup extends React.Component {
     title: '',
     dueDate: '',
     description: '',
+    reward: '',
     search: null,
     members: []
   }
@@ -95,12 +96,14 @@ class AddGroup extends React.Component {
   }
 
   handleNewGroup = async () => {
+    const { title, dueDate, reward } = this.state
     const newGroup = {
       variables: {
-        title: this.state.title,
-        dueDate: this.state.dueDate,
+        title,
+        dueDate,
         membersIds: this.state.members.map(member => member.id),
-        groupOwnerId: localStorage.getItem(USER_ID)
+        groupOwnerId: localStorage.getItem(USER_ID),
+        reward
       }
     }
 
@@ -169,6 +172,13 @@ class AddGroup extends React.Component {
             onChange={this.handleChange}
             placeholder=""
           />
+          <Input
+            name="reward"
+            value={this.state.reward}
+            onChange={this.handleChange}
+            type="text"
+            placeholder="Reward"
+          />
           <AddNewMember href="#">Add a new member to the family.</AddNewMember>
           {this.state.members.length > 0 && (
             <div>
@@ -232,6 +242,7 @@ const ADD_GROUP = gql`
   mutation newGroup(
     $groupOwnerId: ID!
     $dueDate: DateTime!
+    $reward: String!
     $title: String!
     $membersIds: [ID!]
   ) {
@@ -239,6 +250,7 @@ const ADD_GROUP = gql`
       groupOwnerId: $groupOwnerId
       dueDate: $dueDate
       title: $title
+      reward: $reward
       membersIds: $membersIds
     ) {
       title
