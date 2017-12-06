@@ -40,10 +40,10 @@ class Groups extends React.Component {
                   dueDate={group.dueDate}
                 />
               ))}
+
             {allGroups.length === 0 && <NoInfo />}
           </div>
         )}
-
         {ifParent && (
           <Modal button={<Button sticky>+ Add a new group</Button>}>
             {({ handleOpenCloseModal }) => <AddGroup user={this.props.user} />}
