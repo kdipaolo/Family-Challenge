@@ -8,6 +8,9 @@ import { gql, compose, graphql } from 'react-apollo'
 import { USER_ID } from '../../utils/constants'
 
 class Members extends React.Component {
+  componentDidMount() {
+    this.props.user.refetch()
+  }
   render() {
     return (
       <ContentWrapper>
