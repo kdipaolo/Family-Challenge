@@ -1,11 +1,12 @@
-import React from "react"
-import Task from "../task/TaskCard"
-import ContentWrapper from "../../styles/ContentWrapper"
-import Switcher from "../shared/Switcher"
+/* eslint-disable */
+import React from 'react'
+import Task from '../task/TaskCard'
+import ContentWrapper from '../../styles/ContentWrapper'
+import Switcher from '../shared/Switcher'
 
 class MemberLists extends React.Component {
   state = {
-    active: "Tasks"
+    active: 'Tasks'
   }
   handleSwitcherClick = e => {
     this.setState({
@@ -18,10 +19,10 @@ class MemberLists extends React.Component {
         <Switcher
           handleSwitcherClick={this.handleSwitcherClick}
           active={this.state.active}
-          links={["Tasks", "Settings"]}
+          links={['Tasks', 'Settings']}
         />
         <ContentWrapper>
-          {this.state.active === "Tasks" ? (
+          {this.state.active === 'Tasks' ? (
             <div>
               {this.props.User.tasks.map(task => (
                 <Task key={task.id} {...task} />
