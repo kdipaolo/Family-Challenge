@@ -1,6 +1,5 @@
 import React from 'react'
-import { Input, Textarea, Form, Label } from '../../styles/Forms'
-import styled from 'styled-components'
+import { Input, Label } from '../../styles/Forms'
 import { gql, compose, graphql } from 'react-apollo'
 import { USER_ID } from '../../utils/constants'
 

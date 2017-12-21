@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import normalize from 'polished/lib/mixins/normalize'
 import { injectGlobal } from 'styled-components'
 

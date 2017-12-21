@@ -1,6 +1,5 @@
 import React from 'react'
 import TaskCard from '../task/TaskCard'
-import Button from '../shared/Button'
 import Loading from '../shared/Loading'
 import NoResults from '../shared/NoResults'
 class TaskList extends React.Component {

@@ -1,16 +1,15 @@
 import React from 'react'
-import Action from '../shared/ActionCard'
 import Notification from '../shared/Notification'
 import ContentWrapper from '../../styles/ContentWrapper'
-import { gql, graphql, withApollo, compose } from 'react-apollo'
+import { gql, graphql } from 'react-apollo'
 import { USER_ID } from '../../utils/constants'
 
 class Dashboard extends React.Component {
   render() {
     const currentUser = this.props.user
-    const isParent = () => {
-      return currentUser && currentUser.role === 'Parent'
-    }
+    // const isParent = () => {
+    //   return currentUser && currentUser.role === 'Parent'
+    // }
 
     return (
       <div>

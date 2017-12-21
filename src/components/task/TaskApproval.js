@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { CheckCircle, XCircle } from 'react-feather'
-import { USER_ID } from '../../utils/constants'
 import { graphql, gql, compose } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
 const Status = styled.div`
@@ -104,14 +103,14 @@ class TaskApproval extends React.Component {
       </div>
     )
 
-    const MemberSubmit = () => (
-      <Flex>
-        <div onClick={this.handleApprove}>
-          <span>Submit Finished Task</span>
-          <CheckCircle />
-        </div>
-      </Flex>
-    )
+    // const MemberSubmit = () => (
+    //   <Flex>
+    //     <div onClick={this.handleApprove}>
+    //       <span>Submit Finished Task</span>
+    //       <CheckCircle />
+    //     </div>
+    //   </Flex>
+    // )
 
     const MemberAssigned = () => (
       <div>

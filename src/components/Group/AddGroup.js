@@ -143,7 +143,7 @@ class AddGroup extends React.Component {
     this.props.handleClose(e, 'openMenu')
   }
   render() {
-    const { open, type, handleClose, handleAdd } = this.props
+    const { type } = this.props
     return (
       <div>
         <Text>+ Add a New {type}</Text>

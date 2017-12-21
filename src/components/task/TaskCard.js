@@ -1,15 +1,7 @@
-import React from "react"
-import CardWrapper from "../../styles/CardWrapper"
-import { Link } from "react-router-dom"
-import { Zap } from "react-feather"
-import styled from "styled-components"
-import {
-  CardText,
-  CardHeader,
-  Flex,
-  CardIcon,
-  Image
-} from "../../styles/Cards.js"
+import React from 'react'
+import CardWrapper from '../../styles/CardWrapper'
+import { Link } from 'react-router-dom'
+import { CardText, CardHeader, Flex, CardIcon } from '../../styles/Cards.js'
 
 class TaskCard extends React.Component {
   render() {

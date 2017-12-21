@@ -7,9 +7,6 @@ import NoInfo from '../shared/NoInfo'
 import Loading from '../shared/Loading'
 import Modal from '../shared/Modal'
 import AddGroup from './AddGroup'
-import { USER_ID } from '../../utils/constants'
-import { SSL_OP_PKCS1_CHECK_1 } from 'constants'
-import { DIRECTIVE } from 'graphql/language/kinds'
 
 class Groups extends React.Component {
   state = {

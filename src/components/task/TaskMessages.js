@@ -1,21 +1,11 @@
-import React from "react"
-import {
-  EditIcon,
-  Info,
-  MinusCircleIcon,
-  Image,
-  Header,
-  Detail,
-  DetailWrapper,
-  Highlight
-} from "../../styles/theme/infoCard"
-import Message from "./Message.js"
-import { Input, Textarea, Form, Label } from "../../styles/Forms"
-import ContentWrapper from "../../styles/ContentWrapper"
-import Button from "../shared/Button"
-import styled from "styled-components"
-import { withRouter } from "react-router-dom"
-import { gql, graphql, compose } from "react-apollo"
+import React from 'react'
+import Message from './Message.js'
+import { Textarea } from '../../styles/Forms'
+import ContentWrapper from '../../styles/ContentWrapper'
+import Button from '../shared/Button'
+import styled from 'styled-components'
+import { withRouter } from 'react-router-dom'
+import { gql, graphql, compose } from 'react-apollo'
 
 const Messages = styled.div`
   background: ${props => props.theme.colors.cardBackground};
@@ -36,7 +26,7 @@ class TaskMessages extends React.Component {
       }
     })
     this.props.refetch()
-    this.setState({ newMessage: "" })
+    this.setState({ newMessage: '' })
   }
   handleNewMessageTextAreaChange = e => {
     this.setState({
@@ -75,15 +65,6 @@ class TaskMessages extends React.Component {
   }
 }
 
-{
-  /* <Message response content="Content for message" />
-          <Message content="Content for message" />
-          <Message response content="Content for message" />
-          <Message alert rejected />
-          <Message response content="Content for message" />
-          <Message alert completed /> */
-}
-
 const CREATE_MESSAGE_MUTATION = gql`
   mutation createNewMessage($comment: String!, $taskId: ID!) {
     createMessage(comment: $comment, taskId: $taskId) {
@@ -96,7 +77,7 @@ const CREATE_MESSAGE_MUTATION = gql`
 export default withRouter(
   compose(
     graphql(CREATE_MESSAGE_MUTATION, {
-      name: "createMessage"
+      name: 'createMessage'
     })
   )(TaskMessages)
 )

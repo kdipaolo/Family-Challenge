@@ -10,9 +10,18 @@ import {
   Highlight
 } from '../../styles/theme/infoCard'
 import paperAirplane from '../../../public/images/paper-airplane.svg'
-import { CheckCircle, XCircle } from 'react-feather'
+import { CheckCircle } from 'react-feather'
 import { gql, graphql, compose } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
+
+const UPDATE_TASK_MUTATION = gql`
+  mutation updateTask($id: ID!, $title: String!) {
+    updateTask(id: $id, title: $title) {
+      id
+      description
+    }
+  }
+`
 
 class TaskHeader extends React.Component {
   state = {
@@ -118,14 +127,7 @@ const DELETE_TASK_MUTATION = gql`
     }
   }
 `
-const UPDATE_TASK_MUTATION = gql`
-  mutation updateTask($id: ID!, $title: String!) {
-    updateTask(id: $id, title: $title) {
-      id
-      description
-    }
-  }
-`
+
 export default withRouter(
   compose(
     graphql(DELETE_TASK_MUTATION, {

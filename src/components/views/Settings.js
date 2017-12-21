@@ -1,7 +1,7 @@
 import React from 'react'
 import { Info } from '../../styles/theme/infoCard'
 import { USER_ID } from '../../constants'
-import { gql, graphql, withApollo, compose } from 'react-apollo'
+import { gql, graphql, compose } from 'react-apollo'
 import Button from '../shared/Button'
 import styled from 'styled-components'
 
@@ -11,7 +11,9 @@ const ProfileField = styled.div`
   margin: 2%;
   display: flex;
 `
-const ProfileFieldKey = styled.span`flex: 2;`
+const ProfileFieldKey = styled.span`
+  flex: 2;
+`
 const ProfileFieldValue = styled.span`
   flex: 2;
   font-weight: bold;

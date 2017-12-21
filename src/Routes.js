@@ -17,8 +17,6 @@ import Members from './components/Members/Members'
 import Member from './components/Members/Member'
 import Task from './components/task/Task'
 import Settings from './components/views/Settings'
-import requireAuth from './utils/requireAuth'
-import requireNonAuth from './utils/requireNonAuth'
 import { graphql, gql, compose } from 'react-apollo'
 import { USER_ID } from './utils/constants'
 
