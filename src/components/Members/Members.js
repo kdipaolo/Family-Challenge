@@ -6,6 +6,9 @@ import MemberCard from './MemberCard'
 import ContentWrapper from '../../styles/ContentWrapper'
 
 class Members extends React.Component {
+  componentDidMount() {
+    this.props.user.refetch()
+  }
   render() {
     return (
       <ContentWrapper>
