@@ -1,10 +1,9 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
-import Button from '../shared/Button'
+import styled from 'styled-components'
 import alarm from '../../../public/images/alarm-clock.svg'
 import trophy from '../../../public/images/trophy.svg'
 import { Link } from 'react-router-dom'
-import { gql, compose, graphql } from 'react-apollo'
+import { gql, graphql } from 'react-apollo'
 
 const NotificationWrapper = styled.div`
   background: ${props => props.theme.colors.primary};

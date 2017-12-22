@@ -6,7 +6,9 @@ import { gql, compose, graphql } from 'react-apollo'
 import { X } from 'react-feather'
 import { Label } from '../../styles/Forms'
 import { withRouter } from 'react-router-dom'
-const Dropdown = styled.div`position: relative;`
+const Dropdown = styled.div`
+  position: relative;
+`
 const Results = styled.div`
   position: absolute;
   top: 60px;
@@ -42,19 +44,19 @@ const DropdownItem = styled.a`
   }
 `
 
-const SelectedMember = styled.h4`
-  border: 1px solid ${props => props.theme.colors.secondary};
-  padding: 3%;
-  color: ${props => props.theme.colors.secondary};
-  border-radius: 5px;
-  cursor: pointer;
-`
+// const SelectedMember = styled.h4`
+//   border: 1px solid ${props => props.theme.colors.secondary};
+//   padding: 3%;
+//   color: ${props => props.theme.colors.secondary};
+//   border-radius: 5px;
+//   cursor: pointer;
+// `
 
-const Remove = styled.span`
-  color: red;
-  cursor: pointer;
-  font-size: 12px;
-`
+// const Remove = styled.span`
+//   color: red;
+//   cursor: pointer;
+//   font-size: 12px;
+// `
 
 class AddGroupMember extends React.Component {
   state = {
@@ -167,13 +169,3 @@ export default withRouter(
     AddGroupMember
   )
 )
-
-{
-  /* 
-         <SelectedMember
-          onClick={() => this.addMemberToState(this.state.members)}
-        >
-          Task Assigned to: {this.state.members.name} -{" "}
-          <Remove>Remove User From This Task</Remove>
-        </SelectedMember> */
-}

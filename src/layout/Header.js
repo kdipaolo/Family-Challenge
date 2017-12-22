@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link, withRouter } from 'react-router-dom'
 import placeholder from '../../public/images/placeholder.png'
-import getUser from '../utils/getUser'
 import { AUTH_TOKEN, USER_ID } from '../utils/constants'
 import {
   Menu,
@@ -14,7 +13,6 @@ import {
   UserMinus,
   X
 } from 'react-feather'
-import { gql, compose, graphql } from 'react-apollo'
 
 const NavigationBar = styled.div`
   background-color: ${props => props.theme.colors.primary};

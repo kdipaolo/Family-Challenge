@@ -1,5 +1,5 @@
-import styled from "styled-components"
-import { Edit, CheckCircle, MinusCircle } from "react-feather"
+import styled from 'styled-components'
+import { Edit, MinusCircle } from 'react-feather'
 
 export const EditIcon = styled(Edit)`
   display: block;
@@ -29,7 +29,9 @@ export const MinusCircleIcon = styled(MinusCircle)`
   color: ${props => props.theme.colors.rejected};
 `
 
-export const Image = styled.img`width: 75px;`
+export const Image = styled.img`
+  width: 75px;
+`
 
 export const Header = styled.h3`
   margin: 0;

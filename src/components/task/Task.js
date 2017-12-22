@@ -3,7 +3,6 @@ import { gql, graphql, compose } from 'react-apollo'
 import TaskHeader from './TaskHeader'
 import TaskApproval from './TaskApproval'
 import TaskMessages from './TaskMessages'
-import { USER_ID } from '../../utils/constants'
 import { withRouter } from 'react-router-dom'
 const Task = props =>
   !props.getTask.loading && (

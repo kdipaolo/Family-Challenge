@@ -1,9 +1,8 @@
-import React from "react"
-import styled, { css } from "styled-components"
-import ContentWrapper from "../../styles/ContentWrapper"
-import ThumbUp from "react-icons/lib/ti/thumbs-up"
-import ThumbDown from "react-icons/lib/ti/thumbs-down"
-import moment from "moment"
+import React from 'react'
+import styled, { css } from 'styled-components'
+import ThumbUp from 'react-icons/lib/ti/thumbs-up'
+
+import moment from 'moment'
 function submitted() {
   return css`
     border: 1px solid ${props => props.theme.colors.cardBorer};
@@ -40,8 +39,8 @@ const MessageWrapper = styled.div`
   color: ${props => props.theme.colors.text};
   display: flex;
   align-items: center;
-  ${props => props.status === "Completed" && completed()};
-  ${props => props.status === "Submitted" && submitted()};
+  ${props => props.status === 'Completed' && completed()};
+  ${props => props.status === 'Submitted' && submitted()};
   ${props => props.rejected && rejected()};
 `
 
@@ -58,12 +57,13 @@ const icon = css`
   margin-right: 5px;
 `
 
-const ThumbUpIcon = styled(ThumbUp)`${icon};`
-const ThumbDownIcon = styled(ThumbDown)`${icon};`
+const ThumbUpIcon = styled(ThumbUp)`
+  ${icon};
+`
 
 class Message extends React.Component {
   render() {
-    const { response, completed, alert, rejected, date } = this.props
+    const { alert, date } = this.props
     return (
       <MessageWrapper status={this.props.status}>
         {!alert && (
@@ -71,13 +71,13 @@ class Message extends React.Component {
             {this.props.content} - {this.props.status}
           </Content>
         )}
-        {this.props.status === "Completed" && (
+        {this.props.status === 'Completed' && (
           <Content>
             <ThumbUpIcon />Task has been approved!
           </Content>
         )}
 
-        <Timestamp>{moment(date).format("MMM Do YY")}</Timestamp>
+        <Timestamp>{moment(date).format('MMM Do YY')}</Timestamp>
       </MessageWrapper>
     )
   }

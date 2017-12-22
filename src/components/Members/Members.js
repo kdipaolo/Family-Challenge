@@ -4,8 +4,6 @@ import Modal from '../shared/Modal'
 import AddMember from './AddMember'
 import MemberCard from './MemberCard'
 import ContentWrapper from '../../styles/ContentWrapper'
-import { gql, compose, graphql } from 'react-apollo'
-import { USER_ID } from '../../utils/constants'
 
 class Members extends React.Component {
   componentDidMount() {
@@ -30,7 +28,6 @@ class Members extends React.Component {
             <AddMember
               handleOpenCloseModal={handleOpenCloseModal}
               refetch={this.props.user.refetch}
-              handleOpenCloseModal={handleOpenCloseModal}
             />
           )}
         </Modal>

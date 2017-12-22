@@ -1,5 +1,5 @@
 import React from 'react'
-import { gql, graphql, withApollo, compose } from 'react-apollo'
+import { gql, graphql, compose } from 'react-apollo'
 import GroupLists from './GroupLists'
 import GroupHeader from './GroupHeader'
 import { withRouter } from 'react-router-dom'

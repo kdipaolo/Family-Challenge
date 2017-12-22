@@ -1,11 +1,9 @@
+/* eslint-disable */
 import React from 'react'
-import { gql, graphql, withApollo, compose } from 'react-apollo'
 import Task from '../task/TaskCard'
 import ContentWrapper from '../../styles/ContentWrapper'
 import Switcher from '../shared/Switcher'
-import Button from '../shared/Button'
-import { USER_ID } from '../../utils/constants'
-import { withRouter } from 'react-router-dom'
+
 class MemberLists extends React.Component {
   state = {
     active: 'Tasks'

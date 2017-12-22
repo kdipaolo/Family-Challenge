@@ -1,0 +1,26 @@
+language: node_js
+node_js: 
+  - 8
+env:
+  global:
+    - SURGE_LOGIN=kurtdipaolo@gmail.com
+    - SURGE_TOKEN=eb8e6d71d47d93d7f55b64feca8c4f1c
+script: 
+  - npm test
+  - npm run build
+branches:
+  only:
+  - master
+deploy:
+  provider: surge
+  project: ./build/
+  skip_cleanup: true
+
+
+
+# {
+#   language: node_js,
+#   node_js: [8],
+#   script: 
+#   change
+# }

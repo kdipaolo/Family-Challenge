@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import Routes from './Routes'
-import { gql } from 'react-apollo'
-import styled, { ThemeProvider, css } from 'styled-components'
 import './styles/theme/global'
 import {
   ApolloProvider,
@@ -9,7 +7,6 @@ import {
   ApolloClient
 } from 'react-apollo'
 import { AUTH_TOKEN } from './utils/constants'
-import { withRouter } from 'react-router-dom'
 const networkInterface = createNetworkInterface({
   uri: 'https://api.graph.cool/simple/v1/cj83e8far04ms0116qbqr8kox'
 })

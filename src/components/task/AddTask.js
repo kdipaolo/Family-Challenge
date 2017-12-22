@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Input, Textarea, Form, Label } from '../../styles/Forms'
 import { gql, compose, graphql } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
-import { USER_ID } from '../../constants'
+
 const Flex = styled.div`
   display: flex;
   & > div {
@@ -62,8 +62,7 @@ class AddTask extends React.Component {
     title: '',
     member: null,
     description: '',
-    search: null,
-    member: null
+    search: null
   }
 
   handleChange = e => {
@@ -91,7 +90,7 @@ class AddTask extends React.Component {
   }
 
   handleSubmit = async e => {
-    const { title, description, member, group } = this.state
+    const { title, description, member } = this.state
     e.preventDefault()
     const newTask = await this.props.createTask({
       variables: {
@@ -105,7 +104,7 @@ class AddTask extends React.Component {
       }
     })
 
-    const newMemberNotification = await this.props.createNotification({
+    await this.props.createNotification({
       variables: {
         seen: false,
         taskId: newTask.data.createTask.id,
@@ -128,7 +127,6 @@ class AddTask extends React.Component {
     this.props.handleClose(e, 'openMenu')
   }
   render() {
-    const { handleClose, handleAdd } = this.props
     return (
       <div>
         <Text>+ Add a New</Text>

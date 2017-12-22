@@ -1,6 +1,5 @@
-import React from "react"
-import MemberCard from "./MemberCard"
-import Button from "../shared/Button"
+import React from 'react'
+import MemberCard from './MemberCard'
 
 class MemberList extends React.Component {
   render() {

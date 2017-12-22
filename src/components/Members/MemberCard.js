@@ -1,8 +1,8 @@
-import React from "react"
-import placeholder from "../../../public/images/placeholder.png"
-import CardWrapper from "../../styles/CardWrapper"
-import { Link } from "react-router-dom"
-import { CardText, CardHeader, Flex, CardIcon, Image } from "../../styles/Cards"
+import React from 'react'
+import placeholder from '../../../public/images/placeholder.png'
+import CardWrapper from '../../styles/CardWrapper'
+import { Link } from 'react-router-dom'
+import { CardText, Flex, CardIcon, Image } from '../../styles/Cards'
 
 class MemberCard extends React.Component {
   render() {

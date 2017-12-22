@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-
-import { Redirect } from 'react-router-dom'
 import apple from '../../../public/images/apple.svg'
 import { Input, Label } from '../../styles/Forms'
 import { HeaderTwo } from '../../styles/Typography'
@@ -9,7 +7,9 @@ import { Form } from '../../styles/Forms'
 import { gql, compose, graphql } from 'react-apollo'
 import { USER_ID, AUTH_TOKEN } from '../../utils/constants'
 import Button from '../shared/Button'
-const Apple = styled.img`width: 100px;`
+const Apple = styled.img`
+  width: 100px;
+`
 const Wrapper = styled.div`
   width: 100%;
   text-align: center;

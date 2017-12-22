@@ -1,7 +1,7 @@
 import React from 'react'
 import { CheckCircle } from 'react-feather'
 import { withRouter } from 'react-router-dom'
-import { gql, graphql, withApollo, compose } from 'react-apollo'
+import { gql, graphql, compose } from 'react-apollo'
 import {
   EditIcon,
   Info,
@@ -69,11 +69,7 @@ class GroupHeader extends React.Component {
         variables: {
           seen: false,
           groupId: id,
-          content: `${
-            title
-          } has been completed you have earned the following reward:  ${
-            reward
-          }`,
+          content: `${title} has been completed you have earned the following reward:  ${reward}`,
           userId: member.id
         }
       })
