@@ -15,6 +15,7 @@ deploy:
   provider: surge
   project: ./build/
   skip_cleanup: true
+  domain: family-challenge.surge.sh  
 
 
 
